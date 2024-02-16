@@ -3,14 +3,13 @@ package com.escalabram.escalabram.model;
 import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
-import java.util.Date;
 
 @Entity
 @Table(name="profile")
 public class Profile {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long profile_id;
+    private Long id;
 
     @Column(name = "created_at")
     private LocalDateTime createdAt;
@@ -49,9 +48,9 @@ public class Profile {
 
     }
 
-    public Profile(Long profile_id, LocalDateTime createdAt, LocalDateTime updatedAt, String avatar, Long genderId,
+    public Profile(Long id, LocalDateTime createdAt, LocalDateTime updatedAt, String avatar, Long genderId,
                    String languageId, Long userId, boolean isNotified, String profileDescription) {
-        this.profile_id = profile_id;
+        this.id = id;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
         this.avatar = avatar;
@@ -62,12 +61,12 @@ public class Profile {
         this.profileDescription = profileDescription;
     }
 
-    public Long getProfile_id() {
-        return profile_id;
+    public Long getId() {
+        return id;
     }
 
-    public void setProfile_id(Long profile_id) {
-        this.profile_id = profile_id;
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public LocalDateTime getCreatedAt() {

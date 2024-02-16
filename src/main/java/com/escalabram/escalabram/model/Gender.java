@@ -8,7 +8,7 @@ public class Gender {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long gender_id;
+    private Long id;
 
     @Column(name = "label", nullable = false)
     private String label;
@@ -20,18 +20,18 @@ public class Gender {
 
     }
 
-    public Gender(Long gender_id, String label, String code) {
-        this.gender_id = gender_id;
+    public Gender(Long id, String label, String code) {
+        this.id = id;
         this.label = label;
         this.code = code;
     }
 
-    public Long getGender_id() {
-        return gender_id;
+    public Long getId() {
+        return id;
     }
 
-    public void setGender_id(Long gender_id) {
-        this.gender_id = gender_id;
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getLabel() {

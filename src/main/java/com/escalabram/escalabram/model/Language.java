@@ -8,7 +8,7 @@ public class Language {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long language_id;
+    private Long id;
 
     @Column(name = "label", nullable = false)
     private String label;
@@ -20,18 +20,18 @@ public class Language {
 
     }
 
-    public Language(Long language_id, String label, String code) {
-        this.language_id = language_id;
+    public Language(Long id, String label, String code) {
+        this.id = id;
         this.label = label;
         this.code = code;
     }
 
-    public Long getLanguage_id() {
-        return language_id;
+    public Long getId() {
+        return id;
     }
 
-    public void setLanguage_id(Long language_id) {
-        this.language_id = language_id;
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getLabel() {

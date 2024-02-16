@@ -8,7 +8,7 @@ public class UserEscalabram {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long user_id;
+    private Long id;
 
     @Column(name = "name", nullable = false)
     private String name;
@@ -31,19 +31,17 @@ public class UserEscalabram {
 
     }
 
-    public UserEscalabram(Long user_id, String name, String email, String password) {
-        this.user_id = user_id;
+    public UserEscalabram(Long id, String name, String email, String password) {
+        this.id = id;
         this.name = name;
         this.email = email;
         this.password = password;
     }
 
-    public Long getUser_id() {
-        return user_id;
-    }
+    public Long getId() { return id; }
 
-    public void setUser_id(Long user_id) {
-        this.user_id = user_id;
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getName() {

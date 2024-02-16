@@ -2,7 +2,6 @@ package com.escalabram.escalabram.model;
 
 import jakarta.persistence.*;
 
-import java.time.LocalDateTime;
 import java.util.Date;
 
 @Entity
@@ -11,7 +10,7 @@ public class Match {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long match_id;
+    private Long id;
 
     @Column(name = "matching_user_id", nullable = false)
     private Long matchingUserId;
@@ -29,20 +28,20 @@ public class Match {
 
     }
 
-    public Match(Long match_id, Long matchingUserId, Long matchedUserId, boolean mutualMatch, Date matchDate) {
-        this.match_id = match_id;
+    public Match(Long id, Long matchingUserId, Long matchedUserId, boolean mutualMatch, Date matchDate) {
+        this.id = id;
         this.matchingUserId = matchingUserId;
         this.matchedUserId = matchedUserId;
         this.mutualMatch = mutualMatch;
         this.matchDate = matchDate;
     }
 
-    public Long getMatch_id() {
-        return match_id;
+    public Long getId() {
+        return id;
     }
 
-    public void setMatch_id(Long match_id) {
-        this.match_id = match_id;
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public Long getMatchingUserId() {

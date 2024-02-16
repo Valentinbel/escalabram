@@ -8,7 +8,7 @@ public class Search {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long search_id;
+    private Long id;
 
     @Column(name = "profile_id", nullable = false)
     private Long profileId;
@@ -54,10 +54,10 @@ public class Search {
 
     }
 
-    public Search(Long search_id, Long profileId, Long minClimbingLevelId, Long maxClimbingLevelId, Boolean haveRope,
+    public Search(Long id, Long profileId, Long minClimbingLevelId, Long maxClimbingLevelId, Boolean haveRope,
                   Boolean haveBelayDevice, Boolean haveQuickdraw, Boolean haveCarToShare, Long timeSlotId, Long placeId,
                   Long preferedGenderId, String searchComment, Boolean isActive) {
-        this.search_id = search_id;
+        this.id = id;
         this.profileId = profileId;
         this.minClimbingLevelId = minClimbingLevelId;
         this.maxClimbingLevelId = maxClimbingLevelId;
@@ -72,12 +72,12 @@ public class Search {
         this.isActive = isActive;
     }
 
-    public Long getSearch_id() {
-        return search_id;
+    public Long getId() {
+        return id;
     }
 
-    public void setSearch_id(Long search_id) {
-        this.search_id = search_id;
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public Long getProfileId() {
