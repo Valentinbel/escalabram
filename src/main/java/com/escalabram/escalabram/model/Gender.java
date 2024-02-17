@@ -10,20 +10,15 @@ public class Gender {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "label", nullable = false)
-    private String label;
-
-    @Column(name = "code", nullable = false)
-    private String code;
+    @Column(name = "gender_name", nullable = false)
+    private String genderName;
 
     public Gender() {
-
     }
 
-    public Gender(Long id, String label, String code) {
+    public Gender(Long id, String genderName) {
         this.id = id;
-        this.label = label;
-        this.code = code;
+        this.genderName = genderName;
     }
 
     public Long getId() {
@@ -34,19 +29,11 @@ public class Gender {
         this.id = id;
     }
 
-    public String getLabel() {
-        return label;
+    public String getGenderName() {
+        return genderName;
     }
 
-    public void setLabel(String label) {
-        this.label = label;
-    }
-
-    public String getCode() {
-        return code;
-    }
-
-    public void setCode(String code) {
-        this.code = code;
+    public void setGenderName(String genderName) {
+        this.genderName = genderName;
     }
 }

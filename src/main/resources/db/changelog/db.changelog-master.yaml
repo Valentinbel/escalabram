@@ -1,3 +1,5 @@
 databaseChangeLog:
   - include:
       file: classpath:/db/changelog/changes/001-climb_level_data.sql
+  - include:
+      file: classpath:/db/changelog/changes/002-gender_data.sql
