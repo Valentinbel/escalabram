@@ -1,6 +1,11 @@
-insert into climb_level ( code_fr)
-values
-('4A'),('4B'),('4C'),
+CREATE TABLE climb_level (
+  id INT GENERATED ALWAYS AS IDENTITY,
+  code_fr VARCHAR(255)
+);
+
+INSERT INTO climb_level (code_fr)
+VALUES
+('4'),('4+'),
 ('5A'),('5B'),('5C'),
 ('6A'),('6A+'),('6B'),('6B+'),('6C'),('6C+'),
 ('7A'),('7A+'),('7B'),('7B+'),('7C'),('7C+'),
