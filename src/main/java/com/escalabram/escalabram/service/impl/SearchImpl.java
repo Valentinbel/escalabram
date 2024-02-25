@@ -30,6 +30,16 @@ public class SearchImpl implements SearchService {
         return searchRepository.findByProfileId(profileId);
     }
 
+    @Override
+    public Search save(Search search) {
+        return searchRepository.save(search);
+    }
+
+    @Override
+    public void deleteById(Long id) {
+        searchRepository.deleteById(id);
+    }
+
 //    @Override
 //    public List<Search> findByHaveRope(boolean haveRope) {
 //        return searchRepository.findByHaveRope(haveRope);

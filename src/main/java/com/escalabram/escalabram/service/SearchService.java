@@ -12,6 +12,10 @@ public interface SearchService {
 
     Optional<Set<Search>> findByProfileId(Long profileId);
 
+    Search save(Search search);
+
+    void deleteById(Long id);
+
 //    List<Search> findByHaveRope(boolean haveRope);
 //
 //    List<Search> findByMinClimbingLevelIdGreaterThanEqual(Long minClimbingLevelId);

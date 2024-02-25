@@ -59,13 +59,13 @@ public class Search {
                   Long preferedGenderId, String searchComment, Boolean isActive) {
         this.id = id;
         this.profileId = profileId;
-        this.minClimbingLevelId = minClimbingLevelId;
-        this.maxClimbingLevelId = maxClimbingLevelId;
+        this.minClimbingLevelId = minClimbingLevelId; ///////////////////////////
+        this.maxClimbingLevelId = maxClimbingLevelId; //////////////////////////////////
         this.haveRope = haveRope;
         this.haveBelayDevice = haveBelayDevice;
         this.haveQuickdraw = haveQuickdraw;
         this.haveCarToShare = haveCarToShare;
-        this.timeSlotId = timeSlotId;
+        this.timeSlotId = timeSlotId; ////////////////////////////
         this.placeId = placeId;
         this.preferedGenderId = preferedGenderId;
         this.searchComment = searchComment;
