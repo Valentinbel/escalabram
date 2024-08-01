@@ -28,7 +28,7 @@ public class SearchController {
     }
 
     @GetMapping("/searches")
-    public ResponseEntity<List<Search>> getAllSearchs(){
+    public ResponseEntity<List<Search>> getAllSearches(){
         log.debug("REST request to get list of All Searches");
         try{
             List<Search> searches = searchService.findAll();
@@ -52,7 +52,24 @@ public class SearchController {
         try {
             if (search.getId() != null)
                 throw new BadRequestAlertException("A new search cannot already have an ID");
-            Search searchToPost = searchService.save(search);
+
+            //Remplacer SEARCH par un DTO ///////////////////////////////////
+
+            Search newSearch = searchService.createSearch(search);
+
+            //TimeSlot ////N'aparaît pas sur DB
+//                List<TimeSlot> timeslots = new ArrayList<>();
+//                for (TimeSlot timeslot : search.getTimeSlots()) {
+//                    TimeSlot timeSlot = new TimeSlot(timeslot.getId(), timeslot.getDateSlot(),
+//                            timeslot.getBeginTime(), timeslot.getEndTime());
+//                    timeSlot.setSearch(search);
+//                    /// MANQUE timeSlot Id
+//                    timeslots.add(timeslot);
+//                }
+//                newSearch.setTimeSlots(timeslots);
+
+            searchService.save(newSearch);
+
             return ResponseEntity.status(HttpStatus.OK).build();
             //return ResponseEntity.created(new URI("/api/personne-autorises/" + result.getId())).body(result);
         } catch (Exception e) {

@@ -2,6 +2,8 @@ package com.escalabram.escalabram.model;
 
 import jakarta.persistence.*;
 
+import java.util.*;
+
 @Entity
 @Table(name="search")
 public class Search {
@@ -13,11 +15,8 @@ public class Search {
     @Column(name = "profile_id", nullable = false)
     private Long profileId;
 
-    @Column(name= "min_climbing_level_id")
-    private Long minClimbingLevelId;
-
-    @Column(name= "max_climbing_level_id")
-    private Long maxClimbingLevelId;
+    @Column(name = "title")
+    private String title;
 
     @Column(name = "have_rope")
     private Boolean haveRope;
@@ -31,44 +30,58 @@ public class Search {
     @Column(name = "have_car_to_share")
     private Boolean haveCarToShare;
 
-    @Column(name= "time_slot_id")
-    private Long timeSlotId;
-
     @Column(name= "place_id")
     private Long placeId;
 
     @Column(name = "prefered_gender_id")
     private Long preferedGenderId;
 
-    @Column(name = "search_comment")
-    private String searchComment;
-
     @Column(name = "is_active")
     private Boolean isActive;
 
+//    @OneToMany(mappedBy = "search")
+//    List<TimeSlot> timeSlots = new ArrayList<>();
+
+    @ManyToMany(
+            fetch = FetchType.LAZY,
+            cascade = {
+                    CascadeType.PERSIST,
+                    CascadeType.MERGE
+            }
+    )
+    @JoinTable(
+            name = "search_climb_level",
+            joinColumns = { @JoinColumn(name = "search_id") }, //, referencedColumnName = "id"
+            inverseJoinColumns = { @JoinColumn(name = "climb_level_id") } //, referencedColumnName = "id"
+    )
+    private Set<ClimbLevel> climbLevels = new HashSet<>();
+
     // FIXME champs à ajouter (?)
     //min-max age
-    //preferedGender
 
     public Search() {
 
     }
 
-    public Search(Long id, Long profileId, Long minClimbingLevelId, Long maxClimbingLevelId, Boolean haveRope,
-                  Boolean haveBelayDevice, Boolean haveQuickdraw, Boolean haveCarToShare, Long timeSlotId, Long placeId,
-                  Long preferedGenderId, String searchComment, Boolean isActive) {
+    public Search(Long id, Long profileId,
+                  String title,Boolean haveRope,
+                  Boolean haveBelayDevice, Boolean haveQuickdraw,
+                  Boolean haveCarToShare, Long placeId,
+                  Long preferedGenderId,
+                  //List<TimeSlot> timeSlots,
+                  Set<ClimbLevel> climbLevels,
+                  Boolean isActive) {
         this.id = id;
         this.profileId = profileId;
-        this.minClimbingLevelId = minClimbingLevelId; ///////////////////////////
-        this.maxClimbingLevelId = maxClimbingLevelId; //////////////////////////////////
+        this.title = title;
         this.haveRope = haveRope;
         this.haveBelayDevice = haveBelayDevice;
         this.haveQuickdraw = haveQuickdraw;
         this.haveCarToShare = haveCarToShare;
-        this.timeSlotId = timeSlotId; ////////////////////////////
         this.placeId = placeId;
         this.preferedGenderId = preferedGenderId;
-        this.searchComment = searchComment;
+        //this.timeSlots = timeSlots;
+        this.climbLevels = climbLevels;
         this.isActive = isActive;
     }
 
@@ -88,20 +101,12 @@ public class Search {
         this.profileId = profileId;
     }
 
-    public Long getMinClimbingLevelId() {
-        return minClimbingLevelId;
+    public String getTitle() {
+        return title;
     }
 
-    public void setMinClimbingLevelId(Long minClimbingLevelId) {
-        this.minClimbingLevelId = minClimbingLevelId;
-    }
-
-    public Long getMaxClimbingLevelId() {
-        return maxClimbingLevelId;
-    }
-
-    public void setMaxClimbingLevelId(Long maxClimbingLevelId) {
-        this.maxClimbingLevelId = maxClimbingLevelId;
+    public void setTitle(String title) {
+        this.title = title;
     }
 
     public Boolean getHaveRope() {
@@ -136,14 +141,6 @@ public class Search {
         this.haveCarToShare = haveCarToShare;
     }
 
-    public Long getTimeSlotId() {
-        return timeSlotId;
-    }
-
-    public void setTimeSlotId(Long timeSlotId) {
-        this.timeSlotId = timeSlotId;
-    }
-
     public Long getPlaceId() {
         return placeId;
     }
@@ -160,12 +157,50 @@ public class Search {
         this.preferedGenderId = preferedGenderId;
     }
 
-    public String getSearchComment() {
-        return searchComment;
+//    public List<TimeSlot> getTimeSlots() {
+//        return timeSlots;
+//    }
+//
+//    public void setTimeSlots(List<TimeSlot> timeSlots) {
+//        this.timeSlots = timeSlots;
+//    }
+//
+//    public Search addTimeSlots(TimeSlot timeSlot) {
+//        this.timeSlots.add(timeSlot);
+//        timeSlot.setSearch(this);
+//        return this;
+//    }
+//
+//    public Search removeTimeSlots(TimeSlot timeSlot) {
+//        this.timeSlots.remove(timeSlot);
+//        timeSlot.setSearch(null);
+//        return this;
+//    }
+
+    public Set<ClimbLevel> getClimbLevels() {
+        return climbLevels;
     }
 
-    public void setSearchComment(String searchComment) {
-        this.searchComment = searchComment;
+    public void setClimbLevels(Set<ClimbLevel> climbLevels) {
+        this.climbLevels = climbLevels;
+    }
+
+//    public Search climbLevels(List<ClimbLevel> climbLevels) {
+//        this.climbLevels =climbLevels;
+//        return this;
+//    }
+
+    public void addClimbLevel(ClimbLevel climbLevel) {
+        this.climbLevels.add(climbLevel);
+        climbLevel.getSearches().add(this);
+    }
+
+    public void removeClimbLevel(Long climbLevelId) {
+        ClimbLevel climbLevel = this.climbLevels.stream().filter(cl -> cl.getId().equals(climbLevelId)).findFirst().orElse(null);
+        if (climbLevel != null) {
+            this.climbLevels.remove(climbLevel);
+            climbLevel.getSearches().remove(this);
+        }
     }
 
     public Boolean getActive() {
@@ -174,5 +209,57 @@ public class Search {
 
     public void setActive(Boolean active) {
         isActive = active;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Search search)) return false;
+        return Objects.equals(getId(), search.getId())
+                && Objects.equals(getProfileId(), search.getProfileId())
+                && Objects.equals(getTitle(), search.getTitle())
+                && Objects.equals(getHaveRope(), search.getHaveRope())
+                && Objects.equals(getHaveBelayDevice(), search.getHaveBelayDevice())
+                && Objects.equals(getHaveQuickdraw(), search.getHaveQuickdraw())
+                && Objects.equals(getHaveCarToShare(), search.getHaveCarToShare())
+                && Objects.equals(getPlaceId(), search.getPlaceId())
+                && Objects.equals(getPreferedGenderId(), search.getPreferedGenderId())
+               // && Objects.equals(getTimeSlots(), search.getTimeSlots())
+                && Objects.equals(getClimbLevels(), search.getClimbLevels())
+                && Objects.equals(isActive, search.isActive);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getId(),
+                getProfileId(),
+                getTitle(),
+                getHaveRope(),
+                getHaveBelayDevice(),
+                getHaveQuickdraw(),
+                getHaveCarToShare(),
+                getPlaceId(),
+                getPreferedGenderId(),
+                //getTimeSlots(),
+                getClimbLevels(),
+                isActive);
+    }
+
+    @Override
+    public String toString() {
+        return "Search{" +
+                "id=" + id +
+                ", profileId=" + profileId +
+                ", title='" + title + '\'' +
+                ", haveRope=" + haveRope +
+                ", haveBelayDevice=" + haveBelayDevice +
+                ", haveQuickdraw=" + haveQuickdraw +
+                ", haveCarToShare=" + haveCarToShare +
+                ", placeId=" + placeId +
+                ", preferedGenderId=" + preferedGenderId +
+                //", timeSlots=" + timeSlots +
+                ", climbLevels=" + climbLevels +
+                ", isActive=" + isActive +
+                '}';
     }
 }
