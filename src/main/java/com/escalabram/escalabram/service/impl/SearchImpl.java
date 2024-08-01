@@ -37,19 +37,15 @@ public class SearchImpl implements SearchService {
 
     @Override
     public Search createSearch(Search newSearch) {
-        // Le faire en iterator de Stream
-        // Mettre dans l'ordre?
-        Set<ClimbLevel> climbLevelList = newSearch.getClimbLevels();//.stream().findFirst();
-        Set<ClimbLevel> newClimbLevels = new HashSet<>();
-        climbLevelList.forEach(foreachClimb -> System.out.println("FOREAAAACH : " + foreachClimb));
-        if (!climbLevelList.isEmpty()) {
-            Long climbLevelId = climbLevelList.stream().findFirst().get().getId();
-            Optional<ClimbLevel> climbLevel = climbLevelRepository.findById(climbLevelId);
-            if(climbLevel.isPresent())
-                newClimbLevels.add(climbLevel.get());
 
+        Set<ClimbLevel> climbLevelList = newSearch.getClimbLevels();
+        Set<ClimbLevel> newClimbLevels = new HashSet<>();
+        climbLevelList.forEach(eachClimbLevel -> {
+            Optional<ClimbLevel> climbLevel = climbLevelRepository.findById(eachClimbLevel.getId());
+            climbLevel.ifPresent(newClimbLevels::add);
             newSearch.setClimbLevels(newClimbLevels);
-        }
+        });
+
         return newSearch;
     }
 
