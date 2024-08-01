@@ -2,13 +2,12 @@ package com.escalabram.escalabram.service.impl;
 
 import com.escalabram.escalabram.model.ClimbLevel;
 import com.escalabram.escalabram.model.Search;
-import com.escalabram.escalabram.repository.ClimbLevelRepository;
 import com.escalabram.escalabram.repository.SearchRepository;
+import com.escalabram.escalabram.service.ClimbLevelService;
 import com.escalabram.escalabram.service.SearchService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -18,11 +17,11 @@ import java.util.Set;
 public class SearchImpl implements SearchService {
 
     private final SearchRepository searchRepository;
-    private final ClimbLevelRepository climbLevelRepository;
+    private final ClimbLevelService climbLevelService;
 
-    public SearchImpl(SearchRepository searchRepository, ClimbLevelRepository climbLevelRepository) {
+    public SearchImpl(SearchRepository searchRepository, ClimbLevelService climbLevelService) {
         this.searchRepository = searchRepository;
-        this.climbLevelRepository = climbLevelRepository;
+        this.climbLevelService = climbLevelService;
     }
 
     @Override
@@ -37,15 +36,8 @@ public class SearchImpl implements SearchService {
 
     @Override
     public Search createSearch(Search newSearch) {
-
-        Set<ClimbLevel> climbLevelList = newSearch.getClimbLevels();
-        Set<ClimbLevel> newClimbLevels = new HashSet<>();
-        climbLevelList.forEach(eachClimbLevel -> {
-            Optional<ClimbLevel> climbLevel = climbLevelRepository.findById(eachClimbLevel.getId());
-            climbLevel.ifPresent(newClimbLevels::add);
-            newSearch.setClimbLevels(newClimbLevels);
-        });
-
+        Set<ClimbLevel> newClimbLevels = climbLevelService.retrieveCimbLevelsFromIds(newSearch.getClimbLevels());
+        newSearch.setClimbLevels(newClimbLevels);
         return newSearch;
     }
 
