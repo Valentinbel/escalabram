@@ -6,7 +6,7 @@ A match will be done if someone wants to climb in the same place at the same tim
 ## Technical details 
 SpringBoot 3.2.2, JPA, Swagger, Java 21, Maven 3.9, liquibase 17.0, PostgreSQL 16.1.
 
-## Get Started
+## Getting Started
 ### Dependencies
 Get sure you have installed the following: 
 * Java 21
@@ -16,10 +16,10 @@ Get sure you have installed the following:
 * PgAdmin 4.8.2
 * DBeaver or another database administration tool.
 
-### Install
+### Installing
 With PgAdmin, create a server group and database with the userName and Password that appears in application.properties. 
 
-### Execute program
+### Executing program
 Execute the project on Swagger: 
 On a terminal:
 ```
