@@ -39,11 +39,11 @@ public class SearchController {
         }
     }
 
-    @GetMapping("/searches/{profileId}")
-    public ResponseEntity<Set<Search>> getSearchByProfileId(@PathVariable("profileId") long profileId ){
-        log.debug("REST request to get list of Search by profileId : {}", profileId);
-        //Optional<List<Search>> searches= searchService.findByProfileId(profileId);
-        return ResponseUtil.wrapOrNotFound(searchService.findByProfileId(profileId));
+    @GetMapping("/searches/{climberProfileId}")
+    public ResponseEntity<Set<Search>> getSearchByClimberProfileId(@PathVariable("climberProfileId") long climberProfileId ){
+        log.debug("REST request to get list of Search by climberProfileId : {}", climberProfileId);
+        //Optional<List<Search>> searches= searchService.findByProfileId(climberProfileId);
+        return ResponseUtil.wrapOrNotFound(searchService.findByClimberProfileId(climberProfileId));
     }
 
     @PostMapping("/searches")

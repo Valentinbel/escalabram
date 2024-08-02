@@ -5,8 +5,8 @@ import jakarta.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name="profile")
-public class Profile {
+@Table(name="climber_profile")
+public class ClimberProfile {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -30,35 +30,35 @@ public class Profile {
     @Column(name = "language_id")
     private String languageId;
 
-    @Column(name = "user_id", nullable = false)
-    private Long userId;
+    @Column(name = "climber_user_id", nullable = false)
+    private Long climberUserId;
 
     @Column(name = "is_notified", nullable = false)
     private boolean isNotified;
 
-    @Column(name = "profile_description")
-    private String profileDescription;
+    @Column(name = "climber_profile_description")
+    private String climberProfileDescription;
 
     // FIXME Gerer les relations de table
     //hasOne Gender
     //hasOne Language
     //hasManySearch
 
-    public Profile() {
+    public ClimberProfile() {
 
     }
 
-    public Profile(Long id, LocalDateTime createdAt, LocalDateTime updatedAt, String avatar, Long genderId,
-                   String languageId, Long userId, boolean isNotified, String profileDescription) {
+    public ClimberProfile(Long id, LocalDateTime createdAt, LocalDateTime updatedAt, String avatar, Long genderId,
+                          String languageId, Long climberUserId, boolean isNotified, String climberProfileDescription) {
         this.id = id;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
         this.avatar = avatar;
         this.genderId = genderId;
         this.languageId = languageId;
-        this.userId = userId;
+        this.climberUserId = climberUserId;
         this.isNotified = isNotified;
-        this.profileDescription = profileDescription;
+        this.climberProfileDescription = climberProfileDescription;
     }
 
     public Long getId() {
@@ -109,12 +109,12 @@ public class Profile {
         this.languageId = languageId;
     }
 
-    public Long getUserId() {
-        return userId;
+    public Long getClimberUserId() {
+        return climberUserId;
     }
 
-    public void setUserId(Long userId) {
-        this.userId = userId;
+    public void setClimberUserId(Long climberUserId) {
+        this.climberUserId = climberUserId;
     }
 
     public boolean isNotified() {
@@ -125,11 +125,11 @@ public class Profile {
         isNotified = notified;
     }
 
-    public String getProfileDescription() {
-        return profileDescription;
+    public String getClimberProfileDescription() {
+        return climberProfileDescription;
     }
 
-    public void setProfileDescription(String profileDescription) {
-        this.profileDescription = profileDescription;
+    public void setClimberProfileDescription(String climberProfileDescription) {
+        this.climberProfileDescription = climberProfileDescription;
     }
 }

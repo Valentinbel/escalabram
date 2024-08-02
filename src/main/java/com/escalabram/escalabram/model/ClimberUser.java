@@ -3,8 +3,8 @@ package com.escalabram.escalabram.model;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name="user_escalabram")
-public class UserEscalabram {
+@Table(name="climber_user")
+public class ClimberUser {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -27,11 +27,11 @@ public class UserEscalabram {
     // hasOne(() => Profile)
     //public profile: HasOne<typeof Profile>
 
-    public UserEscalabram() {
+    public ClimberUser() {
 
     }
 
-    public UserEscalabram(Long id, String name, String email, String password) {
+    public ClimberUser(Long id, String name, String email, String password) {
         this.id = id;
         this.name = name;
         this.email = email;

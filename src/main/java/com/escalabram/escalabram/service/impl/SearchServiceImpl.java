@@ -32,8 +32,8 @@ public class SearchServiceImpl implements SearchService {
     }
 
     @Override
-    public Optional<Set<Search>> findByProfileId(Long profileId) {
-        return searchRepository.findByProfileId(profileId);
+    public Optional<Set<Search>> findByClimberProfileId(Long climberProfileId) {
+        return searchRepository.findByClimberProfileId(climberProfileId);
     }
 
     @Override

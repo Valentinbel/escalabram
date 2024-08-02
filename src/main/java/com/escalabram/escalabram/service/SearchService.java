@@ -10,7 +10,7 @@ public interface SearchService {
 
     List<Search> findAll();
 
-    Optional<Set<Search>> findByProfileId(Long profileId);
+    Optional<Set<Search>> findByClimberProfileId(Long climberProfileId);
 
     void createSearch(Search newSearch);
 

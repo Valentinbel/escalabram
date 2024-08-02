@@ -12,8 +12,8 @@ public class Search {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "profile_id", nullable = false)
-    private Long profileId;
+    @Column(name = "climber_profile_id", nullable = false)
+    private Long climberProfileId;
 
     @Column(name = "title")
     private String title;
@@ -63,16 +63,15 @@ public class Search {
 
     }
 
-    public Search(Long id, Long profileId,
+    public Search(Long id, Long climberProfileId,
                   String title,Boolean haveRope,
                   Boolean haveBelayDevice, Boolean haveQuickdraw,
                   Boolean haveCarToShare, Long placeId,
                   Long preferedGenderId,
-                  //List<TimeSlot> timeSlots,
                   Set<ClimbLevel> climbLevels,
                   Boolean isActive) {
         this.id = id;
-        this.profileId = profileId;
+        this.climberProfileId = climberProfileId;
         this.title = title;
         this.haveRope = haveRope;
         this.haveBelayDevice = haveBelayDevice;
@@ -80,7 +79,6 @@ public class Search {
         this.haveCarToShare = haveCarToShare;
         this.placeId = placeId;
         this.preferedGenderId = preferedGenderId;
-        //this.timeSlots = timeSlots;
         this.climbLevels = climbLevels;
         this.isActive = isActive;
     }
@@ -93,12 +91,12 @@ public class Search {
         this.id = id;
     }
 
-    public Long getProfileId() {
-        return profileId;
+    public Long getClimberProfileId() {
+        return climberProfileId;
     }
 
-    public void setProfileId(Long profileId) {
-        this.profileId = profileId;
+    public void setClimberProfileId(Long climberProfileId) {
+        this.climberProfileId = climberProfileId;
     }
 
     public String getTitle() {
@@ -186,7 +184,7 @@ public class Search {
         if (this == o) return true;
         if (!(o instanceof Search search)) return false;
         return Objects.equals(getId(), search.getId())
-                && Objects.equals(getProfileId(), search.getProfileId())
+                && Objects.equals(getClimberProfileId(), search.getClimberProfileId())
                 && Objects.equals(getTitle(), search.getTitle())
                 && Objects.equals(getHaveRope(), search.getHaveRope())
                 && Objects.equals(getHaveBelayDevice(), search.getHaveBelayDevice())
@@ -202,7 +200,7 @@ public class Search {
     @Override
     public int hashCode() {
         return Objects.hash(getId(),
-                getProfileId(),
+                getClimberProfileId(),
                 getTitle(),
                 getHaveRope(),
                 getHaveBelayDevice(),
@@ -219,7 +217,7 @@ public class Search {
     public String toString() {
         return "Search{" +
                 "id=" + id +
-                ", profileId=" + profileId +
+                ", climberProfileId=" + climberProfileId +
                 ", title='" + title + '\'' +
                 ", haveRope=" + haveRope +
                 ", haveBelayDevice=" + haveBelayDevice +

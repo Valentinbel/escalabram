@@ -3,7 +3,7 @@ package com.escalabram.escalabram.model;
 import jakarta.persistence.*;
 
 import java.time.LocalDate;
-import java.time.LocalTime;
+import java.util.Objects;
 
 @Entity
 @Table(name="time_slot")

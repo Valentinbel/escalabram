@@ -13,11 +13,11 @@ import java.util.Set;
 
 @Service
 @Transactional
-public class ClimbLevelImpl implements ClimbLevelService {
+public class ClimbLevelServiceImpl implements ClimbLevelService {
 
     private final ClimbLevelRepository climbLevelRepository;
 
-    public ClimbLevelImpl(ClimbLevelRepository climbLevelRepository) {
+    public ClimbLevelServiceImpl(ClimbLevelRepository climbLevelRepository) {
         this.climbLevelRepository = climbLevelRepository;
     }
 
