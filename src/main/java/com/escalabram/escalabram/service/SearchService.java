@@ -12,7 +12,7 @@ public interface SearchService {
 
     Optional<Set<Search>> findByProfileId(Long profileId);
 
-    Search createSearch(Search newSearch);
+    void createSearch(Search newSearch);
 
     Search save(Search search);
 

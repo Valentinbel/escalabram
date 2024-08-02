@@ -15,7 +15,7 @@ import java.util.List;
 import java.util.Set;
 
 
-@CrossOrigin(origins = "http://localhost:8080") //8081 ?
+@CrossOrigin(origins = "http://localhost:8080")
 @RestController
 @RequestMapping("/api")
 public class SearchController {
@@ -54,21 +54,7 @@ public class SearchController {
                 throw new BadRequestAlertException("A new search cannot already have an ID");
 
             //Remplacer SEARCH par un DTO ///////////////////////////////////
-
-            Search newSearch = searchService.createSearch(search);
-
-            //TimeSlot ////N'aparaît pas sur DB
-//                List<TimeSlot> timeslots = new ArrayList<>();
-//                for (TimeSlot timeslot : search.getTimeSlots()) {
-//                    TimeSlot timeSlot = new TimeSlot(timeslot.getId(), timeslot.getDateSlot(),
-//                            timeslot.getBeginTime(), timeslot.getEndTime());
-//                    timeSlot.setSearch(search);
-//                    /// MANQUE timeSlot Id
-//                    timeslots.add(timeslot);
-//                }
-//                newSearch.setTimeSlots(timeslots);
-
-            searchService.save(newSearch);
+            searchService.createSearch(search);
 
             return ResponseEntity.status(HttpStatus.OK).build();
             //return ResponseEntity.created(new URI("/api/personne-autorises/" + result.getId())).body(result);

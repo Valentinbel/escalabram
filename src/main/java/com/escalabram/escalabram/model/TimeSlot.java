@@ -17,16 +17,19 @@ public class TimeSlot {
     private LocalDate dateSlot;
 
     @Column(name = "begin_time")
-    private LocalTime beginTime;
+    private String beginTime; //LocalTime (?)
 
     @Column(name = "end_time")
-    private LocalTime endTime;
+    private String endTime; //LocalTime (?)
+
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "search_id", foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
+    private Search search;
 
     public TimeSlot() {
-
     }
 
-    public TimeSlot(Long id, LocalDate dateSlot, LocalTime beginTime, LocalTime endTime) {
+    public TimeSlot(Long id, LocalDate dateSlot, String beginTime, String endTime) {
         this.id = id;
         this.dateSlot = dateSlot;
         this.beginTime = beginTime;
@@ -49,19 +52,57 @@ public class TimeSlot {
         this.dateSlot = dateSlot;
     }
 
-    public LocalTime getBeginTime() {
+    public String getBeginTime() {
         return beginTime;
     }
 
-    public void setBeginTime(LocalTime beginTime) {
+    public void setBeginTime(String beginTime) {
         this.beginTime = beginTime;
     }
 
-    public LocalTime getEndTime() {
+    public String getEndTime() {
         return endTime;
     }
 
-    public void setEndTime(LocalTime endTime) {
+    public void setEndTime(String endTime) {
         this.endTime = endTime;
+    }
+
+    public Search getSearch() {
+        return search;
+    }
+
+    public void setSearch(Search search) {
+        this.search = search;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof TimeSlot timeSlot)) return false;
+        return Objects.equals(getId(), timeSlot.getId())
+                && Objects.equals(getDateSlot(), timeSlot.getDateSlot())
+                && Objects.equals(getBeginTime(), timeSlot.getBeginTime())
+                && Objects.equals(getEndTime(), timeSlot.getEndTime())
+                && Objects.equals(getSearch(), timeSlot.getSearch());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getId(),
+                getDateSlot(),
+                getBeginTime(),
+                getEndTime(),
+                getSearch());
+    }
+
+    @Override
+    public String toString() {
+        return "TimeSlot{" +
+                "id=" + id +
+                ", dateSlot=" + dateSlot +
+                ", beginTime=" + beginTime +
+                ", endTime=" + endTime +
+                '}';
     }
 }

@@ -39,8 +39,8 @@ public class Search {
     @Column(name = "is_active")
     private Boolean isActive;
 
-//    @OneToMany(mappedBy = "search")
-//    List<TimeSlot> timeSlots = new ArrayList<>();
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "search", cascade = CascadeType.ALL)
+    List<TimeSlot> timeSlots = new ArrayList<>();
 
     @ManyToMany(
             fetch = FetchType.LAZY,
@@ -51,8 +51,8 @@ public class Search {
     )
     @JoinTable(
             name = "search_climb_level",
-            joinColumns = { @JoinColumn(name = "search_id") }, //, referencedColumnName = "id"
-            inverseJoinColumns = { @JoinColumn(name = "climb_level_id") } //, referencedColumnName = "id"
+            joinColumns = { @JoinColumn(name = "search_id") },
+            inverseJoinColumns = { @JoinColumn(name = "climb_level_id") }
     )
     private Set<ClimbLevel> climbLevels = new HashSet<>();
 
@@ -157,25 +157,13 @@ public class Search {
         this.preferedGenderId = preferedGenderId;
     }
 
-//    public List<TimeSlot> getTimeSlots() {
-//        return timeSlots;
-//    }
-//
-//    public void setTimeSlots(List<TimeSlot> timeSlots) {
-//        this.timeSlots = timeSlots;
-//    }
-//
-//    public Search addTimeSlots(TimeSlot timeSlot) {
-//        this.timeSlots.add(timeSlot);
-//        timeSlot.setSearch(this);
-//        return this;
-//    }
-//
-//    public Search removeTimeSlots(TimeSlot timeSlot) {
-//        this.timeSlots.remove(timeSlot);
-//        timeSlot.setSearch(null);
-//        return this;
-//    }
+    public List<TimeSlot> getTimeSlots() {
+        return timeSlots;
+    }
+
+    public void setTimeSlots(List<TimeSlot> timeSlots) {
+        this.timeSlots = timeSlots;
+    }
 
     public Set<ClimbLevel> getClimbLevels() {
         return climbLevels;
@@ -183,24 +171,6 @@ public class Search {
 
     public void setClimbLevels(Set<ClimbLevel> climbLevels) {
         this.climbLevels = climbLevels;
-    }
-
-//    public Search climbLevels(List<ClimbLevel> climbLevels) {
-//        this.climbLevels =climbLevels;
-//        return this;
-//    }
-
-    public void addClimbLevel(ClimbLevel climbLevel) {
-        this.climbLevels.add(climbLevel);
-        climbLevel.getSearches().add(this);
-    }
-
-    public void removeClimbLevel(Long climbLevelId) {
-        ClimbLevel climbLevel = this.climbLevels.stream().filter(cl -> cl.getId().equals(climbLevelId)).findFirst().orElse(null);
-        if (climbLevel != null) {
-            this.climbLevels.remove(climbLevel);
-            climbLevel.getSearches().remove(this);
-        }
     }
 
     public Boolean getActive() {
