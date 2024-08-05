@@ -1,5 +1,6 @@
 package com.escalabram.escalabram.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 import java.time.LocalDate;
@@ -22,6 +23,7 @@ public class TimeSlot {
     @Column(name = "end_time")
     private String endTime; //LocalTime (?)
 
+    @JsonIgnore
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "search_id", foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
     private Search search;

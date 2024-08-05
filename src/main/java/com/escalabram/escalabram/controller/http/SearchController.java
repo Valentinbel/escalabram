@@ -39,11 +39,17 @@ public class SearchController {
         }
     }
 
-    @GetMapping("/searches/{climberProfileId}")
-    public ResponseEntity<Set<Search>> getSearchByClimberProfileId(@PathVariable("climberProfileId") long climberProfileId ){
-        log.debug("REST request to get list of Search by climberProfileId : {}", climberProfileId);
-        //Optional<List<Search>> searches= searchService.findByProfileId(climberProfileId);
-        return ResponseUtil.wrapOrNotFound(searchService.findByClimberProfileId(climberProfileId));
+    @GetMapping("/searches/climber-profile/{id}")
+    public ResponseEntity<Set<Search>> getSearchByClimberProfileId(@PathVariable("id") long id ){
+        log.debug("REST request to get list of Search by climberProfileId : {}", id);
+        try {
+            Optional<Set<Search>> searches= searchService.findByClimberProfileId(id);
+            log.debug("SEARCHES: {}", searches);
+            return ResponseUtil.wrapOrNotFound(searches);
+        } catch (Exception e) {
+            log.error("An error was encountered while retrieving data in getSearchByClimberProfileId",e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
     }
 
     @PostMapping("/searches")
