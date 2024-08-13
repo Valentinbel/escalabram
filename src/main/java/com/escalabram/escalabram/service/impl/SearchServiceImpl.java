@@ -9,10 +9,7 @@ import com.escalabram.escalabram.service.SearchService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 
 @Service
 @Transactional
@@ -32,6 +29,11 @@ public class SearchServiceImpl implements SearchService {
     }
 
     @Override
+    public Optional<Search> findById(Long searchId) {
+        return searchRepository.findById(searchId);
+    }
+
+    @Override
     public Optional<Set<Search>> findByClimberProfileId(Long climberProfileId) {
         return searchRepository.findByClimberProfileId(climberProfileId);
     }
@@ -44,7 +46,7 @@ public class SearchServiceImpl implements SearchService {
 
         List<TimeSlot> timeslots = new ArrayList<>();
         for (TimeSlot timeSlotIn : search.getTimeSlots()) {
-            TimeSlot timeSlot = new TimeSlot(timeSlotIn.getId(), timeSlotIn.getDateSlot(), timeSlotIn.getBeginTime(), timeSlotIn.getEndTime());
+            TimeSlot timeSlot = new TimeSlot(timeSlotIn.getId(), timeSlotIn.getBeginTime(), timeSlotIn.getEndTime());
             timeSlot.setSearch(search);
             timeslots.add(timeSlot);
         }
