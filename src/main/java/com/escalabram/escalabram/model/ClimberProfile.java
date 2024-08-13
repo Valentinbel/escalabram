@@ -2,11 +2,12 @@ package com.escalabram.escalabram.model;
 
 import jakarta.persistence.*;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
 
 @Entity
 @Table(name="climber_profile")
-public class ClimberProfile {
+public class ClimberProfile implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

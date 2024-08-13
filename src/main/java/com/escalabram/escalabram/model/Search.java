@@ -2,11 +2,12 @@ package com.escalabram.escalabram.model;
 
 import jakarta.persistence.*;
 
+import java.io.Serializable;
 import java.util.*;
 
 @Entity
 @Table(name="search")
-public class Search {
+public class Search implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -40,7 +41,7 @@ public class Search {
     private Boolean isActive;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "search", cascade = CascadeType.ALL)
-    List<TimeSlot> timeSlots = new ArrayList<>();
+    private List<TimeSlot> timeSlots = new ArrayList<>();
 
     @ManyToMany(
             fetch = FetchType.LAZY,

@@ -2,9 +2,11 @@ package com.escalabram.escalabram.model;
 
 import jakarta.persistence.*;
 
+import java.io.Serializable;
+
 @Entity
 @Table(name="climber_user")
-public class ClimberUser {
+public class ClimberUser implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

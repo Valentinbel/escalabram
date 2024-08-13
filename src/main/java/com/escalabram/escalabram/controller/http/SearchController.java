@@ -12,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 
@@ -21,7 +22,6 @@ import java.util.Set;
 public class SearchController {
     private final Logger log = LoggerFactory.getLogger(SearchController.class);
     private final SearchService searchService;
-
 
     public SearchController(SearchService searchService){
         this.searchService = searchService;
@@ -41,7 +41,7 @@ public class SearchController {
 
     @GetMapping("/searches/climber-profile/{id}")
     public ResponseEntity<Set<Search>> getSearchByClimberProfileId(@PathVariable("id") long id ){
-        log.debug("REST request to get list of Search by climberProfileId : {}", id);
+        log.debug("REST request to get list of Search by climberProfileId: {}", id);
         try {
             Optional<Set<Search>> searches= searchService.findByClimberProfileId(id);
             log.debug("SEARCHES: {}", searches);
@@ -59,7 +59,7 @@ public class SearchController {
             if (search.getId() != null)
                 throw new BadRequestAlertException("A new search cannot already have an ID");
 
-            //Remplacer SEARCH par un DTO ///////////////////////////////////
+            // TODO Remplacer SEARCH par un DTO
             searchService.createSearch(search);
 
             return ResponseEntity.status(HttpStatus.OK).build();

@@ -3,25 +3,23 @@ package com.escalabram.escalabram.model;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
-import java.time.LocalDate;
+import java.io.Serializable;
+import java.sql.Timestamp;
 import java.util.Objects;
 
 @Entity
 @Table(name="time_slot")
-public class TimeSlot {
+public class TimeSlot implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "date_slot", nullable = false)
-    private LocalDate dateSlot;
+    @Column(name = "begin_time") //, columnDefinition = "TIME"
+    private Timestamp beginTime;
 
-    @Column(name = "begin_time")
-    private String beginTime; //LocalTime (?)
-
-    @Column(name = "end_time")
-    private String endTime; //LocalTime (?)
+    @Column(name = "end_time") //, columnDefinition = "TIME"
+    private Timestamp  endTime;
 
     @JsonIgnore
     @ManyToOne(cascade = CascadeType.ALL)
@@ -31,9 +29,8 @@ public class TimeSlot {
     public TimeSlot() {
     }
 
-    public TimeSlot(Long id, LocalDate dateSlot, String beginTime, String endTime) {
+    public TimeSlot(Long id, Timestamp  beginTime, Timestamp  endTime) {
         this.id = id;
-        this.dateSlot = dateSlot;
         this.beginTime = beginTime;
         this.endTime = endTime;
     }
@@ -46,27 +43,19 @@ public class TimeSlot {
         this.id = id;
     }
 
-    public LocalDate getDateSlot() {
-        return dateSlot;
-    }
-
-    public void setDateSlot(LocalDate dateSlot) {
-        this.dateSlot = dateSlot;
-    }
-
-    public String getBeginTime() {
+    public Timestamp  getBeginTime() {
         return beginTime;
     }
 
-    public void setBeginTime(String beginTime) {
+    public void setBeginTime(Timestamp  beginTime) {
         this.beginTime = beginTime;
     }
 
-    public String getEndTime() {
+    public Timestamp  getEndTime() {
         return endTime;
     }
 
-    public void setEndTime(String endTime) {
+    public void setEndTime(Timestamp  endTime) {
         this.endTime = endTime;
     }
 
@@ -83,7 +72,6 @@ public class TimeSlot {
         if (this == o) return true;
         if (!(o instanceof TimeSlot timeSlot)) return false;
         return Objects.equals(getId(), timeSlot.getId())
-                && Objects.equals(getDateSlot(), timeSlot.getDateSlot())
                 && Objects.equals(getBeginTime(), timeSlot.getBeginTime())
                 && Objects.equals(getEndTime(), timeSlot.getEndTime())
                 && Objects.equals(getSearch(), timeSlot.getSearch());
@@ -92,7 +80,6 @@ public class TimeSlot {
     @Override
     public int hashCode() {
         return Objects.hash(getId(),
-                getDateSlot(),
                 getBeginTime(),
                 getEndTime(),
                 getSearch());
@@ -102,7 +89,6 @@ public class TimeSlot {
     public String toString() {
         return "TimeSlot{" +
                 "id=" + id +
-                ", dateSlot=" + dateSlot +
                 ", beginTime=" + beginTime +
                 ", endTime=" + endTime +
                 '}';

@@ -2,9 +2,11 @@ package com.escalabram.escalabram.model;
 
 import jakarta.persistence.*;
 
+import java.io.Serializable;
+
 @Entity
 @Table(name="language")
-public class Language {
+public class Language implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

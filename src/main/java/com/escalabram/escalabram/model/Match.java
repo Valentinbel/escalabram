@@ -2,36 +2,37 @@ package com.escalabram.escalabram.model;
 
 import jakarta.persistence.*;
 
-import java.util.Date;
+import java.io.Serializable;
+import java.time.LocalDate;
 
 @Entity
 @Table(name="match")
-public class Match {
+public class Match implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "matching_user_id", nullable = false)
-    private Long matchingUserId;
+    @Column(name = "matching_search_id", nullable = false)
+    private Long matchingSearchId;
 
-    @Column(name = "matched_user_id", nullable = false)
-    private Long matchedUserId;
+    @Column(name = "matched_search_id", nullable = false)
+    private Long matchedSearchId;
 
     @Column(name = "mutual_match", nullable = false)
     private boolean mutualMatch;
 
     @Column(name = "match_date", nullable = false)
-    private Date matchDate;
+    private LocalDate matchDate;
 
     public Match() {
 
     }
 
-    public Match(Long id, Long matchingUserId, Long matchedUserId, boolean mutualMatch, Date matchDate) {
+    public Match(Long id, Long matchingSearchId, Long matchedSearchId, boolean mutualMatch, LocalDate matchDate) {
         this.id = id;
-        this.matchingUserId = matchingUserId;
-        this.matchedUserId = matchedUserId;
+        this.matchingSearchId = matchingSearchId;
+        this.matchedSearchId = matchedSearchId;
         this.mutualMatch = mutualMatch;
         this.matchDate = matchDate;
     }
@@ -44,20 +45,20 @@ public class Match {
         this.id = id;
     }
 
-    public Long getMatchingUserId() {
-        return matchingUserId;
+    public Long getMatchingSearchId() {
+        return matchingSearchId;
     }
 
-    public void setMatchingUserId(Long matchingUserId) {
-        this.matchingUserId = matchingUserId;
+    public void setMatchingSearchId(Long matchingSearchId) {
+        this.matchingSearchId = matchingSearchId;
     }
 
-    public Long getMatchedUserId() {
-        return matchedUserId;
+    public Long getMatchedSearchId() {
+        return matchedSearchId;
     }
 
-    public void setMatchedUserId(Long matchedUserId) {
-        this.matchedUserId = matchedUserId;
+    public void setMatchedSearchId(Long matchedSearchId) {
+        this.matchedSearchId = matchedSearchId;
     }
 
     public boolean isMutualMatch() {
@@ -68,11 +69,11 @@ public class Match {
         this.mutualMatch = mutualMatch;
     }
 
-    public Date getMatchDate() {
+    public LocalDate getMatchDate() {
         return matchDate;
     }
 
-    public void setMatchDate(Date matchDate) {
+    public void setMatchDate(LocalDate matchDate) {
         this.matchDate = matchDate;
     }
 }
