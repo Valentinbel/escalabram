@@ -10,7 +10,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.Timestamp;
-import java.time.LocalDate;
 import java.util.*;
 
 @Service
@@ -25,7 +24,6 @@ public class MatchServiceImpl implements MatchService {
 
     @Override
     public List<Match> createMatchesIfExist(Search search) {
-
         // New search for matching
         // Vérifier que la query ne pete pas meme si timeSlotList est vide
         Long matchingSearchId = search.getId();
@@ -33,38 +31,50 @@ public class MatchServiceImpl implements MatchService {
         Long searchPlaceId = search.getPlaceId();
         List<TimeSlot> timeSlotList = search.getTimeSlots();
         List<Timestamp> beginTime = new ArrayList<>();
-        List<Timestamp> endTime = new ArrayList<>();
-        List<Date> dateList = new ArrayList<>();
+
+        HashMap<Timestamp, Timestamp> beginAndEndTimeSlots = new HashMap<>();
         timeSlotList.forEach(eachTimeSlot -> {
             beginTime.add(eachTimeSlot.getBeginTime());
-            endTime.add(eachTimeSlot.getEndTime());
-           // dateList.add(eachTimeSlot.getBeginTime().getTime());
+            beginAndEndTimeSlots.put(eachTimeSlot.getBeginTime(), eachTimeSlot.getEndTime());
         });
 
         // Searches that may have matched
+        List<SearchForMatchDTO> searchForMatchDTOList =
+                matchRepository.findSearchesByMatchCriterias(searchClimberProfile, searchPlaceId, beginTime);
 
-
-        // ajouter begin time.date.
-        List<SearchForMatchDTO> setSearchMatchedId = matchRepository.findSearchesByMatchCriterias(searchClimberProfile, searchPlaceId);
         List<Match> newMatchList = new ArrayList<>();
-        if(!setSearchMatchedId.isEmpty()) {
+        if(!searchForMatchDTOList.isEmpty()) {
+            List<SearchForMatchDTO> matchedOnes = new ArrayList<>();
+            searchForMatchDTOList.forEach(searchForMatchDTO ->
+                    beginAndEndTimeSlots.forEach((Timestamp begin, Timestamp end) ->{
 
+                if (isTimeSlotMatching(begin, end, searchForMatchDTO)){
+                    System.out.println("IS IT A MATCH ? " + searchForMatchDTO );
+                    matchedOnes.add(searchForMatchDTO);
+                }
+            }));
 
-            // TimeSlots
-//            List<String> listOfCommonItems = listOne.stream()
-//                    .filter(item -> listTwo.contains(item))
-//                    .toList();
+            // TODO ajouter vérif sur les climbLevel
 
-            setSearchMatchedId.forEach(eachSearchMatchId -> {
+            matchedOnes.forEach(searchForMatchDTO -> {
                 Match newMatch = new Match();
                 newMatch.setMatchingSearchId(matchingSearchId);
-                newMatch.setMatchedSearchId(eachSearchMatchId.getSearchId());
+                newMatch.setMatchedSearchId(searchForMatchDTO.getSearchId());
+                newMatch.setMatchedTimeSlotId(searchForMatchDTO.getTimeSlotId());
                 newMatch.setMutualMatch(true);
-                newMatch.setMatchDate(LocalDate.now());
-                matchRepository.save(newMatch);
+                matchRepository.save(newMatch); // mettre une condition pour ajouter que si existe pas.
             });
         }
         return newMatchList;
         //TODO ajouter critères de match: preferedGenreId, climbLevelList
+    }
+
+    private boolean isTimeSlotMatching(Timestamp begin, Timestamp end, SearchForMatchDTO searchForMatchDTO){
+        return (begin.toInstant().isBefore(searchForMatchDTO.getBeginTime().toInstant())
+                && begin.toInstant().isAfter(searchForMatchDTO.getEndTime().toInstant()))
+                || (end.toInstant().isBefore(searchForMatchDTO.getBeginTime().toInstant())
+                && end.toInstant().isAfter(searchForMatchDTO.getEndTime().toInstant()))
+                || (begin.toInstant().equals(searchForMatchDTO.getBeginTime().toInstant()))
+                || (end.toInstant().equals(searchForMatchDTO.getEndTime().toInstant()));
     }
 }

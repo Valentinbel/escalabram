@@ -5,13 +5,15 @@ import java.sql.Timestamp;
 
 public class SearchForMatchDTO implements Serializable {
     private Long searchId;
+    private Long timeSlotId;
     private Timestamp beginTime;
-    private Timestamp  endTime;
+    private Timestamp endTime;
 
     public SearchForMatchDTO() {
     }
-    public SearchForMatchDTO(Long searchId, Timestamp beginTime, Timestamp endTime) {
+    public SearchForMatchDTO(Long searchId, Long timeSlotId, Timestamp beginTime, Timestamp endTime) {
         this.searchId = searchId;
+        this.timeSlotId = timeSlotId;
         this.beginTime = beginTime;
         this.endTime = endTime;
     }
@@ -22,6 +24,14 @@ public class SearchForMatchDTO implements Serializable {
 
     public void setSearchId(Long searchId) {
         this.searchId = searchId;
+    }
+
+    public Long getTimeSlotId() {
+        return timeSlotId;
+    }
+
+    public void setTimeSlotId(Long timeSlotId) {
+        this.timeSlotId = timeSlotId;
     }
 
     public Timestamp getBeginTime() {
@@ -44,6 +54,7 @@ public class SearchForMatchDTO implements Serializable {
     public String toString() {
         return "SearchForMatchDTO{" +
                 "searchId=" + searchId +
+                "timeSlotId=" + timeSlotId +
                 ", beginTime=" + beginTime +
                 ", endTime=" + endTime +
                 '}';

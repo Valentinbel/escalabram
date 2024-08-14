@@ -3,7 +3,6 @@ package com.escalabram.escalabram.model;
 import jakarta.persistence.*;
 
 import java.io.Serializable;
-import java.time.LocalDate;
 
 @Entity
 @Table(name="match")
@@ -19,22 +18,22 @@ public class Match implements Serializable {
     @Column(name = "matched_search_id", nullable = false)
     private Long matchedSearchId;
 
+    @Column(name = "matched_time_slot_id", nullable = false)
+    private Long matchedTimeSlotId;
+
     @Column(name = "mutual_match", nullable = false)
     private boolean mutualMatch;
-
-    @Column(name = "match_date", nullable = false)
-    private LocalDate matchDate;
 
     public Match() {
 
     }
 
-    public Match(Long id, Long matchingSearchId, Long matchedSearchId, boolean mutualMatch, LocalDate matchDate) {
+    public Match(Long id, Long matchingSearchId, Long matchedSearchId, Long matchedTimeSlotId, boolean mutualMatch) {
         this.id = id;
         this.matchingSearchId = matchingSearchId;
         this.matchedSearchId = matchedSearchId;
+        this.matchedTimeSlotId = matchedTimeSlotId;
         this.mutualMatch = mutualMatch;
-        this.matchDate = matchDate;
     }
 
     public Long getId() {
@@ -61,19 +60,19 @@ public class Match implements Serializable {
         this.matchedSearchId = matchedSearchId;
     }
 
+    public Long getMatchedTimeSlotId() {
+        return matchedTimeSlotId;
+    }
+
+    public void setMatchedTimeSlotId(Long matchedTimeSlotId) {
+        this.matchedTimeSlotId = matchedTimeSlotId;
+    }
+
     public boolean isMutualMatch() {
         return mutualMatch;
     }
 
     public void setMutualMatch(boolean mutualMatch) {
         this.mutualMatch = mutualMatch;
-    }
-
-    public LocalDate getMatchDate() {
-        return matchDate;
-    }
-
-    public void setMatchDate(LocalDate matchDate) {
-        this.matchDate = matchDate;
     }
 }
