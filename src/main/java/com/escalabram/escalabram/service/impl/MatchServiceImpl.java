@@ -1,10 +1,13 @@
 package com.escalabram.escalabram.service.impl;
 
+import com.escalabram.escalabram.model.ClimbLevel;
 import com.escalabram.escalabram.model.Match;
 import com.escalabram.escalabram.model.Search;
 import com.escalabram.escalabram.model.TimeSlot;
 import com.escalabram.escalabram.repository.MatchRepository;
+import com.escalabram.escalabram.repository.SearchRepository;
 import com.escalabram.escalabram.service.MatchService;
+import com.escalabram.escalabram.service.dto.ISearchClimbLevelDTO;
 import com.escalabram.escalabram.service.dto.SearchForMatchDTO;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -17,9 +20,13 @@ import java.util.*;
 public class MatchServiceImpl implements MatchService {
 
     private final MatchRepository matchRepository;
+    private final SearchRepository searchRepository;
 
-    public MatchServiceImpl(MatchRepository matchRepository) {
+    Set<Long> searchIdList = new HashSet<>();
+
+    public MatchServiceImpl(MatchRepository matchRepository, SearchRepository searchRepository) {
         this.matchRepository = matchRepository;
+        this.searchRepository = searchRepository;
     }
 
     @Override

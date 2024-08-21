@@ -54,7 +54,7 @@ public class SearchForMatchDTO implements Serializable {
     public String toString() {
         return "SearchForMatchDTO{" +
                 "searchId=" + searchId +
-                "timeSlotId=" + timeSlotId +
+                ", timeSlotId=" + timeSlotId +
                 ", beginTime=" + beginTime +
                 ", endTime=" + endTime +
                 '}';
