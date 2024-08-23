@@ -11,6 +11,8 @@ public interface ClimberProfileService {
 
     Optional<ClimberProfile> findById(Long climberProfileId);
 
+    boolean existsById(Long climberProfileId);
+
     void createClimberProfile(ClimberProfile climberProfile);
 
     ClimberProfile save(ClimberProfile climberProfile);

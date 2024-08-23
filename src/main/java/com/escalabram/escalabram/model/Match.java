@@ -3,6 +3,7 @@ package com.escalabram.escalabram.model;
 import jakarta.persistence.*;
 
 import java.io.Serializable;
+import java.util.Objects;
 
 @Entity
 @Table(name="match")
@@ -74,5 +75,28 @@ public class Match implements Serializable {
 
     public void setMutualMatch(boolean mutualMatch) {
         this.mutualMatch = mutualMatch;
+    }
+
+    @Override
+    public String toString() {
+        return "Match{" +
+                "id=" + id +
+                ", matchingSearchId=" + matchingSearchId +
+                ", matchedSearchId=" + matchedSearchId +
+                ", matchedTimeSlotId=" + matchedTimeSlotId +
+                ", mutualMatch=" + mutualMatch +
+                '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Match match)) return false;
+        return isMutualMatch() == match.isMutualMatch() && Objects.equals(getId(), match.getId()) && Objects.equals(getMatchingSearchId(), match.getMatchingSearchId()) && Objects.equals(getMatchedSearchId(), match.getMatchedSearchId()) && Objects.equals(getMatchedTimeSlotId(), match.getMatchedTimeSlotId());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getId(), getMatchingSearchId(), getMatchedSearchId(), getMatchedTimeSlotId(), isMutualMatch());
     }
 }

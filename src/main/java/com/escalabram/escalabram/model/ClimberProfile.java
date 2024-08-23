@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.Objects;
 
 @Entity
 @Table(name="climber_profile")
@@ -18,7 +19,7 @@ public class ClimberProfile implements Serializable {
     @Column(name = "updated_at", nullable = false)
     private LocalDateTime updatedAt;
 
-    //FIXME Decider si cette colonne est importante
+    // TODO Decider si cette colonne est importante
     //    @Column(name = "birth_date")
     //    private Date birthDate;
 
@@ -40,7 +41,7 @@ public class ClimberProfile implements Serializable {
     @Column(name = "climber_profile_description")
     private String climberProfileDescription;
 
-    // FIXME Gerer les relations de table
+    // TODO Gerer les relations de table
     //hasOne Gender
     //hasOne Language
     //hasManySearch
@@ -132,5 +133,32 @@ public class ClimberProfile implements Serializable {
 
     public void setClimberProfileDescription(String climberProfileDescription) {
         this.climberProfileDescription = climberProfileDescription;
+    }
+
+    @Override
+    public String toString() {
+        return "ClimberProfile{" +
+                "id=" + id +
+                ", createdAt=" + createdAt +
+                ", updatedAt=" + updatedAt +
+                ", avatar='" + avatar + '\'' +
+                ", genderId=" + genderId +
+                ", languageId='" + languageId + '\'' +
+                ", climberUserId=" + climberUserId +
+                ", isNotified=" + isNotified +
+                ", climberProfileDescription='" + climberProfileDescription + '\'' +
+                '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof ClimberProfile that)) return false;
+        return isNotified() == that.isNotified() && Objects.equals(getId(), that.getId()) && Objects.equals(getCreatedAt(), that.getCreatedAt()) && Objects.equals(getUpdatedAt(), that.getUpdatedAt()) && Objects.equals(getAvatar(), that.getAvatar()) && Objects.equals(getGenderId(), that.getGenderId()) && Objects.equals(getLanguageId(), that.getLanguageId()) && Objects.equals(getClimberUserId(), that.getClimberUserId()) && Objects.equals(getClimberProfileDescription(), that.getClimberProfileDescription());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getId(), getCreatedAt(), getUpdatedAt(), getAvatar(), getGenderId(), getLanguageId(), getClimberUserId(), isNotified(), getClimberProfileDescription());
     }
 }

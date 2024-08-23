@@ -2,6 +2,7 @@ package com.escalabram.escalabram.controller.http;
 
 import com.escalabram.escalabram.controller.errors.BadRequestAlertException;
 import com.escalabram.escalabram.model.Search;
+import com.escalabram.escalabram.service.ClimberProfileService;
 import com.escalabram.escalabram.service.SearchService;
 import com.escalabram.escalabram.utils.ResponseUtil;
 import jakarta.validation.Valid;
@@ -22,9 +23,11 @@ import java.util.Set;
 public class SearchController {
     private final Logger log = LoggerFactory.getLogger(SearchController.class);
     private final SearchService searchService;
+    private final ClimberProfileService climberProfileService;
 
-    public SearchController(SearchService searchService){
+    public SearchController(SearchService searchService, ClimberProfileService climberProfileService){
         this.searchService = searchService;
+        this.climberProfileService = climberProfileService;
     }
 
     @GetMapping("/searches")
@@ -58,6 +61,9 @@ public class SearchController {
         try {
             if (search.getId() != null)
                 throw new BadRequestAlertException("A new search cannot already have an ID");
+
+            if(!climberProfileService.existsById(search.getClimberProfileId()))
+                throw new BadRequestAlertException("There is no ClimberProfile matching with this search");
 
             // TODO Remplacer SEARCH par un DTO
             searchService.createSearch(search);

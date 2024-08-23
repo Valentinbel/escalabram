@@ -57,7 +57,7 @@ public class Search implements Serializable {
     )
     private Set<ClimbLevel> climbLevels = new HashSet<>();
 
-    // FIXME champs à ajouter (?)
+    // TODO champs à ajouter (?)
     //min-max age
 
     public Search() {

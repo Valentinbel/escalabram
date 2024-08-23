@@ -36,6 +36,11 @@ public class ClimberProfileServiceImpl implements ClimberProfileService {
     }
 
     @Override
+    public boolean existsById(Long climberProfileId) {
+        return climberProfileRepository.existsById(climberProfileId);
+    }
+
+    @Override
     public void createClimberProfile(ClimberProfile climberProfile) {
         log.debug("createClimberProfile : {}", climberProfile);
         save(climberProfile);

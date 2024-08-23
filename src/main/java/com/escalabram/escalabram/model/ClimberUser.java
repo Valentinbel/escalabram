@@ -3,6 +3,7 @@ package com.escalabram.escalabram.model;
 import jakarta.persistence.*;
 
 import java.io.Serializable;
+import java.util.Objects;
 
 @Entity
 @Table(name="climber_user")
@@ -21,11 +22,11 @@ public class ClimberUser implements Serializable {
     @Column(name = "password", nullable = false)
     private String password;
 
-    // FIXME champs à ajouter (?) Spring Security
+    // TODO champs à ajouter (?) Spring Security
     // accessToken string
     //rememberMeToken string
 
-    // FIXME Relations tables
+    // TODO Relations tables
     // hasOne(() => Profile)
     //public profile: HasOne<typeof Profile>
 
@@ -68,5 +69,27 @@ public class ClimberUser implements Serializable {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    @Override
+    public String toString() {
+        return "ClimberUser{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", email='" + email + '\'' +
+                ", password='" + password + '\'' +
+                '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof ClimberUser that)) return false;
+        return Objects.equals(getId(), that.getId()) && Objects.equals(getName(), that.getName()) && Objects.equals(getEmail(), that.getEmail()) && Objects.equals(getPassword(), that.getPassword());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getId(), getName(), getEmail(), getPassword());
     }
 }

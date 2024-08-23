@@ -3,15 +3,15 @@ package com.escalabram.escalabram.service.dto;
 import java.io.Serializable;
 import java.sql.Timestamp;
 
-public class SearchForMatchDTO implements Serializable {
+public class SearchMatchDTO implements Serializable {
     private Long searchId;
     private Long timeSlotId;
     private Timestamp beginTime;
     private Timestamp endTime;
 
-    public SearchForMatchDTO() {
+    public SearchMatchDTO() {
     }
-    public SearchForMatchDTO(Long searchId, Long timeSlotId, Timestamp beginTime, Timestamp endTime) {
+    public SearchMatchDTO(Long searchId, Long timeSlotId, Timestamp beginTime, Timestamp endTime) {
         this.searchId = searchId;
         this.timeSlotId = timeSlotId;
         this.beginTime = beginTime;

@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 
 import java.io.Serializable;
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 
 @Entity
@@ -65,5 +66,17 @@ public class ClimbLevel implements Serializable {
                 "id=" + id +
                 ", codeFr='" + codeFr +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof ClimbLevel that)) return false;
+        return Objects.equals(getId(), that.getId()) && Objects.equals(getCodeFr(), that.getCodeFr()) && Objects.equals(getSearches(), that.getSearches());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getId(), getCodeFr(), getSearches());
     }
 }
