@@ -7,5 +7,5 @@ import java.util.List;
 
 public interface MatchService {
 
-    List<Match> createMatchesIfExist(Search search);
+    List<Match> createMatchesIfFit(Search search);
 }

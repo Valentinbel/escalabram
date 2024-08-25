@@ -30,12 +30,12 @@ public class MatchServiceImpl implements MatchService {
     }
 
     @Override
-    public List<Match> createMatchesIfExist(Search search) {
+    public List<Match> createMatchesIfFit(Search search) {
         // New search for matching (MATCHING)
         Long matchingSearchId = search.getId();
         Long matchingClimberProfile = search.getClimberProfileId();
         Long matchingPlaceId = search.getPlaceId();
-        List<TimeSlot> matchingTimeSlots = search.getTimeSlots();
+        Set<TimeSlot> matchingTimeSlots = search.getTimeSlots();
         List<Timestamp> matchingBeginTimes = new ArrayList<>();
 
         List<ClimbLevel> matchingClimbLevels = search.getClimbLevels().stream().toList();

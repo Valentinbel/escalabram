@@ -35,7 +35,7 @@ public class MatchController {
             Optional<Search> optionalSearch = searchService.findById(searchId);
             if(optionalSearch.isPresent()) {
                 Search search = optionalSearch.get();
-                matchList = matchService.createMatchesIfExist(search);
+                matchList = matchService.createMatchesIfFit(search);
             }
             return ResponseEntity.ok(matchList);
 

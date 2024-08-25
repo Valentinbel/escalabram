@@ -6,5 +6,5 @@ import java.util.Set;
 
 public interface ClimbLevelService {
 
-    Set<ClimbLevel> retrieveCimbLevelsFromIds(Set<ClimbLevel> climbLevelIds);
+    Set<ClimbLevel> findCimbLevelsByIds(Set<ClimbLevel> climbLevelIds);
 }

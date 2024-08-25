@@ -40,11 +40,11 @@ public class SearchServiceImpl implements SearchService {
 
     @Override
     public void createSearch(Search search) {
-
-        Set<ClimbLevel> newClimbLevels = climbLevelService.retrieveCimbLevelsFromIds(search.getClimbLevels());
+        // TODO check if it has to be filled from front?
+        Set<ClimbLevel> newClimbLevels = climbLevelService.findCimbLevelsByIds(search.getClimbLevels());
         search.setClimbLevels(newClimbLevels);
 
-        List<TimeSlot> timeslots = new ArrayList<>();
+        Set<TimeSlot> timeslots = new HashSet<>();
         for (TimeSlot timeSlotIn : search.getTimeSlots()) {
             TimeSlot timeSlot = new TimeSlot(timeSlotIn.getId(), timeSlotIn.getBeginTime(), timeSlotIn.getEndTime());
             timeSlot.setSearch(search);

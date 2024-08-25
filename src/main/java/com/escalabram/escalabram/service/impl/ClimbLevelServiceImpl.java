@@ -22,12 +22,12 @@ public class ClimbLevelServiceImpl implements ClimbLevelService {
     }
 
     @Override
-    public Set<ClimbLevel> retrieveCimbLevelsFromIds(Set<ClimbLevel> climbLevelIds) {
-        Set<ClimbLevel> newClimbLevels = new HashSet<>();
-        climbLevelIds.forEach(eachClimbLevel -> {
-            Optional<ClimbLevel> climbLevel = climbLevelRepository.findById(eachClimbLevel.getId());
-            climbLevel.ifPresent(newClimbLevels::add);
+    public Set<ClimbLevel> findCimbLevelsByIds(Set<ClimbLevel> climbLevels) {
+        Set<ClimbLevel> foundClimbLevels = new HashSet<>();
+        climbLevels.forEach(climbLevel -> {
+            Optional<ClimbLevel> optClimbLevel = climbLevelRepository.findById(climbLevel.getId());
+            optClimbLevel.ifPresent(foundClimbLevels::add);
         });
-        return newClimbLevels;
+        return foundClimbLevels;
     }
 }

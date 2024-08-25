@@ -41,7 +41,7 @@ public class Search implements Serializable {
     private Boolean isActive;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "search", cascade = CascadeType.ALL)
-    private List<TimeSlot> timeSlots = new ArrayList<>();
+    private Set<TimeSlot> timeSlots = new HashSet<>();
 
     @ManyToMany(
             fetch = FetchType.LAZY,
@@ -156,11 +156,11 @@ public class Search implements Serializable {
         this.preferedGenderId = preferedGenderId;
     }
 
-    public List<TimeSlot> getTimeSlots() {
+    public Set<TimeSlot> getTimeSlots() {
         return timeSlots;
     }
 
-    public void setTimeSlots(List<TimeSlot> timeSlots) {
+    public void setTimeSlots(Set<TimeSlot> timeSlots) {
         this.timeSlots = timeSlots;
     }
 
