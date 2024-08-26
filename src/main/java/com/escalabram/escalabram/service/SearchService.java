@@ -14,9 +14,9 @@ public interface SearchService {
 
     Optional<Set<Search>> findByClimberProfileId(Long climberProfileId);
 
-    void createSearch(Search newSearch);
+    Search createSearch(Search newSearch);
 
-    Search save(Search search);
+    Search updateSearch(Search search);
 
     void deleteById(Long id);
 }

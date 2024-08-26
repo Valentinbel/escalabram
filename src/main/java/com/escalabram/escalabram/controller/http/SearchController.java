@@ -66,9 +66,10 @@ public class SearchController {
                 throw new BadRequestAlertException("There is no ClimberProfile matching with this search");
 
             // TODO Remplacer SEARCH par un DTO
-            searchService.createSearch(search);
+            Search createdSearch = searchService.createSearch(search);
 
-            return ResponseEntity.status(HttpStatus.OK).build();
+            return new ResponseEntity<>(createdSearch, HttpStatus.CREATED);
+            //return ResponseEntity.status(HttpStatus.OK).build(createdSearch);
             //return ResponseEntity.created(new URI("/api/personne-autorises/" + result.getId())).body(result);
         } catch (Exception e) {
             log.error("An error was encountered while retrieving data",e);
@@ -81,8 +82,8 @@ public class SearchController {
         log.debug("REST request to update Search : {}", search);
         if (search.getId() == null)
             throw new BadRequestAlertException("You cannot update a Search that have no Id");
-        Search result = searchService.save(search);
-        return ResponseEntity.ok().body(result);
+        Search updatedSearch = searchService.updateSearch(search);
+        return ResponseEntity.ok().body(updatedSearch);
     }
 
     @DeleteMapping("/searches/{id}")

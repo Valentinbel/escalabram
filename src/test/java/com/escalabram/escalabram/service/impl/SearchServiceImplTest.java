@@ -4,10 +4,12 @@ import com.escalabram.escalabram.model.ClimbLevel;
 import com.escalabram.escalabram.model.Search;
 import com.escalabram.escalabram.model.TimeSlot;
 import com.escalabram.escalabram.repository.SearchRepository;
+import com.escalabram.escalabram.service.ClimbLevelService;
 import com.escalabram.escalabram.service.SearchService;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
+import org.mockito.ArgumentMatchers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -33,6 +35,9 @@ class SearchServiceImplTest {
 
     @Autowired
     private SearchService searchService;
+
+    @MockBean
+    private ClimbLevelService climbLevelService;
 
     @MockBean
     private SearchRepository searchRepository;
@@ -106,9 +111,51 @@ class SearchServiceImplTest {
         assertEquals(optSetSearch, Optional.of(Set.of(searchList.get(3))));
     }
 
-//    @Test
-//    void testCreateSearch(){
-//
-//
-//    }
+    @Test
+    void testCreateSearch(){
+        Set<ClimbLevel> climbLevelsToCreate = Stream.of(
+                new ClimbLevel(2L , null),
+                new ClimbLevel(7L ,null)
+        ).collect(Collectors.toSet());
+
+        Search searchToCreate = new Search(1L,1L, "search1Profile1", true, true, true,
+                true, 1L,1L, climbLevelsToCreate, true);
+        searchToCreate.setTimeSlots(timeSlotSet);
+
+        when(climbLevelService.findCimbLevelsByIds(climbLevelsToCreate)).thenReturn(climbLevelSet);
+        when(searchRepository.save(ArgumentMatchers.any())).thenReturn(searchList.getFirst());
+
+        Search search = searchService.createSearch(searchToCreate);
+
+        verify(searchRepository, times(1)).save(ArgumentMatchers.any());
+        assertEquals(search, searchList.getFirst());
+        assertEquals(search.getTimeSlots(), searchList.getFirst().getTimeSlots());
+        assertEquals(search.getClimbLevels(), searchList.getFirst().getClimbLevels());
+        assertEquals(search.getClimberProfileId(), searchList.getFirst().getClimberProfileId());
+    }
+
+    @Test
+    void testUpdateSearch() {
+
+        Search searchToUpdate = new Search(1L,1L, "search1Profile1", true, true, true,
+                true, 1L,1L, climbLevelSet, true);
+        searchToUpdate.setTimeSlots(timeSlotSet);
+
+        when(searchRepository.save(ArgumentMatchers.any())).thenReturn(searchList.getFirst());
+
+        Search search = searchService.updateSearch(searchToUpdate);
+
+        verify(searchRepository, times(1)).save(ArgumentMatchers.any());
+        assertEquals(search, searchList.getFirst());
+        assertEquals(search, searchToUpdate);
+        assertEquals(search.getTitle(), searchList.getFirst().getTitle());
+        assertEquals(search.getClimbLevels(), searchList.getFirst().getClimbLevels());
+        assertEquals(search.getTimeSlots(), searchList.getFirst().getTimeSlots());
+    }
+
+    @Test
+    void deleteEmployeeById() {
+        searchService.deleteById(searchList.get(2).getId());
+        verify(searchRepository, times(1)).deleteById(searchList.get(2).getId());
+    }
 }

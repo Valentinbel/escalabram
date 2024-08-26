@@ -39,8 +39,7 @@ public class SearchServiceImpl implements SearchService {
     }
 
     @Override
-    public void createSearch(Search search) {
-        // TODO check if it has to be filled from front?
+    public Search createSearch(Search search) {
         Set<ClimbLevel> newClimbLevels = climbLevelService.findCimbLevelsByIds(search.getClimbLevels());
         search.setClimbLevels(newClimbLevels);
 
@@ -52,11 +51,11 @@ public class SearchServiceImpl implements SearchService {
         }
         search.setTimeSlots(timeslots);
 
-        save(search);
+        return searchRepository.save(search);
     }
 
     @Override
-    public Search save(Search search) {
+    public Search updateSearch(Search search) {
         return searchRepository.save(search);
     }
 
