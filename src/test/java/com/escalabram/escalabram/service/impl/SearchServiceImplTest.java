@@ -29,9 +29,9 @@ import static org.mockito.Mockito.*;
 
 @SpringBootTest
 class SearchServiceImplTest {
-    public static Set<ClimbLevel> climbLevelSet;
-    public static Set<TimeSlot> timeSlotSet;
-    public static List<Search> searchList;
+    public static Set<ClimbLevel> climbLevels;
+    public static Set<TimeSlot> timeSlots;
+    public static List<Search> searches;
 
     @Autowired
     private SearchService searchService;
@@ -45,70 +45,72 @@ class SearchServiceImplTest {
 
     @BeforeAll
     public static void init() {
+        climbLevels = Stream.of(
+                new ClimbLevel(2L ,"4+"),
+                new ClimbLevel(7L ,"6A+")
+        ).collect(Collectors.toSet());
+
         String beginTime1 = "2024-09-02 13:59:59.123456789";
         String endTime1 = "2024-09-02 18:59:59.123456789";
 
         String beginTime2 = "2024-09-03 19:00:00.123456789";
         String endTime2 = "2024-09-03 21:00:00.123456789";
 
-        climbLevelSet = Stream.of(
-                new ClimbLevel(2L ,"4+"),
-                new ClimbLevel(7L ,"6A+")
-                ).collect(Collectors.toSet());
-        timeSlotSet = Stream.of(
+        timeSlots = Stream.of(
                 new TimeSlot(1L, Timestamp.valueOf(beginTime1), Timestamp.valueOf(endTime1)),
                 new TimeSlot(1L, Timestamp.valueOf(beginTime2), Timestamp.valueOf(endTime2))
         ).collect(Collectors.toSet());
-        searchList = Stream.of(
+
+        searches = Stream.of(
                 new Search(1L,1L, "search1Profile1", true, true, true,
-                        true, 1L,1L, climbLevelSet, true),
+                        true, 1L,1L, climbLevels, true),
                 new Search(2L,1L, "search2Profile1", true, true, true,
-                        true, 2L,1L, climbLevelSet, true),
+                        true, 2L,1L, climbLevels, true),
                 new Search(3L,2L, "search1Profile2", true, true, true,
-                        true, 2L,1L, climbLevelSet, true),
+                        true, 2L,1L, climbLevels, true),
                 new Search(4L,4L, "search1Profile3", true, true, true,
-                        true, 2L,1L, climbLevelSet, true)
+                        true, 2L,1L, climbLevels, true)
         ).toList();
     }
 
     @Test
     void testFindAll(){
-        when(searchRepository.findAll()).thenReturn(searchList);
-        searchList.get(3).setTimeSlots(timeSlotSet);
+        when(searchRepository.findAll()).thenReturn(searches);
+        searches.get(3).setTimeSlots(timeSlots);
 
-        List<Search> searches = searchService.findAll();
+        List<Search> findedSearches = searchService.findAll();
 
         assertFalse(searches.isEmpty());
         verify(searchRepository, times(1)).findAll();
-        assertEquals(searches.size(), searchList.size());
-        assertEquals(searches.get(3), searchList.get(3));
-        assertEquals(searches.get(3).getTimeSlots(), searchList.get(3).getTimeSlots());
-        assertEquals(searches.get(0).getClimbLevels(), searchList.get(0).getClimbLevels());
-        assertEquals(searches.get(3).getId(), searchList.get(3).getId());
-        assertEquals(searches.get(2).getPlaceId(), searchList.get(2).getPlaceId());
-        assertEquals(searches.get(2).getTimeSlots(), searchList.get(2).getTimeSlots());
+        assertEquals(findedSearches.size(), searches.size());
+        assertEquals(findedSearches.get(3), searches.get(3));
+        assertEquals(findedSearches.get(3).getTimeSlots(), searches.get(3).getTimeSlots());
+        assertEquals(findedSearches.get(0).getClimbLevels(), searches.get(0).getClimbLevels());
+        assertEquals(findedSearches.get(3).getId(), searches.get(3).getId());
+        assertEquals(findedSearches.get(2).getPlaceId(), searches.get(2).getPlaceId());
+        assertEquals(findedSearches.get(2).getTimeSlots(), searches.get(2).getTimeSlots());
     }
 
     @Test
     void testFindById() {
-        when(searchRepository.findById(searchList.getFirst().getId())).thenReturn(Optional.of(searchList.getFirst()));
-        searchList.getFirst().setTimeSlots(timeSlotSet);
+        when(searchRepository.findById(searches.getFirst().getId())).thenReturn(Optional.of(searches.getFirst()));
+        searches.getFirst().setTimeSlots(timeSlots);
 
-        Optional<Search> optSearch = searchService.findById(searchList.getFirst().getId());
+        Optional<Search> optSearch = searchService.findById(searches.getFirst().getId());
 
-        verify(searchRepository, times(1)).findById(searchList.getFirst().getId());
-        assertEquals(optSearch, Optional.of(searchList.getFirst()));
+        verify(searchRepository, times(1)).findById(searches.getFirst().getId());
+        assertEquals(optSearch, Optional.of(searches.getFirst()));
     }
 
     @Test
     void testFindByClimberProfileId(){
-        when(searchRepository.findByClimberProfileId(searchList.get(3).getClimberProfileId())).thenReturn(Optional.of(Set.of(searchList.get(3))));
-        searchList.get(3).setTimeSlots(timeSlotSet);
+        when(searchRepository.findByClimberProfileId(searches.get(3).getClimberProfileId())).thenReturn(Optional.of(Set.of(searches.get(3))));
+        searches.get(3).setTimeSlots(timeSlots);
 
-        Optional<Set<Search>> optSetSearch = searchService.findByClimberProfileId(4L);
+        Optional<Set<Search>> optSearches = searchService.findByClimberProfileId(4L);
 
-        verify(searchRepository, times(1)).findByClimberProfileId(searchList.get(3).getClimberProfileId());
-        assertEquals(optSetSearch, Optional.of(Set.of(searchList.get(3))));
+        verify(searchRepository, times(1)).findByClimberProfileId(searches.get(3).getClimberProfileId());
+        assertEquals(optSearches, Optional.of(Set.of(searches.get(3))));
     }
 
     @Test
@@ -120,42 +122,42 @@ class SearchServiceImplTest {
 
         Search searchToCreate = new Search(1L,1L, "search1Profile1", true, true, true,
                 true, 1L,1L, climbLevelsToCreate, true);
-        searchToCreate.setTimeSlots(timeSlotSet);
+        searchToCreate.setTimeSlots(timeSlots);
 
-        when(climbLevelService.findCimbLevelsByIds(climbLevelsToCreate)).thenReturn(climbLevelSet);
-        when(searchRepository.save(ArgumentMatchers.any())).thenReturn(searchList.getFirst());
+        when(climbLevelService.findCimbLevelsByIds(climbLevelsToCreate)).thenReturn(climbLevels);
+        when(searchRepository.save(ArgumentMatchers.any())).thenReturn(searches.getFirst());
 
         Search search = searchService.createSearch(searchToCreate);
 
         verify(searchRepository, times(1)).save(ArgumentMatchers.any());
-        assertEquals(search, searchList.getFirst());
-        assertEquals(search.getTimeSlots(), searchList.getFirst().getTimeSlots());
-        assertEquals(search.getClimbLevels(), searchList.getFirst().getClimbLevels());
-        assertEquals(search.getClimberProfileId(), searchList.getFirst().getClimberProfileId());
+        assertEquals(search, searches.getFirst());
+        assertEquals(search.getTimeSlots(), searches.getFirst().getTimeSlots());
+        assertEquals(search.getClimbLevels(), searches.getFirst().getClimbLevels());
+        assertEquals(search.getClimberProfileId(), searches.getFirst().getClimberProfileId());
     }
 
     @Test
     void testUpdateSearch() {
 
         Search searchToUpdate = new Search(1L,1L, "search1Profile1", true, true, true,
-                true, 1L,1L, climbLevelSet, true);
-        searchToUpdate.setTimeSlots(timeSlotSet);
+                true, 1L,1L, climbLevels, true);
+        searchToUpdate.setTimeSlots(timeSlots);
 
-        when(searchRepository.save(ArgumentMatchers.any())).thenReturn(searchList.getFirst());
+        when(searchRepository.save(ArgumentMatchers.any())).thenReturn(searches.getFirst());
 
         Search search = searchService.updateSearch(searchToUpdate);
 
         verify(searchRepository, times(1)).save(ArgumentMatchers.any());
-        assertEquals(search, searchList.getFirst());
+        assertEquals(search, searches.getFirst());
         assertEquals(search, searchToUpdate);
-        assertEquals(search.getTitle(), searchList.getFirst().getTitle());
-        assertEquals(search.getClimbLevels(), searchList.getFirst().getClimbLevels());
-        assertEquals(search.getTimeSlots(), searchList.getFirst().getTimeSlots());
+        assertEquals(search.getTitle(), searches.getFirst().getTitle());
+        assertEquals(search.getClimbLevels(), searches.getFirst().getClimbLevels());
+        assertEquals(search.getTimeSlots(), searches.getFirst().getTimeSlots());
     }
 
     @Test
     void deleteEmployeeById() {
-        searchService.deleteById(searchList.get(2).getId());
-        verify(searchRepository, times(1)).deleteById(searchList.get(2).getId());
+        searchService.deleteById(searches.get(2).getId());
+        verify(searchRepository, times(1)).deleteById(searches.get(2).getId());
     }
 }

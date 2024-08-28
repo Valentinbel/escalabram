@@ -9,6 +9,8 @@ import com.escalabram.escalabram.repository.SearchRepository;
 import com.escalabram.escalabram.service.MatchService;
 import com.escalabram.escalabram.service.dto.ISearchClimbLevelDTO;
 import com.escalabram.escalabram.service.dto.SearchMatchDTO;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -18,11 +20,12 @@ import java.util.*;
 @Service
 @Transactional
 public class MatchServiceImpl implements MatchService {
+    private final Logger log = LoggerFactory.getLogger(MatchServiceImpl.class);
+    Set<Long> matchedSearchIds = new HashSet<>();
+
 
     private final MatchRepository matchRepository;
     private final SearchRepository searchRepository;
-
-    Set<Long> matchedSearchIds = new HashSet<>();
 
     public MatchServiceImpl(MatchRepository matchRepository, SearchRepository searchRepository) {
         this.matchRepository = matchRepository;
@@ -31,6 +34,7 @@ public class MatchServiceImpl implements MatchService {
 
     @Override
     public List<Match> createMatchesIfFit(Search search) {
+        matchedSearchIds.clear();
         // New search for matching (MATCHING)
         Long matchingSearchId = search.getId();
         Long matchingClimberProfile = search.getClimberProfileId();
@@ -51,9 +55,9 @@ public class MatchServiceImpl implements MatchService {
         });
 
         // Searches that may have matched
-        List<SearchMatchDTO> searchMatchDTOs = searchRepository.findSearchesByCriterias(matchingClimberProfile, matchingPlaceId, matchingBeginTimes);
+        List<SearchMatchDTO> searchMatchDTOs = searchRepository.findAllSearchesByCriterias(matchingClimberProfile, matchingPlaceId, matchingBeginTimes);
 
-        List<Match> newMatchList = new ArrayList<>();
+        List<Match> newMatches = new ArrayList<>();
         if(!searchMatchDTOs.isEmpty()) {
             // coincide with timeSlots
             List<SearchMatchDTO> matchedTimeSlots = getMatchedTimeSlots(searchMatchDTOs, timeSlotsHashMap);
@@ -62,24 +66,30 @@ public class MatchServiceImpl implements MatchService {
             if(!matchedTimeSlots.isEmpty()) {
                 List<SearchMatchDTO> matchedClimbLevels = getMatchedClimbLevels(matchedTimeSlots, matchingClimbLevelIds);
 
+                if(matchedClimbLevels.isEmpty())
+                    log.info("Some timeslots have matched but not the climbLevels");
+
                 matchedClimbLevels.forEach(searchForMatchDTO -> {
-                    Optional<Match> optionalMatch = matchRepository.findByAllCriterias(matchingSearchId, searchForMatchDTO.getSearchId(), searchForMatchDTO.getTimeSlotId(), true );
+                    Optional<Match> optionalMatch = matchRepository.findByCriterias(matchingSearchId, searchForMatchDTO.getSearchId(), searchForMatchDTO.getTimeSlotId(), true );
+
                     if(optionalMatch.isEmpty()) {
                         Match newMatch = new Match();
                         newMatch.setMatchingSearchId(matchingSearchId);
                         newMatch.setMatchedSearchId(searchForMatchDTO.getSearchId());
                         newMatch.setMatchedTimeSlotId(searchForMatchDTO.getTimeSlotId());
                         newMatch.setMutualMatch(true);
+
+                        log.info("newMatch to be saved: {}", newMatch);
                         matchRepository.save(newMatch);
-                        newMatchList.add(newMatch);
+                        newMatches.add(newMatch);
                     } else {
-                        System.out.println("This is a Match. This Match already exists in our Database: " + optionalMatch.get());
-                        newMatchList.add(optionalMatch.get());
+                        log.info("This is a Match. However, this Match already exists in our Database: {}", optionalMatch.get());
+                        newMatches.add(optionalMatch.get());
                     }
                 });
-            }
+            } else log.info("There are no matchedTimeSlots. We can't say about ClimbLevels");
         }
-        return newMatchList;
+        return newMatches;
         //TODO ajouter critères de match: preferedGenreId
     }
 
@@ -88,20 +98,19 @@ public class MatchServiceImpl implements MatchService {
         searchMatchDTOs.forEach(searchMatchDTO ->
             timeSlotsHashMap.forEach((Timestamp begin, Timestamp end) ->{
                 if (isTimeSlotMatching(begin, end, searchMatchDTO)){
-                    System.out.println("TIMESLOT MATCH: " + searchMatchDTO );
+                    log.info("begin: {}. end: {}. searchMatchDTO: {}", begin, end, searchMatchDTO);
                     matchedTimeSlots.add(searchMatchDTO);
                     matchedSearchIds.add(searchMatchDTO.getSearchId());
-                }
-            }));
+                }}));
         return matchedTimeSlots;
     }
 
     private boolean isTimeSlotMatching(Timestamp begin, Timestamp end, SearchMatchDTO searchMatchDTO){
-        return (begin.toInstant().isBefore(searchMatchDTO.getBeginTime().toInstant())
-                    && begin.toInstant().isAfter(searchMatchDTO.getEndTime().toInstant()))
+        return (begin.toInstant().isAfter(searchMatchDTO.getBeginTime().toInstant())
+                    && begin.toInstant().isBefore(searchMatchDTO.getEndTime().toInstant()))
 
-                || (end.toInstant().isBefore(searchMatchDTO.getBeginTime().toInstant())
-                    && end.toInstant().isAfter(searchMatchDTO.getEndTime().toInstant()))
+                || (end.toInstant().isAfter(searchMatchDTO.getBeginTime().toInstant())
+                    && end.toInstant().isBefore(searchMatchDTO.getEndTime().toInstant()))
 
                 || (begin.toInstant().equals(searchMatchDTO.getBeginTime().toInstant()))
                     || (end.toInstant().equals(searchMatchDTO.getEndTime().toInstant()));

@@ -20,7 +20,7 @@ public interface SearchRepository extends JpaRepository<Search, Long> {
             "WHERE s.placeId = :placeId " +
             "AND s.climberProfileId <> :climberProfileId " +
             "AND DATE(ts.beginTime) IN :matchingBeginTimes ")
-    List<SearchMatchDTO> findSearchesByCriterias(
+    List<SearchMatchDTO> findAllSearchesByCriterias(
             @Param("climberProfileId") Long searchClimberProfile,
             @Param("placeId") Long placeId,
             @Param("matchingBeginTimes") List<Timestamp> matchingBeginTimes);

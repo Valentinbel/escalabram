@@ -31,13 +31,13 @@ public class MatchController {
     public ResponseEntity<List<Match>> getMatchesBySearchId(@PathVariable Long searchId) {
         log.debug("REST request to get list of matches, or create them if necessary, from searchId: {}", searchId);
         try {
-            List<Match> matchList = new ArrayList<>();
-            Optional<Search> optionalSearch = searchService.findById(searchId);
-            if(optionalSearch.isPresent()) {
-                Search search = optionalSearch.get();
-                matchList = matchService.createMatchesIfFit(search);
+            List<Match> matches = new ArrayList<>();
+            Optional<Search> optSearch = searchService.findById(searchId);
+            if(optSearch.isPresent()) {
+                Search search = optSearch.get();
+                matches = matchService.createMatchesIfFit(search);
             }
-            return ResponseEntity.ok(matchList);
+            return ResponseEntity.ok(matches);
 
         } catch (Exception e) {
             log.error("An error was encountered while retrieving data from Matches",e);

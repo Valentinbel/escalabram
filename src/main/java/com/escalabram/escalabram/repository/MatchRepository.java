@@ -16,8 +16,8 @@ public interface MatchRepository extends JpaRepository<Match, Long> {
             "AND m.matched_time_slot_id = :matchedTimeSlotId " +
             "AND m.mutual_match = :mutualMatch " +
             "LIMIT 1 ", nativeQuery = true)
-    Optional<Match> findByAllCriterias(@Param("matchingSearchId") Long matchingSearchId,
-                                      @Param("matchedSearchId") Long matchedSearchId,
-                                      @Param("matchedTimeSlotId") Long matchedTimeSlotId,
-                                      @Param("mutualMatch") boolean mutualMatch);
+    Optional<Match> findByCriterias(@Param("matchingSearchId") Long matchingSearchId,
+                                    @Param("matchedSearchId") Long matchedSearchId,
+                                    @Param("matchedTimeSlotId") Long matchedTimeSlotId,
+                                    @Param("mutualMatch") boolean mutualMatch);
 }
