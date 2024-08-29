@@ -16,7 +16,6 @@ import org.mockito.ArgumentMatchers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.test.context.ContextConfiguration;
 
 import java.sql.Timestamp;
 import java.util.ArrayList;
@@ -31,7 +30,6 @@ import static org.mockito.Mockito.when;
 import static org.mockito.Mockito.*;
 
 @SpringBootTest
-@ContextConfiguration(classes = MatchServiceImpl.class)
 class MatchServiceImplTest {
     public static List<Search> searches;
     public static Set<ClimbLevel> climbLevelsMatching1;
