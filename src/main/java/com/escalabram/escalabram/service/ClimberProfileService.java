@@ -13,7 +13,7 @@ public interface ClimberProfileService {
 
     boolean existsById(Long climberProfileId);
 
-    void createClimberProfile(ClimberProfile climberProfile);
+    ClimberProfile createClimberProfile(ClimberProfile climberProfile);
 
     ClimberProfile save(ClimberProfile climberProfile);
 }

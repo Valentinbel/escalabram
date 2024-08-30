@@ -41,9 +41,9 @@ public class ClimberProfileServiceImpl implements ClimberProfileService {
     }
 
     @Override
-    public void createClimberProfile(ClimberProfile climberProfile) {
+    public ClimberProfile createClimberProfile(ClimberProfile climberProfile) {
         log.debug("createClimberProfile : {}", climberProfile);
-        save(climberProfile);
+        return save(climberProfile);
     }
 
     @Override

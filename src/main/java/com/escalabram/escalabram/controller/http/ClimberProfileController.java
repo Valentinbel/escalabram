@@ -3,6 +3,7 @@ package com.escalabram.escalabram.controller.http;
 import com.escalabram.escalabram.controller.errors.BadRequestAlertException;
 import com.escalabram.escalabram.model.ClimberProfile;
 import com.escalabram.escalabram.service.ClimberProfileService;
+import com.escalabram.escalabram.utils.ResponseUtil;
 import jakarta.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -11,8 +12,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
-@CrossOrigin(origins = "http://localhost:8080")
+@CrossOrigin(origins = "http://localhost:8081")
 @RestController
 @RequestMapping("/api")
 public class ClimberProfileController {
@@ -37,6 +39,18 @@ public class ClimberProfileController {
         }
     }
 
+    @GetMapping("/climber-profile/{id}")
+    public ResponseEntity<ClimberProfile> getClimberProfileById(@PathVariable Long id) {
+        log.debug("REST request to get ClimberProfileById : {}", id);
+        try {
+            Optional<ClimberProfile> climberProfile = climberProfileService.findById(id);
+            return ResponseUtil.wrapOrNotFound(climberProfile);
+        } catch (Exception e) {
+        log.error("An error was encountered while retrieving data in getSearchByClimberProfileId",e);
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+    }
+
     @PostMapping("/climber-profile")
     public ResponseEntity<ClimberProfile> createClimberProfile(@Valid @RequestBody ClimberProfile climberProfile){
         log.debug("REST request to save ClimberProfile : {}", climberProfile);
@@ -45,9 +59,8 @@ public class ClimberProfileController {
                 throw new BadRequestAlertException("A new climberProfile cannot already have an ID");
 
             //Remplacer ClimberProfile par un DTO ///////////////////////////////////
-            climberProfileService.createClimberProfile(climberProfile);
-
-            return ResponseEntity.status(HttpStatus.OK).build();
+            ClimberProfile createdClimberProfile = climberProfileService.createClimberProfile(climberProfile);
+            return new ResponseEntity<>(createdClimberProfile, HttpStatus.CREATED);
             //return ResponseEntity.created(new URI("/api/personne-autorises/" + result.getId())).body(result);
         } catch (Exception e) {
             log.error("An error was encountered while retrieving data",e);
