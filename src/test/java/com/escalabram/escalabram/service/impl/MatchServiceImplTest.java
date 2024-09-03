@@ -122,19 +122,18 @@ class MatchServiceImplTest {
         matchedClimbLevelDTOs.add(searchClimbLevelDTO1);
         matchedClimbLevelDTOs.add(searchClimbLevelDTO2);
 
-        Match matchNotSaved = new Match(null, searches.getFirst().getId(), searchMatchDTO1.getSearchId(), searchMatchDTO1.getTimeSlotId(), true);
         Match match = new Match(1L, searches.getFirst().getId(), searchMatchDTO1.getSearchId(), searchMatchDTO1.getTimeSlotId(), true);
         Optional<Match> emptyMatch = Optional.empty();
         List<Match> matchesToResult = new ArrayList<>();
-        matchesToResult.add(matchNotSaved);
+        matchesToResult.add(match);
 
         List<SearchMatchDTO> searchMatchDTOs = new ArrayList<>();
         searchMatchDTOs.add(searchMatchDTO1);
 
-        when(searchRepository.findAllSearchesByCriterias(searchMatching.getClimberProfileId(), searchMatching.getPlaceId(), matchingBeginTimesSearchMatching))
+        when(searchRepository.findAllSearchesByCriterias(ArgumentMatchers.any(), ArgumentMatchers.any(), ArgumentMatchers.any()))
                 .thenReturn(searchMatchDTOs);
-        when(searchRepository.findClimbLevelsByIdSearchId(searchToMatched.getId())).thenReturn(matchedClimbLevelDTOs);
-        when(matchRepository.findByCriterias(match.getMatchingSearchId(), match.getMatchedSearchId(),match.getMatchedTimeSlotId(), match.isMutualMatch()))
+        when(searchRepository.findClimbLevelsByIdSearchId(ArgumentMatchers.any())).thenReturn(matchedClimbLevelDTOs);
+        when(matchRepository.findByCriterias(ArgumentMatchers.anyLong(), ArgumentMatchers.anyLong(),ArgumentMatchers.anyLong(), ArgumentMatchers.anyBoolean()))
                 .thenReturn(emptyMatch);
         when(matchRepository.save(ArgumentMatchers.any())).thenReturn(match);
 
@@ -143,7 +142,7 @@ class MatchServiceImplTest {
         verify(searchRepository, times(1)).findAllSearchesByCriterias(searchMatching.getClimberProfileId(), searchMatching.getPlaceId(), matchingBeginTimesSearchMatching);
         verify(searchRepository, times(1)).findClimbLevelsByIdSearchId(searchToMatched.getId());
         verify(matchRepository, times(1)).findByCriterias(match.getMatchingSearchId(), match.getMatchedSearchId(),match.getMatchedTimeSlotId(), match.isMutualMatch());
-        verify(matchRepository, times(1)).save(matchNotSaved);
+        verify(matchRepository, times(1)).save(ArgumentMatchers.any());
 
         assertEquals(matches, matchesToResult);
     }

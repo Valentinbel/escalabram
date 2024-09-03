@@ -82,8 +82,8 @@ public class MatchServiceImpl implements MatchService {
                             newMatch.setMutualMatch(true);
 
                             log.info("newMatch to be saved: {}", newMatch);
-                            matchRepository.save(newMatch);
-                            newMatches.add(newMatch);
+                            Match savedMatch = matchRepository.save(newMatch);
+                            newMatches.add(savedMatch);
                         } else {
                             log.info("This is a Match. However, this Match already exists in our Database: {}", optionalMatch.get());
                             newMatches.add(optionalMatch.get());
