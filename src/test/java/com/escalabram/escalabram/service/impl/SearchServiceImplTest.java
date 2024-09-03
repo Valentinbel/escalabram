@@ -31,6 +31,7 @@ import static org.mockito.Mockito.*;
 class SearchServiceImplTest {
     public static Set<ClimbLevel> climbLevels;
     public static Set<TimeSlot> timeSlots;
+    public static Set<TimeSlot> timeSlot2;
     public static List<Search> searches;
 
     @Autowired
@@ -61,6 +62,7 @@ class SearchServiceImplTest {
                 new TimeSlot(1L, Timestamp.valueOf(beginTime2), Timestamp.valueOf(endTime2))
         ).collect(Collectors.toSet());
 
+        timeSlot2 = Stream.of(new TimeSlot(1L, Timestamp.valueOf(beginTime1), Timestamp.valueOf(endTime1))).collect(Collectors.toSet());
         searches = Stream.of(
                 new Search(1L,1L, "search1Profile1", true, true, true,
                         true, 1L,1L, climbLevels, true),
@@ -71,6 +73,8 @@ class SearchServiceImplTest {
                 new Search(4L,4L, "search1Profile3", true, true, true,
                         true, 2L,1L, climbLevels, true)
         ).toList();
+
+        searches.forEach(search -> search.setTimeSlots(timeSlots));
     }
 
     @Test
@@ -136,24 +140,27 @@ class SearchServiceImplTest {
         assertEquals(search.getClimberProfileId(), searches.getFirst().getClimberProfileId());
     }
 
-//    @Test
-//    void testUpdateSearch() {
-//
-//        Search searchToUpdate = new Search(1L,1L, "search1Profile1", true, true, true,
-//                true, 1L,1L, climbLevels, true);
-//        searchToUpdate.setTimeSlots(timeSlots);
-//
-//        when(searchRepository.save(ArgumentMatchers.any())).thenReturn(searches.getFirst());
-//
-//        Search search = searchService.updateSearch(searchToUpdate);
-//
-//        verify(searchRepository, times(1)).save(ArgumentMatchers.any());
-//        assertEquals(search, searches.getFirst());
-//        assertEquals(search, searchToUpdate);
-//        assertEquals(search.getTitle(), searches.getFirst().getTitle());
-//        assertEquals(search.getClimbLevels(), searches.getFirst().getClimbLevels());
-//        assertEquals(search.getTimeSlots(), searches.getFirst().getTimeSlots());
-//    }
+    @Test
+    void testUpdateSearch() {
+        Search searchToUpdate = new Search(1L,1L, "search1modified", true, true, true,
+                true, 1L,1L, climbLevels, true);
+        searchToUpdate.setTimeSlots(timeSlot2);
+
+        when(searchRepository.save(ArgumentMatchers.any())).thenReturn(searches.getFirst());
+        when(searchRepository.save(searchToUpdate)).thenReturn(searchToUpdate);
+
+        searchService.updateSearch(searches.getFirst());
+        Search searchUpdated = searchService.updateSearch(searchToUpdate);
+
+        System.out.println("searches.getFirst().getTimeSlots(): " + searches.getFirst().getTimeSlots());
+        System.out.println("searchToUpdate.getTimeSlots(): " + searchToUpdate.getTimeSlots());
+
+        verify(searchRepository, times(2)).save(ArgumentMatchers.any());
+        assertEquals(searchUpdated, searchToUpdate);
+        assertEquals(searchUpdated.getTitle(), searchToUpdate.getTitle());
+        assertEquals(searchUpdated.getClimbLevels(), searches.getFirst().getClimbLevels());
+        assertEquals(searchUpdated.getTimeSlots(), timeSlot2);
+    }
 
     @Test
     void deleteEmployeeById() {

@@ -10,4 +10,6 @@ public interface ClimbLevelService {
     Set<ClimbLevel> findCimbLevelsByIds(Set<ClimbLevel> climbLevelIds);
 
     Set<ClimbLevel> findBySearches(Search search);
+
+    Set<ClimbLevel> getClimbLevelsBySearchId(Long id);
 }

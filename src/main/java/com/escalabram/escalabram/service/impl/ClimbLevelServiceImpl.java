@@ -36,4 +36,9 @@ public class ClimbLevelServiceImpl implements ClimbLevelService {
     public Set<ClimbLevel> findBySearches(Search search){
         return climbLevelRepository.findBySearches(search);
     }
+
+    @Override
+    public Set<ClimbLevel> getClimbLevelsBySearchId(Long id) {
+        return climbLevelRepository.getClimbLevelsBySearchesId(id);
+    }
 }

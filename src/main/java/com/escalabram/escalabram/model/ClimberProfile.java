@@ -4,7 +4,6 @@ import jakarta.persistence.*;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
-import java.util.Objects;
 
 @Entity
 @Table(name="climber_profile")
@@ -148,17 +147,5 @@ public class ClimberProfile implements Serializable {
                 ", isNotified=" + isNotified +
                 ", climberProfileDescription='" + climberProfileDescription + '\'' +
                 '}';
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof ClimberProfile that)) return false;
-        return isNotified() == that.isNotified() && Objects.equals(getId(), that.getId()) && Objects.equals(getCreatedAt(), that.getCreatedAt()) && Objects.equals(getUpdatedAt(), that.getUpdatedAt()) && Objects.equals(getAvatar(), that.getAvatar()) && Objects.equals(getGenderId(), that.getGenderId()) && Objects.equals(getLanguageId(), that.getLanguageId()) && Objects.equals(getClimberUserId(), that.getClimberUserId()) && Objects.equals(getClimberProfileDescription(), that.getClimberProfileDescription());
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(getId(), getCreatedAt(), getUpdatedAt(), getAvatar(), getGenderId(), getLanguageId(), getClimberUserId(), isNotified(), getClimberProfileDescription());
     }
 }

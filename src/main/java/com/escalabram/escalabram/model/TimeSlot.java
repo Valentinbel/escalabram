@@ -5,7 +5,6 @@ import jakarta.persistence.*;
 
 import java.io.Serializable;
 import java.sql.Timestamp;
-import java.util.Objects;
 
 @Entity
 @Table(name="time_slot")
@@ -65,24 +64,6 @@ public class TimeSlot implements Serializable {
 
     public void setSearch(Search search) {
         this.search = search;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof TimeSlot timeSlot)) return false;
-        return Objects.equals(getId(), timeSlot.getId())
-                && Objects.equals(getBeginTime(), timeSlot.getBeginTime())
-                && Objects.equals(getEndTime(), timeSlot.getEndTime())
-                && Objects.equals(getSearch(), timeSlot.getSearch());
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(getId(),
-                getBeginTime(),
-                getEndTime(),
-                getSearch());
     }
 
     @Override

@@ -9,4 +9,6 @@ import java.util.Set;
 public interface ClimbLevelRepository extends JpaRepository<ClimbLevel, Long> {
 
     Set<ClimbLevel> findBySearches(Search search);
+
+    Set<ClimbLevel> getClimbLevelsBySearchesId(Long id);
 }

@@ -3,7 +3,6 @@ package com.escalabram.escalabram.model;
 import jakarta.persistence.*;
 
 import java.io.Serializable;
-import java.util.Objects;
 
 @Entity
 @Table(name="climber_user")
@@ -26,9 +25,6 @@ public class ClimberUser implements Serializable {
     // accessToken string
     //rememberMeToken string
 
-    // TODO Relations tables
-    // hasOne(() => Profile)
-    //public profile: HasOne<typeof Profile>
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "climber_profile_id", referencedColumnName = "id")
     private ClimberProfile climberProfile;
@@ -92,21 +88,5 @@ public class ClimberUser implements Serializable {
                 ", password='" + password + '\'' +
                 ", climberProfile='" + climberProfile + '\'' +
                 '}';
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof ClimberUser that)) return false;
-        return Objects.equals(getId(), that.getId())
-                && Objects.equals(getName(), that.getName())
-                && Objects.equals(getEmail(), that.getEmail())
-                && Objects.equals(getPassword(), that.getPassword())
-                && Objects.equals(getClimberProfile(), that.getClimberProfile());
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(getId(), getName(), getEmail(), getPassword(), getClimberProfile());
     }
 }
