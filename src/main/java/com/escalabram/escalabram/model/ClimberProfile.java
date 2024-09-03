@@ -30,7 +30,7 @@ public class ClimberProfile implements Serializable {
     private Long genderId;
 
     @Column(name = "language_id")
-    private String languageId;
+    private Long languageId;
 
     @Column(name = "climber_user_id", nullable = false)
     private Long climberUserId;
@@ -51,7 +51,7 @@ public class ClimberProfile implements Serializable {
     }
 
     public ClimberProfile(Long id, LocalDateTime createdAt, LocalDateTime updatedAt, String avatar, Long genderId,
-                          String languageId, Long climberUserId, boolean isNotified, String climberProfileDescription) {
+                          Long languageId, Long climberUserId, boolean isNotified, String climberProfileDescription) {
         this.id = id;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
@@ -103,11 +103,11 @@ public class ClimberProfile implements Serializable {
         this.genderId = genderId;
     }
 
-    public String getLanguageId() {
+    public Long getLanguageId() {
         return languageId;
     }
 
-    public void setLanguageId(String languageId) {
+    public void setLanguageId(Long languageId) {
         this.languageId = languageId;
     }
 

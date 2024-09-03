@@ -23,7 +23,7 @@ public class TimeSlot implements Serializable {
 
     @JsonIgnore
     @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "search_id", foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
+    @JoinColumn(name = "search_id" , referencedColumnName = "id")// , foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT)
     private Search search;
 
     public TimeSlot() {

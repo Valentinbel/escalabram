@@ -30,7 +30,14 @@ public class SearchServiceImpl implements SearchService {
 
     @Override
     public Optional<Search> findById(Long searchId) {
-        return searchRepository.findById(searchId);
+        Optional<Search> optSearch = searchRepository.findById(searchId);
+        if(optSearch.isPresent()) {
+            Set<ClimbLevel> climbLevels = climbLevelService.findBySearches(optSearch.get());
+            optSearch.get().setClimbLevels(climbLevels);
+        }
+//        List<ClimbLevel> climbLevels = climbLevelService.findCimbLevelsByIds(searchId);
+//        optSearch.get().setClimbLevels(climbLevels);
+        return optSearch;
     }
 
     @Override

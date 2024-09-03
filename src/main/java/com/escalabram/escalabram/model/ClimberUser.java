@@ -29,16 +29,20 @@ public class ClimberUser implements Serializable {
     // TODO Relations tables
     // hasOne(() => Profile)
     //public profile: HasOne<typeof Profile>
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "climber_profile_id", referencedColumnName = "id")
+    private ClimberProfile climberProfile;
 
     public ClimberUser() {
 
     }
 
-    public ClimberUser(Long id, String name, String email, String password) {
+    public ClimberUser(Long id, String name, String email, String password, ClimberProfile climberProfile) {
         this.id = id;
         this.name = name;
         this.email = email;
         this.password = password;
+        this.climberProfile = climberProfile;
     }
 
     public Long getId() { return id; }
@@ -71,6 +75,14 @@ public class ClimberUser implements Serializable {
         this.password = password;
     }
 
+    public ClimberProfile getClimberProfile() {
+        return climberProfile;
+    }
+
+    public void setClimberProfile(ClimberProfile climberProfile) {
+        this.climberProfile = climberProfile;
+    }
+
     @Override
     public String toString() {
         return "ClimberUser{" +
@@ -78,6 +90,7 @@ public class ClimberUser implements Serializable {
                 ", name='" + name + '\'' +
                 ", email='" + email + '\'' +
                 ", password='" + password + '\'' +
+                ", climberProfile='" + climberProfile + '\'' +
                 '}';
     }
 
@@ -85,11 +98,15 @@ public class ClimberUser implements Serializable {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof ClimberUser that)) return false;
-        return Objects.equals(getId(), that.getId()) && Objects.equals(getName(), that.getName()) && Objects.equals(getEmail(), that.getEmail()) && Objects.equals(getPassword(), that.getPassword());
+        return Objects.equals(getId(), that.getId())
+                && Objects.equals(getName(), that.getName())
+                && Objects.equals(getEmail(), that.getEmail())
+                && Objects.equals(getPassword(), that.getPassword())
+                && Objects.equals(getClimberProfile(), that.getClimberProfile());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getId(), getName(), getEmail(), getPassword());
+        return Objects.hash(getId(), getName(), getEmail(), getPassword(), getClimberProfile());
     }
 }
