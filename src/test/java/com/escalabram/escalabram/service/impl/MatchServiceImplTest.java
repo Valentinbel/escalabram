@@ -70,21 +70,21 @@ class MatchServiceImplTest {
         timeSlotsMatching1 = Stream.of(
                 new TimeSlot(1L, Timestamp.valueOf(beginTime1), Timestamp.valueOf(endTime1))).collect(Collectors.toSet());
 
-        String beginTime21 = "2024-09-02 15:59:59.123456789";
-        String endTime21 = "2024-09-02 19:59:59.123456789";
+        String beginTime2 = "2024-09-02 15:59:59.123456789";
+        String endTime2 = "2024-09-02 19:59:59.123456789";
 
         timeSlotsMatching2 = Stream.of(
-                new TimeSlot(3L, Timestamp.valueOf(beginTime21), Timestamp.valueOf(endTime21))).collect(Collectors.toSet());
+                new TimeSlot(3L, Timestamp.valueOf(beginTime2), Timestamp.valueOf(endTime2))).collect(Collectors.toSet());
 
-        String beginTime31 = "2024-09-02 22:59:59.123456789";
-        String endTime31 = "2024-09-02 23:59:59.123456789";
+        String beginTime3 = "2024-09-02 22:59:59.123456789";
+        String endTime3 = "2024-09-02 23:59:59.123456789";
 
-        String beginTime32 = "2024-09-03 04:00:00.123456789";
-        String endTime32 = "2024-09-03 06:00:00.123456789";
+        String beginTime4 = "2024-09-03 04:00:00.123456789";
+        String endTime4 = "2024-09-03 06:00:00.123456789";
 
         timeSlotsNOTMatching = Stream.of(
-                new TimeSlot(5L, Timestamp.valueOf(beginTime31), Timestamp.valueOf(endTime31)),
-                new TimeSlot(6L, Timestamp.valueOf(beginTime32), Timestamp.valueOf(endTime32))
+                new TimeSlot(5L, Timestamp.valueOf(beginTime3), Timestamp.valueOf(endTime3)),
+                new TimeSlot(6L, Timestamp.valueOf(beginTime4), Timestamp.valueOf(endTime4))
         ).collect(Collectors.toSet());
 
         searches = Stream.of(

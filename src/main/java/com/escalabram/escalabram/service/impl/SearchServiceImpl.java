@@ -30,15 +30,7 @@ public class SearchServiceImpl implements SearchService {
 
     @Override
     public Optional<Search> findById(Long searchId) {
-        Optional<Search> optSearch = searchRepository.findById(searchId);
-        if(optSearch.isPresent() && optSearch.get().getClimbLevels().isEmpty()) {
-            // TODO voir si c'est bien utile
-            Set<ClimbLevel> climbLevels = climbLevelService.getClimbLevelsBySearchId(optSearch.get().getId());
-            System.out.println("///////////////////////////////////////////////////////////////////////////////////");
-            System.out.println("getClimbLevels().isEmpty() estait EMPTYYYYYYYYYY  dans SearchServiceImpl.findById");
-            optSearch.get().setClimbLevels(climbLevels);
-        }
-        return optSearch;
+        return searchRepository.findById(searchId);
     }
 
     @Override

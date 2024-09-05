@@ -51,7 +51,7 @@ public class MatchServiceImpl implements MatchService {
             matchingClimbLevelIds.add(matchingClimbLevels.getLast().getId());
             Collections.sort(matchingClimbLevelIds);
 
-            HashMap<Timestamp, Timestamp> timeSlotsHashMap = new HashMap<>();
+            HashMap<Timestamp, Timestamp> timeSlotsHashMap = new HashMap<>(); // Remplacer par un SearchMatchDTO
             matchingTimeSlots.forEach(timeSlot -> {
                 matchingBeginTimes.add(timeSlot.getBeginTime());
                 timeSlotsHashMap.put(timeSlot.getBeginTime(), timeSlot.getEndTime());
@@ -94,6 +94,7 @@ public class MatchServiceImpl implements MatchService {
         } else log.error("The Search reference has no ClimbLevels. Search : {}", search);
         return newMatches;
         //TODO ajouter critères de match: preferedGenreId
+        // TODO refactor to pass cognitive complexity
     }
 
     private List<SearchMatchDTO> getMatchedTimeSlots(List<SearchMatchDTO> searchMatchDTOs, HashMap<Timestamp, Timestamp> timeSlotsHashMap) {

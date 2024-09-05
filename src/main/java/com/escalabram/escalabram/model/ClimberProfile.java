@@ -3,7 +3,6 @@ package com.escalabram.escalabram.model;
 import jakarta.persistence.*;
 
 import java.io.Serializable;
-import java.time.LocalDateTime;
 
 @Entity
 @Table(name="climber_profile")
@@ -12,11 +11,8 @@ public class ClimberProfile implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "created_at")
-    private LocalDateTime createdAt;
-
-    @Column(name = "updated_at", nullable = false)
-    private LocalDateTime updatedAt;
+    @Column(name = "name")
+    private String name;
 
     // TODO Decider si cette colonne est importante
     //    @Column(name = "birth_date")
@@ -31,8 +27,10 @@ public class ClimberProfile implements Serializable {
     @Column(name = "language_id")
     private Long languageId;
 
-    @Column(name = "climber_user_id", nullable = false)
-    private Long climberUserId;
+    @OneToOne(cascade = CascadeType.ALL,
+            fetch = FetchType.LAZY,
+            mappedBy = "climberProfile")
+    private ClimberUser climberUser;
 
     @Column(name = "is_notified", nullable = false)
     private boolean isNotified;
@@ -49,15 +47,20 @@ public class ClimberProfile implements Serializable {
 
     }
 
-    public ClimberProfile(Long id, LocalDateTime createdAt, LocalDateTime updatedAt, String avatar, Long genderId,
-                          Long languageId, Long climberUserId, boolean isNotified, String climberProfileDescription) {
+    public ClimberProfile(Long id,
+                          String name,
+                          String avatar,
+                          Long genderId,
+                          Long languageId,
+                          ClimberUser climberUser,
+                          boolean isNotified,
+                          String climberProfileDescription) {
         this.id = id;
-        this.createdAt = createdAt;
-        this.updatedAt = updatedAt;
+        this.name = name;
         this.avatar = avatar;
         this.genderId = genderId;
         this.languageId = languageId;
-        this.climberUserId = climberUserId;
+        this.climberUser = climberUser;
         this.isNotified = isNotified;
         this.climberProfileDescription = climberProfileDescription;
     }
@@ -70,20 +73,12 @@ public class ClimberProfile implements Serializable {
         this.id = id;
     }
 
-    public LocalDateTime getCreatedAt() {
-        return createdAt;
+    public String getName() {
+        return name;
     }
 
-    public void setCreatedAt(LocalDateTime createdAt) {
-        this.createdAt = createdAt;
-    }
-
-    public LocalDateTime getUpdatedAt() {
-        return updatedAt;
-    }
-
-    public void setUpdatedAt(LocalDateTime updatedAt) {
-        this.updatedAt = updatedAt;
+    public void setName(String name) {
+        this.name = name;
     }
 
     public String getAvatar() {
@@ -110,12 +105,12 @@ public class ClimberProfile implements Serializable {
         this.languageId = languageId;
     }
 
-    public Long getClimberUserId() {
-        return climberUserId;
+    public ClimberUser getClimberUser() {
+        return climberUser;
     }
 
-    public void setClimberUserId(Long climberUserId) {
-        this.climberUserId = climberUserId;
+    public void setClimberUser(ClimberUser climberUser) {
+        this.climberUser = climberUser;
     }
 
     public boolean isNotified() {
@@ -138,12 +133,11 @@ public class ClimberProfile implements Serializable {
     public String toString() {
         return "ClimberProfile{" +
                 "id=" + id +
-                ", createdAt=" + createdAt +
-                ", updatedAt=" + updatedAt +
+                "name=" + name +
                 ", avatar='" + avatar + '\'' +
                 ", genderId=" + genderId +
-                ", languageId='" + languageId + '\'' +
-                ", climberUserId=" + climberUserId +
+                ", languageId=" + languageId +
+                ", climberUser=" + climberUser +
                 ", isNotified=" + isNotified +
                 ", climberProfileDescription='" + climberProfileDescription + '\'' +
                 '}';
