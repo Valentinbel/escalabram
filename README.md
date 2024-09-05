@@ -32,7 +32,10 @@ http://localhost:8080/swagger-ui/index.html
 ## Used and implemented technologies
 * Junit & Mockito
 
+## Front-end part (https://github.com/Valentinbel/escalafront)
+* Angular 18 (Reactive Forms, RXJs)
+* Pure CSS
+
 ## To be implemented soon
-* Front with Angular
 * Spring Security
 * Emails/ Notifications
