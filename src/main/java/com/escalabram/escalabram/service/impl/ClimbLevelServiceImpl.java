@@ -1,6 +1,7 @@
 package com.escalabram.escalabram.service.impl;
 
 import com.escalabram.escalabram.model.ClimbLevel;
+import com.escalabram.escalabram.model.Search;
 import com.escalabram.escalabram.repository.ClimbLevelRepository;
 import com.escalabram.escalabram.service.ClimbLevelService;
 import org.springframework.stereotype.Service;
@@ -29,5 +30,15 @@ public class ClimbLevelServiceImpl implements ClimbLevelService {
             optClimbLevel.ifPresent(foundClimbLevels::add);
         });
         return foundClimbLevels;
+    }
+
+    @Override
+    public Set<ClimbLevel> findBySearches(Search search){
+        return climbLevelRepository.findBySearches(search);
+    }
+
+    @Override
+    public Set<ClimbLevel> getClimbLevelsBySearchId(Long id) {
+        return climbLevelRepository.getClimbLevelsBySearchesId(id);
     }
 }

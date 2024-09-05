@@ -181,40 +181,6 @@ public class Search implements Serializable {
     }
 
     @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof Search search)) return false;
-        return Objects.equals(getId(), search.getId())
-                && Objects.equals(getClimberProfileId(), search.getClimberProfileId())
-                && Objects.equals(getTitle(), search.getTitle())
-                && Objects.equals(getHaveRope(), search.getHaveRope())
-                && Objects.equals(getHaveBelayDevice(), search.getHaveBelayDevice())
-                && Objects.equals(getHaveQuickdraw(), search.getHaveQuickdraw())
-                && Objects.equals(getHaveCarToShare(), search.getHaveCarToShare())
-                && Objects.equals(getPlaceId(), search.getPlaceId())
-                && Objects.equals(getPreferedGenderId(), search.getPreferedGenderId())
-               // && Objects.equals(getTimeSlots(), search.getTimeSlots())
-                && Objects.equals(getClimbLevels(), search.getClimbLevels())
-                && Objects.equals(isActive, search.isActive);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(getId(),
-                getClimberProfileId(),
-                getTitle(),
-                getHaveRope(),
-                getHaveBelayDevice(),
-                getHaveQuickdraw(),
-                getHaveCarToShare(),
-                getPlaceId(),
-                getPreferedGenderId(),
-                //getTimeSlots(),
-                getClimbLevels(),
-                isActive);
-    }
-
-    @Override
     public String toString() {
         return "Search{" +
                 "id=" + id +

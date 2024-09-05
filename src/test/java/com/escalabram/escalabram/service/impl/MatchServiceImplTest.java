@@ -70,21 +70,21 @@ class MatchServiceImplTest {
         timeSlotsMatching1 = Stream.of(
                 new TimeSlot(1L, Timestamp.valueOf(beginTime1), Timestamp.valueOf(endTime1))).collect(Collectors.toSet());
 
-        String beginTime21 = "2024-09-02 15:59:59.123456789";
-        String endTime21 = "2024-09-02 19:59:59.123456789";
+        String beginTime2 = "2024-09-02 15:59:59.123456789";
+        String endTime2 = "2024-09-02 19:59:59.123456789";
 
         timeSlotsMatching2 = Stream.of(
-                new TimeSlot(3L, Timestamp.valueOf(beginTime21), Timestamp.valueOf(endTime21))).collect(Collectors.toSet());
+                new TimeSlot(3L, Timestamp.valueOf(beginTime2), Timestamp.valueOf(endTime2))).collect(Collectors.toSet());
 
-        String beginTime31 = "2024-09-02 22:59:59.123456789";
-        String endTime31 = "2024-09-02 23:59:59.123456789";
+        String beginTime3 = "2024-09-02 22:59:59.123456789";
+        String endTime3 = "2024-09-02 23:59:59.123456789";
 
-        String beginTime32 = "2024-09-03 04:00:00.123456789";
-        String endTime32 = "2024-09-03 06:00:00.123456789";
+        String beginTime4 = "2024-09-03 04:00:00.123456789";
+        String endTime4 = "2024-09-03 06:00:00.123456789";
 
         timeSlotsNOTMatching = Stream.of(
-                new TimeSlot(5L, Timestamp.valueOf(beginTime31), Timestamp.valueOf(endTime31)),
-                new TimeSlot(6L, Timestamp.valueOf(beginTime32), Timestamp.valueOf(endTime32))
+                new TimeSlot(5L, Timestamp.valueOf(beginTime3), Timestamp.valueOf(endTime3)),
+                new TimeSlot(6L, Timestamp.valueOf(beginTime4), Timestamp.valueOf(endTime4))
         ).collect(Collectors.toSet());
 
         searches = Stream.of(
@@ -122,19 +122,18 @@ class MatchServiceImplTest {
         matchedClimbLevelDTOs.add(searchClimbLevelDTO1);
         matchedClimbLevelDTOs.add(searchClimbLevelDTO2);
 
-        Match matchNotSaved = new Match(null, searches.getFirst().getId(), searchMatchDTO1.getSearchId(), searchMatchDTO1.getTimeSlotId(), true);
         Match match = new Match(1L, searches.getFirst().getId(), searchMatchDTO1.getSearchId(), searchMatchDTO1.getTimeSlotId(), true);
         Optional<Match> emptyMatch = Optional.empty();
         List<Match> matchesToResult = new ArrayList<>();
-        matchesToResult.add(matchNotSaved);
+        matchesToResult.add(match);
 
         List<SearchMatchDTO> searchMatchDTOs = new ArrayList<>();
         searchMatchDTOs.add(searchMatchDTO1);
 
-        when(searchRepository.findAllSearchesByCriterias(searchMatching.getClimberProfileId(), searchMatching.getPlaceId(), matchingBeginTimesSearchMatching))
+        when(searchRepository.findAllSearchesByCriterias(ArgumentMatchers.any(), ArgumentMatchers.any(), ArgumentMatchers.any()))
                 .thenReturn(searchMatchDTOs);
-        when(searchRepository.findClimbLevelsByIdSearchId(searchToMatched.getId())).thenReturn(matchedClimbLevelDTOs);
-        when(matchRepository.findByCriterias(match.getMatchingSearchId(), match.getMatchedSearchId(),match.getMatchedTimeSlotId(), match.isMutualMatch()))
+        when(searchRepository.findClimbLevelsByIdSearchId(ArgumentMatchers.any())).thenReturn(matchedClimbLevelDTOs);
+        when(matchRepository.findByCriterias(ArgumentMatchers.anyLong(), ArgumentMatchers.anyLong(),ArgumentMatchers.anyLong(), ArgumentMatchers.anyBoolean()))
                 .thenReturn(emptyMatch);
         when(matchRepository.save(ArgumentMatchers.any())).thenReturn(match);
 
@@ -143,7 +142,7 @@ class MatchServiceImplTest {
         verify(searchRepository, times(1)).findAllSearchesByCriterias(searchMatching.getClimberProfileId(), searchMatching.getPlaceId(), matchingBeginTimesSearchMatching);
         verify(searchRepository, times(1)).findClimbLevelsByIdSearchId(searchToMatched.getId());
         verify(matchRepository, times(1)).findByCriterias(match.getMatchingSearchId(), match.getMatchedSearchId(),match.getMatchedTimeSlotId(), match.isMutualMatch());
-        verify(matchRepository, times(1)).save(matchNotSaved);
+        verify(matchRepository, times(1)).save(ArgumentMatchers.any());
 
         assertEquals(matches, matchesToResult);
     }

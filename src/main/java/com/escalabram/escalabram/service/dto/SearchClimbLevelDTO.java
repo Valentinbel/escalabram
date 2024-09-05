@@ -1,7 +1,5 @@
 package com.escalabram.escalabram.service.dto;
 
-import java.util.Objects;
-
 public class SearchClimbLevelDTO implements ISearchClimbLevelDTO {
     private Long searchid;
     private Long climblevelid;
@@ -33,17 +31,5 @@ public class SearchClimbLevelDTO implements ISearchClimbLevelDTO {
                 "searchId=" + searchid +
                 ", climbLevelId=" + climblevelid +
                 '}';
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof SearchClimbLevelDTO that)) return false;
-        return Objects.equals(getSearchid(), that.getSearchid()) && Objects.equals(getClimblevelid(), that.getClimblevelid());
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(getSearchid(), getClimblevelid());
     }
 }
