@@ -11,8 +11,8 @@ public class ClimberProfile implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "name")
-    private String name;
+    @Column(name = "profil_name")
+    private String profilName;
 
     // TODO Decider si cette colonne est importante
     //    @Column(name = "birth_date")
@@ -48,7 +48,7 @@ public class ClimberProfile implements Serializable {
     }
 
     public ClimberProfile(Long id,
-                          String name,
+                          String profilName,
                           String avatar,
                           Long genderId,
                           Long languageId,
@@ -56,7 +56,7 @@ public class ClimberProfile implements Serializable {
                           boolean isNotified,
                           String climberProfileDescription) {
         this.id = id;
-        this.name = name;
+        this.profilName = profilName;
         this.avatar = avatar;
         this.genderId = genderId;
         this.languageId = languageId;
@@ -73,12 +73,12 @@ public class ClimberProfile implements Serializable {
         this.id = id;
     }
 
-    public String getName() {
-        return name;
+    public String getProfilName() {
+        return profilName;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setProfilName(String profilName) {
+        this.profilName = profilName;
     }
 
     public String getAvatar() {
@@ -133,7 +133,7 @@ public class ClimberProfile implements Serializable {
     public String toString() {
         return "ClimberProfile{" +
                 "id=" + id +
-                "name=" + name +
+                ", profilName='" + profilName + '\'' +
                 ", avatar='" + avatar + '\'' +
                 ", genderId=" + genderId +
                 ", languageId=" + languageId +

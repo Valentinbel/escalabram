@@ -13,16 +13,22 @@ public class ClimberUser implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(name = "user_name")
+    private String userName;
+
     @Column(name = "email", nullable = false)
     private String email;
 
-    @Column(name = "password", nullable = false)
+    @Column(name = "password")
     private String password;
+
+    @Column(name = "role")
+    private String role;
 
     @Column(name = "created_at")
     private LocalDateTime createdAt;
 
-    @Column(name = "updated_at", nullable = false)
+    @Column(name = "updated_at")
     private LocalDateTime updatedAt;
 
     // TODO champs à ajouter (?) Spring Security
@@ -39,12 +45,14 @@ public class ClimberUser implements Serializable {
 
     }
 
-    public ClimberUser(Long id, String email, String password, ClimberProfile climberProfile,
-                       LocalDateTime createdAt, LocalDateTime updatedAt) {
+    public ClimberUser(Long id, String userName, String email, String password, ClimberProfile climberProfile,
+                       String role, LocalDateTime createdAt, LocalDateTime updatedAt) {
         this.id = id;
+        this.userName = userName;
         this.email = email;
         this.password = password;
         this.climberProfile = climberProfile;
+        this.role = role;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
     }
@@ -53,6 +61,14 @@ public class ClimberUser implements Serializable {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public String getUserName() {
+        return userName;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
     }
 
     public String getEmail() {
@@ -79,6 +95,14 @@ public class ClimberUser implements Serializable {
         this.climberProfile = climberProfile;
     }
 
+    public String getRole() {
+        return role;
+    }
+
+    public void setRole(String role) {
+        this.role = role;
+    }
+
     public LocalDateTime getCreatedAt() {
         return createdAt;
     }
@@ -99,8 +123,10 @@ public class ClimberUser implements Serializable {
     public String toString() {
         return "ClimberUser{" +
                 "id=" + id +
+                ", userName='" + userName + '\'' +
                 ", email='" + email + '\'' +
                 ", password='" + password + '\'' +
+                ", role='" + role + '\'' +
                 ", createdAt=" + createdAt +
                 ", updatedAt=" + updatedAt +
                 ", climberProfile=" + climberProfile +

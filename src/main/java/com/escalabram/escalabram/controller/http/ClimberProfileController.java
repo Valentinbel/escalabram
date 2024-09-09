@@ -19,7 +19,7 @@ import java.util.Optional;
 @RequestMapping("/api")
 public class ClimberProfileController {
 
-    private final Logger log = LoggerFactory.getLogger(ClimberProfileController.class);
+    private static final Logger log = LoggerFactory.getLogger(ClimberProfileController.class);
     private final ClimberProfileService climberProfileService;
 
     public ClimberProfileController(ClimberProfileService climberProfileService) {
