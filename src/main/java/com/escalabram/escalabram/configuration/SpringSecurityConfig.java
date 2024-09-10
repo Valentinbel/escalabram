@@ -28,13 +28,13 @@ public class SpringSecurityConfig {
                     auth.requestMatchers("/admin").hasAnyRole("ADMIN");
                     auth.requestMatchers("/user").hasAnyRole("USER");
                     auth.anyRequest().authenticated();
-                }).formLogin(Customizer.withDefaults())
+                }).formLogin(Customizer.withDefaults()) ///////////////// Formulaire de login est retourné
                 .oauth2Login(Customizer.withDefaults()).build();
     }
 
     @Bean // Service à déplacer dans une classe appropriée?
     public UserDetailsService users() {  ////// EN PROD on stocke ces users en BBDD
-        UserDetails user = User.builder()
+        UserDetails user = User.builder() ///// mettre ClimberUSer pour voir........................................................
                 .username("user")
                 .password(passwordEncoder().encode("user")) // Password Compromised for PROD
                 .roles("USER").build();

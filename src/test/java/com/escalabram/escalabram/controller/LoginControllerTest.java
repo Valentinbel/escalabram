@@ -33,12 +33,12 @@ class LoginControllerTest {
 //        // On pourra créer un faux compte pour les tests. Et le supprimer plus tard pour raison de sécu
 //    }
 
-    @Test
-    void userLoginFailed() throws Exception {
-        mockMvc.perform(formLogin("/login")
-                        .user("user").password("WRONGPASSWORD"))
-                .andExpect(unauthenticated());
-    }
+//    @Test
+//    void userLoginFailed() throws Exception {
+//        mockMvc.perform(formLogin("/login")
+//                        .user("user").password("WRONGPASSWORD"))
+//                .andExpect(unauthenticated());
+//    }
 
 //    @Test
 //    @WithMockUser

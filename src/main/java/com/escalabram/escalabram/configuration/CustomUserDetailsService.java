@@ -30,7 +30,7 @@ public class CustomUserDetailsService implements UserDetailsService {
     // Pour l'instant le Catch empêche le message d'erreur en Front.
     @Override
     public UserDetails loadUserByUsername(String userName) throws UsernameNotFoundException, InternalAuthenticationServiceException {
-        try {
+        try { // Renvoyer autre chose qu¡un UserDetails ??
             ClimberUser user = climberUserRepository.findByUserName(userName);
             return new User(user.getUserName(), user.getPassword(), getGrantedAuthorities(user.getRole()));
         } catch (UsernameNotFoundException e) {

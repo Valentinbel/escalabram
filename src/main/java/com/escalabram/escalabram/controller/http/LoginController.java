@@ -53,9 +53,9 @@ public class LoginController {
         StringBuffer userNameInfo = new StringBuffer();
         UsernamePasswordAuthenticationToken token = (UsernamePasswordAuthenticationToken) user;
         if(token.isAuthenticated()) {
-            User u = (User) token.getPrincipal();
-            userNameInfo.append("Welcome, " + u.getUsername() + ". Tu t'es connecté avec user et password.  <br><br>");
-            userNameInfo.append("u.getAuthorities() : " + u.getAuthorities());
+            User u = (User) token.getPrincipal(); // (User) à renplacer par ClimberUser ?
+            userNameInfo.append("Welcome, " + u.getUsername() + ". Tu t'es connecté avec user et password.  <br><br>"); // là aussi
+            userNameInfo.append("u.getAuthorities() : " + u.getAuthorities()); // là aussi
         } else {
             userNameInfo.append("Not Authorised, Bro");
         }
