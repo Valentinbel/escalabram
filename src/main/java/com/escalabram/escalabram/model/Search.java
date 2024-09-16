@@ -2,12 +2,16 @@ package com.escalabram.escalabram.model;
 
 import jakarta.persistence.*;
 
+import java.io.Serial;
 import java.io.Serializable;
 import java.util.*;
 
 @Entity
 @Table(name="search")
 public class Search implements Serializable {
+
+    @Serial
+    private static final long serialVersionUID = 1689869441270067374L;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

@@ -3,12 +3,16 @@ package com.escalabram.escalabram.model;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
+import java.io.Serial;
 import java.io.Serializable;
 import java.sql.Timestamp;
 
 @Entity
 @Table(name="time_slot")
 public class TimeSlot implements Serializable {
+
+    @Serial
+    private static final long serialVersionUID = -3149722237167848310L;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

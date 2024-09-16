@@ -20,9 +20,8 @@ import java.util.*;
 @Service
 @Transactional
 public class MatchServiceImpl implements MatchService {
-    private final Logger log = LoggerFactory.getLogger(MatchServiceImpl.class);
+    private static final Logger log = LoggerFactory.getLogger(MatchServiceImpl.class);
     Set<Long> matchedSearchIds = new HashSet<>();
-
 
     private final MatchRepository matchRepository;
     private final SearchRepository searchRepository;

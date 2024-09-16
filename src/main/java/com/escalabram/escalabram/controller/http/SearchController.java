@@ -17,11 +17,11 @@ import java.util.Optional;
 import java.util.Set;
 
 
-@CrossOrigin(origins = "http://localhost:8080")
+@CrossOrigin(origins = "http://localhost:8081")
 @RestController
 @RequestMapping("/api")
 public class SearchController {
-    private final Logger log = LoggerFactory.getLogger(SearchController.class);
+    private static final Logger log = LoggerFactory.getLogger(SearchController.class);
     private final SearchService searchService;
     private final ClimberProfileService climberProfileService;
 

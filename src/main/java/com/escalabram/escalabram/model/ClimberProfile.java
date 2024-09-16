@@ -2,11 +2,15 @@ package com.escalabram.escalabram.model;
 
 import jakarta.persistence.*;
 
+import java.io.Serial;
 import java.io.Serializable;
 
 @Entity
 @Table(name="climber_profile")
 public class ClimberProfile implements Serializable {
+    @Serial
+    private static final long serialVersionUID = -2789592186380559249L;
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

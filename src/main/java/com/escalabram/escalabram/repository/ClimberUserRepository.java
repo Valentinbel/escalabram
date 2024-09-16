@@ -6,7 +6,12 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.Optional;
 
 public interface ClimberUserRepository extends JpaRepository<ClimberUser, Long> {
-    ClimberUser findByUserName(String userName);
+
+    Optional<ClimberUser> findByUserName(String userName);
 
     Optional<ClimberUser> findByEmail(String email);
+
+    Boolean existsByUserName(String userName);
+
+    Boolean existsByEmail(String email);
 }
