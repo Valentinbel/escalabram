@@ -1,9 +1,9 @@
 package com.escalabram.escalabram.controller.http;
 
-import com.escalabram.escalabram.configuration.payload.request.LoginRequest;
-import com.escalabram.escalabram.configuration.payload.request.SignupRequest;
-import com.escalabram.escalabram.configuration.payload.response.JwtResponse;
-import com.escalabram.escalabram.configuration.payload.response.MessageResponse;
+import com.escalabram.escalabram.security.payload.request.LoginRequest;
+import com.escalabram.escalabram.security.payload.request.SignupRequest;
+import com.escalabram.escalabram.security.payload.response.JwtResponse;
+import com.escalabram.escalabram.security.payload.response.MessageResponse;
 import com.escalabram.escalabram.model.ClimberUser;
 import com.escalabram.escalabram.service.AuthService;
 import com.escalabram.escalabram.service.ClimberUSerService;
@@ -45,6 +45,7 @@ public class AuthController {
 
         ClimberUser newUser =   authService.createUser(signUpRequest);
         log.info("New user created: {}", newUser); // TODO DO not sent in PROD
+        //System.Logger logger = System.getLogger("java.lang.ProcessBuilder");
         return ResponseEntity.ok(new MessageResponse("User registered successfully!"));
     }
 }

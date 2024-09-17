@@ -1,4 +1,4 @@
-package com.escalabram.escalabram.configuration;
+package com.escalabram.escalabram.security.service;
 
 import com.escalabram.escalabram.model.ClimberUser;
 import com.fasterxml.jackson.annotation.JsonIgnore;

@@ -1,7 +1,8 @@
-package com.escalabram.escalabram.configuration;
+package com.escalabram.escalabram.security;
 
-import com.escalabram.escalabram.configuration.jwt.AuthEntryPointJwt;
-import com.escalabram.escalabram.configuration.jwt.AuthTokenFilter;
+import com.escalabram.escalabram.security.jwt.AuthEntryPointJwt;
+import com.escalabram.escalabram.security.jwt.AuthTokenFilter;
+import com.escalabram.escalabram.security.service.UserDetailsServiceImpl;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;

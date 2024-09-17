@@ -1,6 +1,6 @@
-package com.escalabram.escalabram.utils;
+package com.escalabram.escalabram.security.jwt;
 
-import com.escalabram.escalabram.configuration.UserDetailsImpl;
+import com.escalabram.escalabram.security.service.UserDetailsImpl;
 import io.jsonwebtoken.*;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;

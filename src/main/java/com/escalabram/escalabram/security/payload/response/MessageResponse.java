@@ -1,4 +1,4 @@
-package com.escalabram.escalabram.configuration.payload.response;
+package com.escalabram.escalabram.security.payload.response;
 
 public class MessageResponse {
 

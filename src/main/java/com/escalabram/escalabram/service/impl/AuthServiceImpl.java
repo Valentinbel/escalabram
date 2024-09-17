@@ -1,16 +1,16 @@
 package com.escalabram.escalabram.service.impl;
 
-import com.escalabram.escalabram.configuration.UserDetailsImpl;
-import com.escalabram.escalabram.configuration.payload.request.LoginRequest;
-import com.escalabram.escalabram.configuration.payload.request.SignupRequest;
-import com.escalabram.escalabram.configuration.payload.response.JwtResponse;
+import com.escalabram.escalabram.security.service.UserDetailsImpl;
+import com.escalabram.escalabram.security.payload.request.LoginRequest;
+import com.escalabram.escalabram.security.payload.request.SignupRequest;
+import com.escalabram.escalabram.security.payload.response.JwtResponse;
 import com.escalabram.escalabram.model.ClimberUser;
 import com.escalabram.escalabram.model.Role;
 import com.escalabram.escalabram.model.enumeration.EnumRole;
 import com.escalabram.escalabram.service.AuthService;
 import com.escalabram.escalabram.service.ClimberUSerService;
 import com.escalabram.escalabram.service.UserRoleService;
-import com.escalabram.escalabram.utils.JwtUtils;
+import com.escalabram.escalabram.security.jwt.JwtUtils;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;

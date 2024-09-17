@@ -1,7 +1,6 @@
-package com.escalabram.escalabram.configuration.jwt;
+package com.escalabram.escalabram.security.jwt;
 
-import com.escalabram.escalabram.configuration.UserDetailsServiceImpl;
-import com.escalabram.escalabram.utils.JwtUtils;
+import com.escalabram.escalabram.security.service.UserDetailsServiceImpl;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -58,7 +57,7 @@ public class AuthTokenFilter extends OncePerRequestFilter {
         String headerAuth = request.getHeader("Authorization");
 
         if (StringUtils.hasText(headerAuth) && headerAuth.startsWith("Bearer ")) {
-            return headerAuth.substring(7, headerAuth.length());
+            return headerAuth.substring(7);
         }
 
         return null;

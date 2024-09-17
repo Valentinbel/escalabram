@@ -1,4 +1,4 @@
-package com.escalabram.escalabram.configuration.jwt;
+package com.escalabram.escalabram.security.jwt;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.ServletException;

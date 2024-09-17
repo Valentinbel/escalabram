@@ -1,4 +1,4 @@
-package com.escalabram.escalabram.configuration.payload.request;
+package com.escalabram.escalabram.security.payload.request;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
