@@ -34,7 +34,7 @@ public class MatchController {
             List<Match> matches = new ArrayList<>();
             Optional<Search> optSearch = searchService.findById(searchId);
             if(optSearch.isPresent()) {
-                Search search = optSearch.get();
+                Search search = optSearch.orElseThrow();
                 matches = matchService.createMatchesIfFit(search);
             }
             return ResponseEntity.ok(matches);
