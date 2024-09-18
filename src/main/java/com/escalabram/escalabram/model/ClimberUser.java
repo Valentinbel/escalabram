@@ -27,18 +27,18 @@ public class ClimberUser implements Serializable {
     private Long id;
 
     @NotBlank
-    @Size(max = 20, message = "{validation.userName.size.too_long}")
+    @Size(min = 4, max = 20, message = "userName should be between 4 to 20 characters")
     @Column(name = "user_name")
     private String userName;
 
     @NotBlank
-    @Size(max = 50)
-    @Email
+    @Size(max = 50, message = "Email cannot be longer than 50 characters")
+    @Email(message = "Email should be valid")
     @Column(name = "email", nullable = false)
     private String email;
 
     @NotBlank
-    @Size(max = 120)
+    @Size(max = 120) //c'est le password crypté
     @Column(name = "password")
     private String password;
 

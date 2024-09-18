@@ -8,18 +8,18 @@ import java.util.Set;
 
 public class SignupRequest {
     @NotBlank
-    @Size(min = 3, max = 20)
+    @Size(min = 4, max = 20, message = "userName should be between 4 to 20 characters")
     private String userName;
 
     @NotBlank
-    @Size(max = 50)
-    @Email
+    @Size(max = 50, message = "Email cannot be longer than 50 characters")
+    @Email(message = "Email should be valid")
     private String email;
 
     private Set<String> role;
 
     @NotBlank
-    @Size(min = 6, max = 40)
+    @Size(min = 8, max = 40, message = "Password should be between 8 to 40 characters")
     private String password;
 
     public String getUserName() {

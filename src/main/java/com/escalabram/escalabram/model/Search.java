@@ -1,6 +1,7 @@
 package com.escalabram.escalabram.model;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Size;
 
 import java.io.Serial;
 import java.io.Serializable;
@@ -20,6 +21,7 @@ public class Search implements Serializable {
     @Column(name = "climber_profile_id", nullable = false)
     private Long climberProfileId;
 
+    @Size(max = 80, message = "Title cannot be longer than 80 characters")
     @Column(name = "title")
     private String title;
 
