@@ -39,7 +39,7 @@ public class ClimberProfile implements Serializable {
     @Column(name = "is_notified", nullable = false)
     private boolean isNotified;
 
-    @Column(name = "climber_profile_description")
+    @Column(columnDefinition = "TEXT", name = "climber_profile_description")
     private String climberProfileDescription;
 
     // TODO Gerer les relations de table
