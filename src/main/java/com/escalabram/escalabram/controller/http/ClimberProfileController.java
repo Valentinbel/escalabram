@@ -1,6 +1,6 @@
 package com.escalabram.escalabram.controller.http;
 
-import com.escalabram.escalabram.controller.errors.BadRequestAlertException;
+import com.escalabram.escalabram.exception.BadRequestAlertException;
 import com.escalabram.escalabram.model.ClimberProfile;
 import com.escalabram.escalabram.service.ClimberProfileService;
 import com.escalabram.escalabram.utils.ResponseUtil;

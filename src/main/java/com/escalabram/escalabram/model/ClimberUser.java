@@ -28,13 +28,13 @@ public class ClimberUser implements Serializable {
 
     @NotBlank
     @Size(min = 4, max = 20, message = "userName should be between 4 to 20 characters")
-    @Column(name = "user_name")
+    @Column(name = "user_name", unique = true)
     private String userName;
 
     @NotBlank
     @Size(max = 50, message = "Email cannot be longer than 50 characters")
     @Email(message = "Email should be valid")
-    @Column(name = "email", nullable = false)
+    @Column(name = "email", nullable = false, unique = true)
     private String email;
 
     @NotBlank
