@@ -99,7 +99,7 @@ public class SearchController {
     }
 }
 
-// import fr.gouv.justice.tig.web.rest.errors.BadRequestAlertException; (Tig-Lib-Shared)
+// TODO import fr.gouv.justice.tig.web.rest.errors.BadRequestAlertException; (Tig-Lib-Shared)
 // Creer ma badRequestAlert implémenter commme URI Alert
 // Vérifier dans les autres fonctions ouvertes de TIG si on a tout ok.
 // Implémenter le test.

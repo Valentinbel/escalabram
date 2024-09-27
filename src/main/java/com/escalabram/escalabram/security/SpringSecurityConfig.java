@@ -68,12 +68,12 @@ public class SpringSecurityConfig {
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth ->
                         auth.requestMatchers("/api/auth/**").permitAll()
-                                .requestMatchers("/api/searches/**").permitAll()
-                                .requestMatchers("/api/test/**").permitAll()
-                                .requestMatchers("/api/matches/**").permitAll()
-                                .requestMatchers("/api/climber-profiles/**").permitAll()
-                                .requestMatchers("/api/climber-profile/**").permitAll()
-                                .anyRequest().authenticated()
+                        .requestMatchers("/api/test/**").hasAnyRole("USER")
+                        .requestMatchers("/api/searches/**").hasAnyRole("USER")
+                        .requestMatchers("/api/matches/**").hasAnyRole("USER")
+                        .requestMatchers("/api/climber-profiles/**").hasAnyRole("USER")
+                        .requestMatchers("/api/climber-profile/**").hasAnyRole("USER")
+                        .anyRequest().authenticated()
                 );
 
         http.authenticationProvider(authenticationProvider());

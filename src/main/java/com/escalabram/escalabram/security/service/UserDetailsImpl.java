@@ -19,14 +19,10 @@ public class UserDetailsImpl implements UserDetails {
     private static final long serialVersionUID = -1711412704122890555L;
 
     private final Long id;
-
     private final String userName;
-
     private final String email;
-
     @JsonIgnore
     private final String password;
-
     private final Collection<? extends GrantedAuthority> authorities;
 
     public UserDetailsImpl(Long id, String userName, String email, String password,
@@ -43,7 +39,8 @@ public class UserDetailsImpl implements UserDetails {
                 .map(role -> new SimpleGrantedAuthority(role.getName().name()))
                 .collect(Collectors.toList());
 
-        return new UserDetailsImpl(climberUser.getId(),
+        return new UserDetailsImpl(
+                climberUser.getId(),
                 climberUser.getUserName(),
                 climberUser.getEmail(),
                 climberUser.getPassword(),

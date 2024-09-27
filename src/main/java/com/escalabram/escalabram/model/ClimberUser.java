@@ -14,7 +14,7 @@ import java.util.Set;
 @Entity
 @Table(name="climber_user",
         uniqueConstraints = {
-                @UniqueConstraint(columnNames = "username"),
+                @UniqueConstraint(columnNames = "userName"),
                 @UniqueConstraint(columnNames = "email")
         })
 public class ClimberUser implements Serializable {
