@@ -1,4 +1,4 @@
-package com.escalabram.escalabram.controller.http.error;
+package com.escalabram.escalabram.exception;
 
 import java.util.Date;
 

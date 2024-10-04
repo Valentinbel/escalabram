@@ -1,6 +1,5 @@
-package com.escalabram.escalabram.controller.http.error;
+package com.escalabram.escalabram.exception;
 
-import com.escalabram.escalabram.exception.TokenRefreshException;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
