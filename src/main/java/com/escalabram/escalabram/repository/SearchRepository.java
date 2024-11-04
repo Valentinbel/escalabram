@@ -6,10 +6,12 @@ import com.escalabram.escalabram.service.dto.SearchMatchDTO;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
+import org.springframework.stereotype.Repository;
 
 import java.sql.Timestamp;
 import java.util.*;
 
+@Repository
 public interface SearchRepository extends JpaRepository<Search, Long> {
 
     Optional<Set<Search>> findByClimberProfileId(Long climberProfileId);

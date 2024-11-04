@@ -1,6 +1,6 @@
 package com.escalabram.escalabram.controller.http;
 
-import com.escalabram.escalabram.controller.errors.BadRequestAlertException;
+import com.escalabram.escalabram.exception.BadRequestAlertException;
 import com.escalabram.escalabram.model.Search;
 import com.escalabram.escalabram.service.ClimberProfileService;
 import com.escalabram.escalabram.service.SearchService;
@@ -17,11 +17,11 @@ import java.util.Optional;
 import java.util.Set;
 
 
-@CrossOrigin(origins = "http://localhost:8080")
+@CrossOrigin(origins = "http://localhost:8081", maxAge = 3600, allowCredentials="true") //, maxAge = 3600, allowCredentials="true"
 @RestController
 @RequestMapping("/api")
 public class SearchController {
-    private final Logger log = LoggerFactory.getLogger(SearchController.class);
+    private static final Logger log = LoggerFactory.getLogger(SearchController.class);
     private final SearchService searchService;
     private final ClimberProfileService climberProfileService;
 
@@ -42,7 +42,7 @@ public class SearchController {
         }
     }
 
-    @GetMapping("/searches/climber-profile/{id}")
+    @GetMapping("/searches/climber-profiles/{id}")
     public ResponseEntity<Set<Search>> getSearchByClimberProfileId(@PathVariable("id") long id ){
         log.debug("REST request to get list of Search by climberProfileId: {}", id);
         try {
@@ -99,7 +99,7 @@ public class SearchController {
     }
 }
 
-// import fr.gouv.justice.tig.web.rest.errors.BadRequestAlertException; (Tig-Lib-Shared)
+// TODO import fr.gouv.justice.tig.web.rest.errors.BadRequestAlertException; (Tig-Lib-Shared)
 // Creer ma badRequestAlert implémenter commme URI Alert
 // Vérifier dans les autres fonctions ouvertes de TIG si on a tout ok.
 // Implémenter le test.

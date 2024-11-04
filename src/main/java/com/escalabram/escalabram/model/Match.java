@@ -2,11 +2,15 @@ package com.escalabram.escalabram.model;
 
 import jakarta.persistence.*;
 
+import java.io.Serial;
 import java.io.Serializable;
 
 @Entity
 @Table(name="match")
 public class Match implements Serializable {
+
+    @Serial
+    private static final long serialVersionUID = -6078432217702053187L;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

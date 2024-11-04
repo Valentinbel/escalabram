@@ -12,7 +12,7 @@ Get sure you have installed the following:
 * Java 21
 *	Maven 3.9
 *	PostGreSql 16.1
-*	Liquibase 17.0
+*	Liquibase 4.26.0
 * PgAdmin 4.8.2
 * DBeaver or another database administration tool.
 
@@ -32,7 +32,10 @@ http://localhost:8080/swagger-ui/index.html
 ## Used and implemented technologies
 * Junit & Mockito
 
+## Front-end part (https://github.com/Valentinbel/escalafront)
+* Angular 18 (Reactive Forms, RXJs)
+* Pure CSS
+
 ## To be implemented soon
-* Front with Angular
 * Spring Security
 * Emails/ Notifications

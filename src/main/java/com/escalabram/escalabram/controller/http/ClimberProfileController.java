@@ -1,6 +1,6 @@
 package com.escalabram.escalabram.controller.http;
 
-import com.escalabram.escalabram.controller.errors.BadRequestAlertException;
+import com.escalabram.escalabram.exception.BadRequestAlertException;
 import com.escalabram.escalabram.model.ClimberProfile;
 import com.escalabram.escalabram.service.ClimberProfileService;
 import com.escalabram.escalabram.utils.ResponseUtil;
@@ -14,12 +14,12 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.Optional;
 
-@CrossOrigin(origins = "http://localhost:8081")
+@CrossOrigin(origins = "http://localhost:8081", maxAge = 3600, allowCredentials="true")
 @RestController
 @RequestMapping("/api")
 public class ClimberProfileController {
 
-    private final Logger log = LoggerFactory.getLogger(ClimberProfileController.class);
+    private static final Logger log = LoggerFactory.getLogger(ClimberProfileController.class);
     private final ClimberProfileService climberProfileService;
 
     public ClimberProfileController(ClimberProfileService climberProfileService) {
@@ -39,9 +39,8 @@ public class ClimberProfileController {
         }
     }
 
-    @GetMapping("/climber-profile/{id}")
+    @GetMapping("/climber-profiles/{id}")
     public ResponseEntity<ClimberProfile> getClimberProfileById(@PathVariable Long id) {
-        log.debug("REST request to get ClimberProfileById : {}", id);
         try {
             Optional<ClimberProfile> climberProfile = climberProfileService.findById(id);
             return ResponseUtil.wrapOrNotFound(climberProfile);
@@ -51,7 +50,7 @@ public class ClimberProfileController {
         }
     }
 
-    @PostMapping("/climber-profile")
+    @PostMapping("/climber-profiles")
     public ResponseEntity<ClimberProfile> createClimberProfile(@Valid @RequestBody ClimberProfile climberProfile){
         log.debug("REST request to save ClimberProfile : {}", climberProfile);
         try {

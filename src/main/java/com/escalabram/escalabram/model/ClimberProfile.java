@@ -1,18 +1,23 @@
 package com.escalabram.escalabram.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
+import java.io.Serial;
 import java.io.Serializable;
 
 @Entity
 @Table(name="climber_profile")
 public class ClimberProfile implements Serializable {
+    @Serial
+    private static final long serialVersionUID = -2789592186380559249L;
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "name")
-    private String name;
+    @Column(name = "profile_name")
+    private String profileName;
 
     // TODO Decider si cette colonne est importante
     //    @Column(name = "birth_date")
@@ -27,6 +32,7 @@ public class ClimberProfile implements Serializable {
     @Column(name = "language_id")
     private Long languageId;
 
+    @JsonIgnore // TODO enlever ça et mettre un DTO ? ou corriger les parametres ici
     @OneToOne(cascade = CascadeType.ALL,
             fetch = FetchType.LAZY,
             mappedBy = "climberProfile")
@@ -35,7 +41,7 @@ public class ClimberProfile implements Serializable {
     @Column(name = "is_notified", nullable = false)
     private boolean isNotified;
 
-    @Column(name = "climber_profile_description")
+    @Column(columnDefinition = "TEXT", name = "climber_profile_description")
     private String climberProfileDescription;
 
     // TODO Gerer les relations de table
@@ -48,7 +54,7 @@ public class ClimberProfile implements Serializable {
     }
 
     public ClimberProfile(Long id,
-                          String name,
+                          String profileName,
                           String avatar,
                           Long genderId,
                           Long languageId,
@@ -56,7 +62,7 @@ public class ClimberProfile implements Serializable {
                           boolean isNotified,
                           String climberProfileDescription) {
         this.id = id;
-        this.name = name;
+        this.profileName = profileName;
         this.avatar = avatar;
         this.genderId = genderId;
         this.languageId = languageId;
@@ -73,12 +79,12 @@ public class ClimberProfile implements Serializable {
         this.id = id;
     }
 
-    public String getName() {
-        return name;
+    public String getProfileName() {
+        return profileName;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setProfileName(String profileName) {
+        this.profileName = profileName;
     }
 
     public String getAvatar() {
@@ -133,7 +139,7 @@ public class ClimberProfile implements Serializable {
     public String toString() {
         return "ClimberProfile{" +
                 "id=" + id +
-                "name=" + name +
+                ", profileName='" + profileName + '\'' +
                 ", avatar='" + avatar + '\'' +
                 ", genderId=" + genderId +
                 ", languageId=" + languageId +
