@@ -17,7 +17,7 @@ import java.util.Optional;
 import java.util.Set;
 
 
-@CrossOrigin(origins = "http://localhost:8081")
+@CrossOrigin(origins = "http://localhost:8081", maxAge = 3600, allowCredentials="true") //, maxAge = 3600, allowCredentials="true"
 @RestController
 @RequestMapping("/api")
 public class SearchController {
@@ -42,7 +42,7 @@ public class SearchController {
         }
     }
 
-    @GetMapping("/searches/climber-profile/{id}")
+    @GetMapping("/searches/climber-profiles/{id}")
     public ResponseEntity<Set<Search>> getSearchByClimberProfileId(@PathVariable("id") long id ){
         log.debug("REST request to get list of Search by climberProfileId: {}", id);
         try {

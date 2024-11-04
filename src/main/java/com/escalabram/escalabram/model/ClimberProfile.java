@@ -1,5 +1,6 @@
 package com.escalabram.escalabram.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 import java.io.Serial;
@@ -31,6 +32,7 @@ public class ClimberProfile implements Serializable {
     @Column(name = "language_id")
     private Long languageId;
 
+    @JsonIgnore // TODO enlever ça et mettre un DTO ? ou corriger les parametres ici
     @OneToOne(cascade = CascadeType.ALL,
             fetch = FetchType.LAZY,
             mappedBy = "climberProfile")

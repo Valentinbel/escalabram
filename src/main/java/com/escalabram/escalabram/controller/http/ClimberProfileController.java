@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.Optional;
 
-@CrossOrigin(origins = "http://localhost:8081")
+@CrossOrigin(origins = "http://localhost:8081", maxAge = 3600, allowCredentials="true")
 @RestController
 @RequestMapping("/api")
 public class ClimberProfileController {
@@ -39,9 +39,8 @@ public class ClimberProfileController {
         }
     }
 
-    @GetMapping("/climber-profile/{id}")
+    @GetMapping("/climber-profiles/{id}")
     public ResponseEntity<ClimberProfile> getClimberProfileById(@PathVariable Long id) {
-        log.debug("REST request to get ClimberProfileById : {}", id);
         try {
             Optional<ClimberProfile> climberProfile = climberProfileService.findById(id);
             return ResponseUtil.wrapOrNotFound(climberProfile);
@@ -51,7 +50,7 @@ public class ClimberProfileController {
         }
     }
 
-    @PostMapping("/climber-profile")
+    @PostMapping("/climber-profiles")
     public ResponseEntity<ClimberProfile> createClimberProfile(@Valid @RequestBody ClimberProfile climberProfile){
         log.debug("REST request to save ClimberProfile : {}", climberProfile);
         try {
