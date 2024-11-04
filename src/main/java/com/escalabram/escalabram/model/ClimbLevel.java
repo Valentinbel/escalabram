@@ -3,6 +3,7 @@ package com.escalabram.escalabram.model;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
+import java.io.Serial;
 import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
@@ -10,6 +11,9 @@ import java.util.Set;
 @Entity
 @Table(name="climb_level")
 public class ClimbLevel implements Serializable {
+
+    @Serial
+    private static final long serialVersionUID = -2093459699877697906L;
 
     @Id
     private Long id;

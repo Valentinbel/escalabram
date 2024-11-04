@@ -1,13 +1,18 @@
 package com.escalabram.escalabram.model;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Size;
 
+import java.io.Serial;
 import java.io.Serializable;
 import java.util.*;
 
 @Entity
 @Table(name="search")
 public class Search implements Serializable {
+
+    @Serial
+    private static final long serialVersionUID = 1689869441270067374L;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -16,6 +21,7 @@ public class Search implements Serializable {
     @Column(name = "climber_profile_id", nullable = false)
     private Long climberProfileId;
 
+    @Size(max = 80, message = "Title cannot be longer than 80 characters")
     @Column(name = "title")
     private String title;
 

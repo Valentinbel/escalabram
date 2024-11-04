@@ -152,9 +152,6 @@ class SearchServiceImplTest {
         searchService.updateSearch(searches.getFirst());
         Search searchUpdated = searchService.updateSearch(searchToUpdate);
 
-        System.out.println("searches.getFirst().getTimeSlots(): " + searches.getFirst().getTimeSlots());
-        System.out.println("searchToUpdate.getTimeSlots(): " + searchToUpdate.getTimeSlots());
-
         verify(searchRepository, times(2)).save(ArgumentMatchers.any());
         assertEquals(searchUpdated, searchToUpdate);
         assertEquals(searchUpdated.getTitle(), searchToUpdate.getTitle());

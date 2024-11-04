@@ -20,9 +20,8 @@ import java.util.*;
 @Service
 @Transactional
 public class MatchServiceImpl implements MatchService {
-    private final Logger log = LoggerFactory.getLogger(MatchServiceImpl.class);
+    private static final Logger log = LoggerFactory.getLogger(MatchServiceImpl.class);
     Set<Long> matchedSearchIds = new HashSet<>();
-
 
     private final MatchRepository matchRepository;
     private final SearchRepository searchRepository;
@@ -85,8 +84,8 @@ public class MatchServiceImpl implements MatchService {
                             Match savedMatch = matchRepository.save(newMatch);
                             newMatches.add(savedMatch);
                         } else {
-                            log.info("This is a Match. However, this Match already exists in our Database: {}", optionalMatch.get());
-                            newMatches.add(optionalMatch.get());
+                            log.info("This is a Match. However, this Match already exists in our Database: {}", optionalMatch.orElseThrow());
+                            newMatches.add(optionalMatch.orElseThrow());
                         }
                     });
                 } else log.info("There are no matchedTimeSlots. We can't say about ClimbLevels");

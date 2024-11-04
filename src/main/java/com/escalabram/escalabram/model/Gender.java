@@ -2,11 +2,15 @@ package com.escalabram.escalabram.model;
 
 import jakarta.persistence.*;
 
+import java.io.Serial;
 import java.io.Serializable;
 
 @Entity
 @Table(name="gender")
 public class Gender implements Serializable {
+
+    @Serial
+    private static final long serialVersionUID = 2998787090387494728L;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
