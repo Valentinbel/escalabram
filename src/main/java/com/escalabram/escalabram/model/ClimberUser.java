@@ -54,16 +54,6 @@ public class ClimberUser implements Serializable {
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
 
-    // TODO champs à ajouter (?) Spring Security
-    // accessToken string
-    //rememberMeToken string
-
-    @OneToOne(cascade = CascadeType.ALL,
-            fetch = FetchType.LAZY)
-    @JoinColumn(name = "climber_profile_id",
-            referencedColumnName = "id")
-    private ClimberProfile climberProfile;
-
     public ClimberUser() {
 
     }
@@ -111,14 +101,6 @@ public class ClimberUser implements Serializable {
         this.password = password;
     }
 
-    public ClimberProfile getClimberProfile() {
-        return climberProfile;
-    }
-
-    public void setClimberProfile(ClimberProfile climberProfile) {
-        this.climberProfile = climberProfile;
-    }
-
     public Set<Role> getRoles() {
         return roles;
     }
@@ -153,7 +135,6 @@ public class ClimberUser implements Serializable {
                 ", roles=" + roles +
                 ", createdAt=" + createdAt +
                 ", updatedAt=" + updatedAt +
-                ", climberProfile=" + climberProfile +
                 '}';
     }
 }

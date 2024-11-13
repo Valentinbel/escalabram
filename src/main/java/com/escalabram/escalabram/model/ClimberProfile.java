@@ -1,6 +1,5 @@
 package com.escalabram.escalabram.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 import java.io.Serial;
@@ -19,10 +18,6 @@ public class ClimberProfile implements Serializable {
     @Column(name = "profile_name")
     private String profileName;
 
-    // TODO Decider si cette colonne est importante
-    //    @Column(name = "birth_date")
-    //    private Date birthDate;
-
     @Column(name = "avatar")
     private String avatar;
 
@@ -32,17 +27,15 @@ public class ClimberProfile implements Serializable {
     @Column(name = "language_id")
     private Long languageId;
 
-    @JsonIgnore // TODO enlever ça et mettre un DTO ? ou corriger les parametres ici
-    @OneToOne(cascade = CascadeType.ALL,
-            fetch = FetchType.LAZY,
-            mappedBy = "climberProfile")
-    private ClimberUser climberUser;
-
     @Column(name = "is_notified", nullable = false)
-    private boolean isNotified;
+    private Boolean isNotified;
 
     @Column(columnDefinition = "TEXT", name = "climber_profile_description")
     private String climberProfileDescription;
+
+    @OneToOne//(cascade = CascadeType.ALL) //fetch = FetchType.LAZY ?
+    @JoinColumn(name = "climber_user_id", referencedColumnName = "id", nullable = false)
+    private ClimberUser climberUser;
 
     // TODO Gerer les relations de table
     //hasOne Gender
@@ -59,7 +52,7 @@ public class ClimberProfile implements Serializable {
                           Long genderId,
                           Long languageId,
                           ClimberUser climberUser,
-                          boolean isNotified,
+                          Boolean isNotified,
                           String climberProfileDescription) {
         this.id = id;
         this.profileName = profileName;
@@ -119,11 +112,11 @@ public class ClimberProfile implements Serializable {
         this.climberUser = climberUser;
     }
 
-    public boolean isNotified() {
+    public Boolean isNotified() {
         return isNotified;
     }
 
-    public void setNotified(boolean notified) {
+    public void setNotified(Boolean notified) {
         isNotified = notified;
     }
 

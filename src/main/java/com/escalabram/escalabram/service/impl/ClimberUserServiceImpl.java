@@ -5,14 +5,11 @@ import com.escalabram.escalabram.repository.ClimberUserRepository;
 import com.escalabram.escalabram.service.ClimberUSerService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.validation.annotation.Validated;
 
 import java.util.Optional;
 
 @Service
 @Transactional
-@Validated
-//@Valid
 public class ClimberUserServiceImpl implements ClimberUSerService {
 
     private final ClimberUserRepository climberUserRepository;
@@ -22,12 +19,12 @@ public class ClimberUserServiceImpl implements ClimberUSerService {
     }
 
     @Override
-    public Boolean existsByUserName(String userName) {
+    public boolean existsByUserName(String userName) {
         return climberUserRepository.existsByUserName(userName);
     }
 
     @Override
-    public Boolean existsByEmail(String email) {
+    public boolean existsByEmail(String email) {
         return climberUserRepository.existsByEmail(email);
     }
 

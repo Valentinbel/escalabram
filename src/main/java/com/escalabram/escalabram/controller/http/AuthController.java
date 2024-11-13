@@ -34,9 +34,9 @@ public class AuthController {
 
     @PostMapping("/register")
     public ResponseEntity<MessageResponse> registerUser(@Valid @RequestBody SignupRequest signUpRequest) {
-        if (climberUSerService.existsByUserName(signUpRequest.getUserName()).equals(true))
+        if (climberUSerService.existsByUserName(signUpRequest.getUserName()))
             return ResponseEntity.badRequest().body(new MessageResponse("Error: UserName is already taken!: " + signUpRequest.getUserName()));
-        if (climberUSerService.existsByEmail(signUpRequest.getEmail()).equals(true))
+        if (climberUSerService.existsByEmail(signUpRequest.getEmail()))
             return ResponseEntity.badRequest().body(new MessageResponse("Error: Email is already in use!"));
         ClimberUser newUser =   authService.createUser(signUpRequest);
         log.info("New user created: {}", newUser); // TODO DO not sent in PROD

@@ -6,12 +6,11 @@ import java.util.Optional;
 
 public interface ClimberUSerService {
 
-    Boolean existsByUserName(String userName);
+    boolean existsByUserName(String userName);
 
-    Boolean existsByEmail(String email);
+    boolean existsByEmail(String email);
 
     Optional<ClimberUser> findById(Long id);
 
     ClimberUser save(ClimberUser user);
-
 }
