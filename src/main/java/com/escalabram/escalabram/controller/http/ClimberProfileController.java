@@ -35,11 +35,12 @@ public class ClimberProfileController {
         }
     }
 
+    // Used for create and update
     @PostMapping("/climber-profiles")
-    public ResponseEntity<ClimberProfileDTO> createClimberProfile(@Valid @RequestBody ClimberProfileDTO climberProfileDTO){
+    public ResponseEntity<ClimberProfileDTO> saveClimberProfile(@Valid @RequestBody ClimberProfileDTO climberProfileDTO){
         log.debug("REST request to save ClimberProfile : {}", climberProfileDTO);
         try {
-            ClimberProfileDTO createdClimberProfileDTO = climberProfileService.createClimberProfile(climberProfileDTO);
+            ClimberProfileDTO createdClimberProfileDTO = climberProfileService.saveClimberProfile(climberProfileDTO);
             return new ResponseEntity<>(createdClimberProfileDTO, HttpStatus.CREATED);
             //return ResponseEntity.created(new URI("/api/personne-autorises/" + result.getId())).body(result);
         } catch (Exception e) {

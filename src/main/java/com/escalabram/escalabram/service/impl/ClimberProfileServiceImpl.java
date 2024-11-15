@@ -33,8 +33,6 @@ public class ClimberProfileServiceImpl implements ClimberProfileService {
             ClimberProfileDTO climberProfileDTO = this.climberProfileMapper.toClimberProfileDTO(optionalClimberProfile.get());
             return Optional.ofNullable(climberProfileDTO);
         } else return  Optional.empty();
-
-
     }
 
     @Override
@@ -43,12 +41,8 @@ public class ClimberProfileServiceImpl implements ClimberProfileService {
     }
 
     @Override
-    public ClimberProfileDTO createClimberProfile(ClimberProfileDTO climberProfileDTO) {
+    public ClimberProfileDTO saveClimberProfile(ClimberProfileDTO climberProfileDTO) {
         log.debug("climberProfileRequestDTO : {}", climberProfileDTO);
-        return save(climberProfileDTO);
-    }
-
-    private ClimberProfileDTO save(ClimberProfileDTO climberProfileDTO) {
         ClimberProfile climberProfile = this.climberProfileMapper.toClimberProfile(climberProfileDTO);
         ClimberProfile savedClimberProfile = climberProfileRepository.save(climberProfile);
         return this.climberProfileMapper.toClimberProfileDTO(savedClimberProfile);

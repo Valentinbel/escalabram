@@ -10,5 +10,5 @@ public interface ClimberProfileService {
 
     boolean existsById(Long climberProfileId);
 
-    ClimberProfileDTO createClimberProfile(ClimberProfileDTO climberProfileDTO);
+    ClimberProfileDTO saveClimberProfile(ClimberProfileDTO climberProfileDTO);
 }
