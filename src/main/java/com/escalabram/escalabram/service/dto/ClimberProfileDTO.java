@@ -33,7 +33,9 @@ public class ClimberProfileDTO implements Serializable {
                              String profileName,
                              String avatar,
                              Long genderId,
-                             Long languageId, Boolean isNotified, String climberProfileDescription,
+                             Long languageId,
+                             Boolean isNotified,
+                             String climberProfileDescription,
                              Long climberUserId) {
         this.id = id;
         this.profileName = profileName;
