@@ -3,14 +3,15 @@ package com.escalabram.escalabram.service.impl;
 import com.escalabram.escalabram.model.ClimberProfile;
 import com.escalabram.escalabram.model.ClimberUser;
 import com.escalabram.escalabram.repository.ClimberProfileRepository;
-import com.escalabram.escalabram.service.ClimberProfileService;
 import com.escalabram.escalabram.service.dto.ClimberProfileDTO;
 import com.escalabram.escalabram.service.mapper.ClimberProfileMapper;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
+
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.LocalDateTime;
 import java.util.Optional;
@@ -18,7 +19,7 @@ import java.util.Optional;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
-@SpringBootTest
+@ExtendWith(MockitoExtension.class)
 public class ClimberProfileServiceImplTest {
 
     public static ClimberUser climberUser;
@@ -29,13 +30,13 @@ public class ClimberProfileServiceImplTest {
     public static ClimberProfileDTO climberProfileDTO;
     public static ClimberProfileDTO climberProfileDTONoId;
 
-    @Autowired
-    ClimberProfileService climberProfileService;
+    @InjectMocks
+    ClimberProfileServiceImpl climberProfileServiceImpl;
 
-    @MockBean
+    @Mock
     ClimberProfileRepository climberProfileRepository;
 
-    @MockBean
+    @Mock
     ClimberProfileMapper climberProfileMapper;
 
     @BeforeAll
@@ -78,22 +79,21 @@ public class ClimberProfileServiceImplTest {
     }
 
     @Test
-    void testFindByClimberUserId() {
+    void findByClimberUserId_UserId_OptionalDTO() {
         when(climberProfileRepository.findByClimberUserId(climberUser.getId())).thenReturn(Optional.of(climberProfile));
         when(climberProfileMapper.toClimberProfileDTO(climberProfile)).thenReturn(climberProfileDTO);
 
-        Optional<ClimberProfileDTO> optionalClimberProfileDTO = climberProfileService.findByClimberUserId(climberUser.getId());
+        Optional<ClimberProfileDTO> optionalClimberProfileDTO = climberProfileServiceImpl.findByClimberUserId(climberUser.getId());
 
         verify(climberProfileRepository, times(1)).findByClimberUserId(climberUser.getId());
         assertEquals(optionalClimberProfileDTO, Optional.of(climberProfileDTO));
     }
 
     @Test
-    void testFindByClimberUserId_empty() {
+    void findByClimberUserId_WrongUserId_OptionalEmpty() {
         when(climberProfileRepository.findByClimberUserId(climberUser.getId())).thenReturn(Optional.empty());
-        when(climberProfileMapper.toClimberProfileDTO(climberProfile)).thenReturn(climberProfileDTO);
 
-        Optional<ClimberProfileDTO> optionalClimberProfileDTO = climberProfileService.findByClimberUserId(climberUser.getId());
+        Optional<ClimberProfileDTO> optionalClimberProfileDTO = climberProfileServiceImpl.findByClimberUserId(climberUser.getId());
 
         verify(climberProfileRepository, times(1)).findByClimberUserId(climberUser.getId());
         verify(climberProfileMapper, times(0)).toClimberProfileDTO(climberProfile);
@@ -101,32 +101,32 @@ public class ClimberProfileServiceImplTest {
     }
 
     @Test
-    void testExistsById_true() {
+    void existsById_ClimberProfileId_True() {
         when(climberProfileRepository.existsById(climberProfile.getId())).thenReturn(true);
 
-        boolean isTrue = climberProfileService.existsById(climberProfile.getId());
+        boolean isTrue = climberProfileServiceImpl.existsById(climberProfile.getId());
 
         verify(climberProfileRepository, times(1)).existsById(climberProfile.getId());
         assertTrue(isTrue);
     }
 
     @Test
-    void testExistsById_false() {
+    void existsById_WrongClimberProfileId_False() {
         when(climberProfileRepository.existsById(climberProfile.getId())).thenReturn(false);
 
-        boolean isFalse = climberProfileService.existsById(climberProfile.getId());
+        boolean isFalse = climberProfileServiceImpl.existsById(climberProfile.getId());
 
         verify(climberProfileRepository, times(1)).existsById(climberProfile.getId());
         assertFalse(isFalse);
     }
 
     @Test
-    void testSaveClimberProfile_insert() {
+    void saveClimberProfile_Insert() {
         when(climberProfileMapper.toClimberProfile(climberProfileDTONoId)).thenReturn(climberProfileNoId);
         when(climberProfileRepository.save(climberProfileNoId)).thenReturn(climberProfile);
         when(climberProfileMapper.toClimberProfileDTO(climberProfile)).thenReturn(climberProfileDTO);
 
-        ClimberProfileDTO insertedClimberProfileDTO = climberProfileService.saveClimberProfile(climberProfileDTONoId);
+        ClimberProfileDTO insertedClimberProfileDTO = climberProfileServiceImpl.saveClimberProfile(climberProfileDTONoId);
 
         verify(climberProfileRepository, times(1)).save(climberProfileNoId);
         assertEquals(insertedClimberProfileDTO, climberProfileDTO);
