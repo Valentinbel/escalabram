@@ -100,7 +100,7 @@ class MatchServiceImplTest {
     }
 
     @Test
-    void createMatchesIfFit_Matching(){
+    void createMatchesIfFit_matching(){
         // Matching
         Search searchMatching = searches.getFirst();
         searchMatching.setTimeSlots(timeSlotsMatching1);
@@ -148,7 +148,7 @@ class MatchServiceImplTest {
     }
 
     @Test
-    void createMatchesIfFit_MatchAlreadyExists(){
+    void createMatchesIfFit_matchAlreadyExists(){
         // Matching
         Search searchMatching = searches.getFirst();
         searchMatching.setTimeSlots(timeSlotsMatching1);
@@ -196,7 +196,7 @@ class MatchServiceImplTest {
     }
 
     @Test
-    void createMatchesIfFit_TimeSlotsNOMatch(){
+    void createMatchesIfFit_timeSlotsNOMatch(){
         // Matching
         Search searchMatching = searches.getFirst();
         searchMatching.setTimeSlots(timeSlotsMatching1);
@@ -228,7 +228,7 @@ class MatchServiceImplTest {
     }
 
     @Test
-    void testCreateMatchesIfFit_TimeSlotsMatchButClimbLevelDONT(){
+    void testCreateMatchesIfFit_timeSlotsMatchButClimbLevelDONT(){
         // Matching
         Search searchMatching = searches.getFirst();
         searchMatching.setTimeSlots(timeSlotsMatching1);

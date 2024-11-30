@@ -79,7 +79,7 @@ public class ClimberProfileServiceImplTest {
     }
 
     @Test
-    void findByClimberUserId_UserId_OptionalDTO() {
+    void findByClimberUserId_userId_optionalDTO() {
         when(climberProfileRepository.findByClimberUserId(climberUser.getId())).thenReturn(Optional.of(climberProfile));
         when(climberProfileMapper.toClimberProfileDTO(climberProfile)).thenReturn(climberProfileDTO);
 
@@ -90,7 +90,7 @@ public class ClimberProfileServiceImplTest {
     }
 
     @Test
-    void findByClimberUserId_WrongUserId_OptionalEmpty() {
+    void findByClimberUserId_wrongUserId_optionalEmpty() {
         when(climberProfileRepository.findByClimberUserId(climberUser.getId())).thenReturn(Optional.empty());
 
         Optional<ClimberProfileDTO> optionalClimberProfileDTO = climberProfileServiceImpl.findByClimberUserId(climberUser.getId());
@@ -101,7 +101,7 @@ public class ClimberProfileServiceImplTest {
     }
 
     @Test
-    void existsById_ClimberProfileId_True() {
+    void existsById_climberProfileId_true() {
         when(climberProfileRepository.existsById(climberProfile.getId())).thenReturn(true);
 
         boolean isTrue = climberProfileServiceImpl.existsById(climberProfile.getId());
@@ -111,7 +111,7 @@ public class ClimberProfileServiceImplTest {
     }
 
     @Test
-    void existsById_WrongClimberProfileId_False() {
+    void existsById_wrongClimberProfileId_false() {
         when(climberProfileRepository.existsById(climberProfile.getId())).thenReturn(false);
 
         boolean isFalse = climberProfileServiceImpl.existsById(climberProfile.getId());
@@ -121,7 +121,7 @@ public class ClimberProfileServiceImplTest {
     }
 
     @Test
-    void saveClimberProfile_Insert() {
+    void saveClimberProfile_insert() {
         when(climberProfileMapper.toClimberProfile(climberProfileDTONoId)).thenReturn(climberProfileNoId);
         when(climberProfileRepository.save(climberProfileNoId)).thenReturn(climberProfile);
         when(climberProfileMapper.toClimberProfileDTO(climberProfile)).thenReturn(climberProfileDTO);

@@ -78,7 +78,7 @@ class SearchServiceImplTest {
     }
 
     @Test
-    void findAll_ReturnAll(){
+    void findAll_returnAll(){
         when(searchRepository.findAll()).thenReturn(searches);
         searches.get(3).setTimeSlots(timeSlots);
 
@@ -96,7 +96,7 @@ class SearchServiceImplTest {
     }
 
     @Test
-    void findById_SearchId_OptionalEntity() {
+    void findById_searchId_optionalEntity() {
         when(searchRepository.findById(searches.getFirst().getId())).thenReturn(Optional.of(searches.getFirst()));
         searches.getFirst().setTimeSlots(timeSlots);
 
@@ -107,7 +107,7 @@ class SearchServiceImplTest {
     }
 
     @Test
-    void findById_WrongId_OptionalEmpty() {
+    void findById_wrongId_optionalEmpty() {
         when(searchRepository.findById(searches.getLast().getId())).thenReturn(Optional.empty());
         Optional<Search> optSearch = searchServiceImpl.findById(searches.getLast().getId());
 
@@ -116,7 +116,7 @@ class SearchServiceImplTest {
     }
 
     @Test
-    void findByClimberProfileId_ProfileId_OptionalSetSearch(){
+    void findByClimberProfileId_profileId_optionalSetSearch(){
         when(searchRepository.findByClimberProfileId(searches.get(3).getClimberProfileId())).thenReturn(Optional.of(Set.of(searches.get(3))));
         searches.get(3).setTimeSlots(timeSlots);
 
@@ -127,7 +127,7 @@ class SearchServiceImplTest {
     }
 
     @Test
-    void findByClimberProfileId_WrongProfileId_Empty(){
+    void findByClimberProfileId_wrongProfileId_empty(){
         when(searchRepository.findByClimberProfileId(searches.get(2).getClimberProfileId())).thenReturn(Optional.empty());
         Optional<Set<Search>> optSearches = searchServiceImpl.findByClimberProfileId(2L);
 
@@ -136,7 +136,7 @@ class SearchServiceImplTest {
     }
 
     @Test
-    void createSearch_Insert(){
+    void createSearch_insert(){
         Set<ClimbLevel> climbLevelsToCreate = Stream.of(
                 new ClimbLevel(2L , null),
                 new ClimbLevel(7L ,null)
@@ -159,7 +159,7 @@ class SearchServiceImplTest {
     }
 
     @Test
-    void updateSearch_Update() {
+    void updateSearch_update() {
         Search searchToUpdate = new Search(1L,1L, "search1modified", true, true, true,
                 true, 1L,1L, climbLevels, true);
         searchToUpdate.setTimeSlots(timeSlot2);
@@ -178,7 +178,7 @@ class SearchServiceImplTest {
     }
 
     @Test
-    void deleteEmployeeById_Ok() {
+    void deleteEmployeeById_ok() {
         searchServiceImpl.deleteById(searches.get(2).getId());
         verify(searchRepository, times(1)).deleteById(searches.get(2).getId());
     }
