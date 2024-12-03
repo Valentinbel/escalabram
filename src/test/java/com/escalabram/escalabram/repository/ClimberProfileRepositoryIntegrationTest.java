@@ -47,4 +47,10 @@ class ClimberProfileRepositoryIntegrationTest {
                 () -> assertEquals(retrievedClimberProfile.get().getClimberUser().getRoles(), optprofileToFind.get().getClimberUser().getRoles())
         );
     }
+
+    @Test
+    void findByClimberUserId_whenFindById_thenEmpty() {
+        Optional<ClimberProfile> retrievedClimberProfile = climberProfileRepository.findByClimberUserId(99L);
+        assertEquals(retrievedClimberProfile, Optional.empty());
+    }
 }
