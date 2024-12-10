@@ -16,7 +16,7 @@ import java.util.Set;
 import static org.junit.jupiter.api.Assertions.*;
 
 @DataJpaTest
-class ClimberProfileRepositoryIntegrationTest {
+class ClimberProfileRepositoryTest {
 
     @Autowired
     private ClimberProfileRepository climberProfileRepository;

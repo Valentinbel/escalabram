@@ -67,7 +67,7 @@ public class AuthServiceImpl implements AuthService {
             roles.add(role);
         } else {
             strRoles.forEach(role -> {
-                if(role.equals("admin")) {
+                if(role.equalsIgnoreCase("admin")) {
                     Role adminRole = userRoleService.findByRoleName(EnumRole.ROLE_ADMIN)
                             .orElseThrow(() -> new RuntimeException("Error: RoleName is not found."));
                     roles.add(adminRole);

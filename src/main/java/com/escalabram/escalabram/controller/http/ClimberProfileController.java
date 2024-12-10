@@ -25,7 +25,7 @@ public class ClimberProfileController {
     }
 
     @GetMapping("/climber-profiles/climber-users/{climberUserId}")
-    public ResponseEntity<ClimberProfileDTO> getClimberProfileById(@PathVariable Long climberUserId) {
+    public ResponseEntity<ClimberProfileDTO> getClimberProfileByClimberUserId(@PathVariable Long climberUserId) {
         try {
             Optional<ClimberProfileDTO> climberProfileDTO = climberProfileService.findByClimberUserId(climberUserId);
             return ResponseUtil.wrapOrNotFound(climberProfileDTO);
