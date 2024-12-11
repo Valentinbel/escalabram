@@ -30,8 +30,8 @@ public class ClimberProfileController {
             Optional<ClimberProfileDTO> climberProfileDTO = climberProfileService.findByClimberUserId(climberUserId);
             return ResponseUtil.wrapOrNotFound(climberProfileDTO);
         } catch (Exception e) {
-        log.error("An error was encountered while retrieving data in getSearchByClimberProfileId",e);
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+            log.error("An error was encountered while retrieving data in getSearchByClimberProfileId",e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
 
