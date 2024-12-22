@@ -15,6 +15,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
@@ -29,8 +30,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @SpringBootTest
 @AutoConfigureMockMvc
+@ActiveProfiles("test") // Active le profil "test" défini dans application-test.properties
 @Transactional
-public class ClimberProfileControllerTest {
+class ClimberProfileControllerTest {
 
     @Autowired
     private MockMvc mockMvc;
@@ -64,7 +66,7 @@ public class ClimberProfileControllerTest {
     }
 
     @Test
-    public void getClimberProfileByClimberUserId_unAuthenticated_unAuthorized() throws Exception {
+    void getClimberProfileByClimberUserId_unAuthenticated_unAuthorized() throws Exception {
         Long climberUserId = 1L;
         this.mockMvc.perform(get("/api/climber-profiles/climber-users/{climberUserId}", climberUserId))
                 .andDo(print())
@@ -73,7 +75,7 @@ public class ClimberProfileControllerTest {
 
     @Test
     @WithMockUser
-    public void getClimberProfileByClimberUserId_whenFindByUserId_thenSuccess() throws Exception {
+    void getClimberProfileByClimberUserId_whenFindByUserId_thenSuccess() throws Exception {
 
         Long climberUserId = listUsers.getFirst().getId();
 
@@ -86,7 +88,7 @@ public class ClimberProfileControllerTest {
 
     @Test
     @WithMockUser
-    public void getClimberProfileByClimberUserId_whenFindByUserId_thenNotFound() throws Exception {
+    void getClimberProfileByClimberUserId_whenFindByUserId_thenNotFound() throws Exception {
 
         long climberUserIdNotFound = listUsers.getFirst().getId() + 1;
         this.mockMvc.perform(get("/api/climber-profiles/climber-users/" + climberUserIdNotFound))
@@ -96,7 +98,7 @@ public class ClimberProfileControllerTest {
 
     @Test
     @WithMockUser
-    public void saveClimberProfile_climberProfileDto_created() throws Exception {
+    void saveClimberProfile_climberProfileDto_created() throws Exception {
 
         ClimberUser climberUserToCreate = new ClimberUser("OriBertone", "ori@gmail.com", "password1234567", LocalDateTime.now(), LocalDateTime.now());
         climberUserRepository.saveAndFlush(climberUserToCreate);
@@ -116,7 +118,7 @@ public class ClimberProfileControllerTest {
 
     @Test
     @WithMockUser
-    public void saveClimberProfile_climberProfileDto_update() throws Exception {
+    void saveClimberProfile_climberProfileDto_update() throws Exception {
 
         ClimberProfileDTO profileDTOToUpdate = climberProfileMapper.toClimberProfileDTO(listProfiles.getFirst());
         profileDTOToUpdate.setAvatar("/path/enfaituneautreimage.png");
@@ -131,4 +133,3 @@ public class ClimberProfileControllerTest {
                 .andExpect(jsonPath("$.climberUserId").value(listProfiles.getFirst().getClimberUser().getId()));
     }
 }
-// TODO H2 db se vide mais incrémente toujours. Faut il passer en @sql?
