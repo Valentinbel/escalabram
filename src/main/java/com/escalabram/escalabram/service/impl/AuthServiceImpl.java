@@ -128,10 +128,9 @@ public class AuthServiceImpl implements AuthService {
     }
 
     @Override
-    public MessageResponse logoutUser() {
-        UserDetailsImpl userDetails = (UserDetailsImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        Long userId = userDetails.getId();
-        refreshTokenService.deleteByUserId(userId);
+    public MessageResponse logoutUser(Long userId) {
+        ClimberUser climberUser = climberUSerService.findById(userId).orElseThrow();
+        refreshTokenService.deleteByUserId(climberUser.getId());
         return new MessageResponse("Log out successful!");
     }
 }

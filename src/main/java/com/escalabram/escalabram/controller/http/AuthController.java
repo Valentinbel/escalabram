@@ -56,9 +56,9 @@ public class AuthController {
         return ResponseEntity.ok(refreshedToken);
     }
 
-    @PostMapping("/signout")
-    public ResponseEntity<MessageResponse> logoutUser() {
-        MessageResponse logOutResponse = authService.logoutUser();
+    @PostMapping("/signout/{userId}")
+    public ResponseEntity<MessageResponse> logoutUser(@PathVariable Long userId) {
+        MessageResponse logOutResponse = authService.logoutUser(userId);
         return ResponseEntity.ok(logOutResponse);
     }
 }

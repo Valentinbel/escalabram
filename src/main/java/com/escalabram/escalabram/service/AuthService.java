@@ -16,7 +16,7 @@ public interface AuthService {
 
     TokenRefreshResponse refreshtoken(TokenRefreshRequest request);
 
-    MessageResponse logoutUser();
+    MessageResponse logoutUser(Long userId);
 
 
 }
