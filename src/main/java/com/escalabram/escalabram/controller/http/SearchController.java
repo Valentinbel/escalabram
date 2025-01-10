@@ -43,7 +43,7 @@ public class SearchController {
     }
 
     @GetMapping("/searches/climber-profiles/{id}")
-    public ResponseEntity<Set<Search>> getSearchByClimberProfileId(@PathVariable("id") long id ){
+    public ResponseEntity<Set<Search>> getSearchByClimberProfileId(@PathVariable("id") Long id ){
         log.debug("REST request to get list of Search by climberProfileId: {}", id);
         try {
             Optional<Set<Search>> searches= searchService.findByClimberProfileId(id);

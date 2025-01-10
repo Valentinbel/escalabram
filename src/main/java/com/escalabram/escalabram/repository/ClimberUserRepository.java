@@ -9,7 +9,7 @@ import java.util.Optional;
 @Repository
 public interface ClimberUserRepository extends JpaRepository<ClimberUser, Long> {
 
-    Optional<ClimberUser> findByUserName(String userName);
+    Optional<ClimberUser> findByEmail(String email);
 
     boolean existsByUserName(String userName);
 
