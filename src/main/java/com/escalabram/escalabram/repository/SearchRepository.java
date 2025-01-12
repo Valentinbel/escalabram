@@ -33,4 +33,5 @@ public interface SearchRepository extends JpaRepository<Search, Long> {
             "WHERE s.id = :searchId " +
             "ORDER BY scl.climb_level_id", nativeQuery = true)
     List<ISearchClimbLevelDTO> findClimbLevelsByIdSearchId(@Param("searchId") Long searchId);
+    // TODO Passer en JPQL avec un DTO
 }

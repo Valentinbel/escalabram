@@ -15,9 +15,6 @@ public class ClimberProfile implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "profile_name")
-    private String profileName;
-
     @Column(name = "avatar")
     private String avatar;
 
@@ -40,14 +37,13 @@ public class ClimberProfile implements Serializable {
     // TODO Gerer les relations de table
     //hasOne Gender
     //hasOne Language
-    //hasManySearch
+    //hasManySearch ==> Comprendre les différents types de Cascade et autres parametres
 
     public ClimberProfile() {
 
     }
 
     public ClimberProfile(Long id,
-                          String profileName,
                           String avatar,
                           Long genderId,
                           Long languageId,
@@ -55,7 +51,6 @@ public class ClimberProfile implements Serializable {
                           Boolean isNotified,
                           String climberProfileDescription) {
         this.id = id;
-        this.profileName = profileName;
         this.avatar = avatar;
         this.genderId = genderId;
         this.languageId = languageId;
@@ -70,14 +65,6 @@ public class ClimberProfile implements Serializable {
 
     public void setId(Long id) {
         this.id = id;
-    }
-
-    public String getProfileName() {
-        return profileName;
-    }
-
-    public void setProfileName(String profileName) {
-        this.profileName = profileName;
     }
 
     public String getAvatar() {
@@ -132,7 +119,6 @@ public class ClimberProfile implements Serializable {
     public String toString() {
         return "ClimberProfile{" +
                 "id=" + id +
-                ", profileName='" + profileName + '\'' +
                 ", avatar='" + avatar + '\'' +
                 ", genderId=" + genderId +
                 ", languageId=" + languageId +

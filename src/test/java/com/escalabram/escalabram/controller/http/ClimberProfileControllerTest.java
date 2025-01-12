@@ -60,7 +60,7 @@ class ClimberProfileControllerTest {
         this.listUsers = climberUserRepository.findAll();
 
         //climberProfile
-        ClimberProfile climberProfile = new ClimberProfile(1L, "CrisSharma", "path/image.png", 1L, 2L, climberUser, true, "Salut salut");
+        ClimberProfile climberProfile = new ClimberProfile(1L, "path/image.png", 1L, 2L, climberUser, true, "Salut salut");
         this.climberProfileRepository.saveAndFlush(climberProfile);
         this.listProfiles = climberProfileRepository.findAll();
     }
@@ -104,7 +104,7 @@ class ClimberProfileControllerTest {
         climberUserRepository.saveAndFlush(climberUserToCreate);
         Long newclimberUserId = listUsers.getFirst().getId() +1;
         Long newprofileId = listProfiles.getFirst().getId() +1;
-        ClimberProfileDTO profileDTO = new ClimberProfileDTO(newprofileId, "OrianeBertone", "image.png", 2L, 1L, true, "salut c'est Bertone", newclimberUserId);
+        ClimberProfileDTO profileDTO = new ClimberProfileDTO(newprofileId, "image.png", 2L, 1L, true, "salut c'est Bertone", newclimberUserId);
 
         mockMvc.perform(post("/api/climber-profiles")
                         .contentType(MediaType.APPLICATION_JSON)

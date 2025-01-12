@@ -19,6 +19,11 @@ public class ClimberUserServiceImpl implements ClimberUSerService {
     }
 
     @Override
+    public boolean existsById(Long id) {
+        return climberUserRepository.existsById(id);
+    }
+
+    @Override
     public boolean existsByUserName(String userName) {
         return climberUserRepository.existsByUserName(userName);
     }
@@ -36,5 +41,10 @@ public class ClimberUserServiceImpl implements ClimberUSerService {
     @Override
     public ClimberUser save(ClimberUser user) {
         return climberUserRepository.save(user);
+    }
+
+    @Override
+    public int updateUserNameById(Long userId, String userName) {
+        return climberUserRepository.updateUserNameById(userId, userName);
     }
 }
