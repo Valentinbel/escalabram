@@ -42,7 +42,7 @@ public class ClimberUser implements Serializable {
     @Column(name = "password")
     private String password;
 
-    @ManyToMany(fetch = FetchType.LAZY)
+    @ManyToMany
     @JoinTable(name = "user_roles",
             joinColumns = @JoinColumn(name = "climber_user_id"),
             inverseJoinColumns = @JoinColumn(name = "role_user_id"))

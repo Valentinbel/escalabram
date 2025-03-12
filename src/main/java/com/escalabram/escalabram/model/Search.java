@@ -46,16 +46,10 @@ public class Search implements Serializable {
     @Column(name = "is_active")
     private Boolean isActive;
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "search", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "search", cascade = CascadeType.ALL)
     private Set<TimeSlot> timeSlots = new HashSet<>();
 
-    @ManyToMany(
-            fetch = FetchType.LAZY,
-            cascade = {
-                    CascadeType.PERSIST,
-                    CascadeType.MERGE
-            }
-    )
+    @ManyToMany(cascade = { CascadeType.PERSIST, CascadeType.MERGE })
     @JoinTable(
             name = "search_climb_level",
             joinColumns = { @JoinColumn(name = "search_id") },
