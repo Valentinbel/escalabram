@@ -180,6 +180,16 @@ public class Search implements Serializable {
         isActive = active;
     }
 
+    public void addTimeSlot(TimeSlot timeSlot) {
+        timeSlots.add(timeSlot);
+        timeSlot.setSearch(this);
+    }
+
+    public void removeTimeSlot(TimeSlot timeSlot) {
+        timeSlots.remove(timeSlot);
+        timeSlot.setSearch(null);
+    }
+
     @Override
     public String toString() {
         return "Search{" +
