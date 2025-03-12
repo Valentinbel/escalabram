@@ -1,7 +1,5 @@
 package com.escalabram.escalabram.service.dto;
 
-import jakarta.validation.constraints.NotBlank;
-
 import java.io.Serial;
 import java.io.Serializable;
 
@@ -10,9 +8,6 @@ public class ClimberProfileDTO implements Serializable {
     private static final long serialVersionUID = -2061960641588724813L;
 
     private Long id;
-
-    @NotBlank
-    private String profileName;
 
     private String avatar;
 
@@ -30,7 +25,6 @@ public class ClimberProfileDTO implements Serializable {
     }
 
     public ClimberProfileDTO(Long id,
-                             String profileName,
                              String avatar,
                              Long genderId,
                              Long languageId,
@@ -38,7 +32,6 @@ public class ClimberProfileDTO implements Serializable {
                              String climberProfileDescription,
                              Long climberUserId) {
         this.id = id;
-        this.profileName = profileName;
         this.avatar = avatar;
         this.genderId = genderId;
         this.languageId = languageId;
@@ -53,14 +46,6 @@ public class ClimberProfileDTO implements Serializable {
 
     public void setId(Long id) {
         this.id = id;
-    }
-
-    public @NotBlank String getProfileName() {
-        return profileName;
-    }
-
-    public void setProfileName(@NotBlank String profileName) {
-        this.profileName = profileName;
     }
 
     public String getAvatar() {
@@ -115,7 +100,6 @@ public class ClimberProfileDTO implements Serializable {
     public String toString() {
         return "ClimberProfileDTO{" +
                 "id=" + id +
-                ", profileName='" + profileName + '\'' +
                 ", avatar='" + avatar + '\'' +
                 ", genderId=" + genderId +
                 ", languageId=" + languageId +

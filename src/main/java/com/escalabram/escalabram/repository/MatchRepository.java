@@ -22,4 +22,5 @@ public interface MatchRepository extends JpaRepository<Match, Long> {
                                     @Param("matchedSearchId") Long matchedSearchId,
                                     @Param("matchedTimeSlotId") Long matchedTimeSlotId,
                                     @Param("mutualMatch") boolean mutualMatch);
+    // TODO Passer un DTO pour passer en JPQL != nativequery
 }

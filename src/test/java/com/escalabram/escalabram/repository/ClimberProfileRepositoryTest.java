@@ -34,7 +34,7 @@ class ClimberProfileRepositoryTest {
         relatedUser.setRoles(roleSet);
         entityManager.merge(relatedUser);
 
-        ClimberProfile profileToFind = new ClimberProfile(1L, "Chris_S", "path/myFace.png", 1L, 2L, relatedUser, true, "Blah blah, my life...");
+        ClimberProfile profileToFind = new ClimberProfile(1L, "path/myFace.png", 1L, 2L, relatedUser, true, "Blah blah, my life...");
         entityManager.merge(profileToFind);
         Optional<ClimberProfile> optprofileToFind = Optional.of(profileToFind);
 

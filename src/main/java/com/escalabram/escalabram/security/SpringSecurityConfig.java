@@ -68,10 +68,11 @@ public class SpringSecurityConfig {
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth ->
                         auth.requestMatchers("/api/auth/**").permitAll()
-                        .requestMatchers("/api/test/**").hasAnyRole("USER") // TEST à enlever
-                        .requestMatchers("/api/searches/**").hasAnyRole("USER")
-                        .requestMatchers("/api/matches/**").hasAnyRole("USER")
                         .requestMatchers("/api/climber-profiles/**").hasAnyRole("USER")
+                        .requestMatchers("/api/climber-user/**").hasAnyRole("USER")
+                        .requestMatchers("/api/matches/**").hasAnyRole("USER")
+                        .requestMatchers("/api/searches/**").hasAnyRole("USER")
+                        .requestMatchers("/api/test/**").hasAnyRole("USER") // TODO TEST à enlever
                         .anyRequest().authenticated()
                 );
 

@@ -53,7 +53,6 @@ public class ClimberProfileServiceImplTest {
 
         climberProfile = new ClimberProfile(
                 1L,
-                "AdamOndraProfileName",
                 "path/avatar.png",
                 1L,
                 2L,
@@ -66,7 +65,6 @@ public class ClimberProfileServiceImplTest {
 
         climberProfileDTO = new ClimberProfileDTO(
                 1L,
-                "AdamOndraProfileName",
                 "path/avatar.png",
                 1L,
                 2L,

@@ -21,11 +21,11 @@ public class JwtUtils {
     private int jwtExpirationMs;
 
     public String generateJwtToken(UserDetailsImpl userPrincipal) {
-        return generateTokenFromUserName(userPrincipal.getUsername());
+        return generateTokenFromEmail(userPrincipal.getEmail());
     }
 
-    public String generateTokenFromUserName(String userName) {
-        return Jwts.builder().setSubject(userName).setIssuedAt(new Date())
+    public String generateTokenFromEmail(String email) {
+        return Jwts.builder().setSubject(email).setIssuedAt(new Date())
                 .setExpiration(new Date((new Date()).getTime() + jwtExpirationMs)).signWith(SignatureAlgorithm.HS512, jwtSecret)
                 .compact();
     }
