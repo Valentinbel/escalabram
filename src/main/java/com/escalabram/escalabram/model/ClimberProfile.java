@@ -15,6 +15,7 @@ public class ClimberProfile implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    //TODO Relation to fileInfo
     @Column(name = "avatar")
     private String avatar;
 

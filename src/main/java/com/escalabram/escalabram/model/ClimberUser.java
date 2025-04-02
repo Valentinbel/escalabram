@@ -12,11 +12,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 @Entity
-@Table(name="climber_user",
-        uniqueConstraints = {
-                @UniqueConstraint(columnNames = "userName"),
-                @UniqueConstraint(columnNames = "email")
-        })
+@Table(name="climber_user")
 public class ClimberUser implements Serializable {
 
     @Serial

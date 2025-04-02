@@ -33,7 +33,7 @@ public class ClimberUserController {
             else {
                 return new ResponseEntity<>(HttpStatus.NOT_FOUND);
             }
-
+           // remplacer ResponseEntity<String> par ResponseEntity<MessageResponse> comme dans Auth Controller
         } catch (Exception e) {
             log.error("Une erreur a été rencontrée lors de mise à terme d'une condamnation", e);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
