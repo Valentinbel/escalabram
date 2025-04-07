@@ -44,17 +44,18 @@ public class ClimberProfileController {
     public ResponseEntity<MessageResponse> uploadFile(@RequestParam("file") MultipartFile file) {
         String message = "";
         try {
-
+            // TODO PAsser ça dans @PostMapping("/climber-profiles")
             // On save le profil. Si c'est le premier post, on récupère le profilId et on peut s'occuper de l'avatar.
 
             // init correspondant au profileid?
-            this.filesStorageService.init(); //passer en parametre l'id et voir si il peut nous retourner le path
+            String profileId = "v2_initDepuisSave";
+            //this.filesStorageService.init(profileId); //passer en parametre l'id et voir si il peut nous retourner le path
             System.out.println("/////////////////////////////");
             System.out.println("file.getOriginalFilename: "+ file.getOriginalFilename());
 
             //Si existe dejà: message: "message": "Could not upload the file: Kavinski - NightCall.txt. Error: A file of that name already exists."
             //Verifier que le fichier avec le path existe pas dejà ?
-            this.filesStorageService.save(file);
+            this.filesStorageService.save(file, profileId);
 
             //file a plein de getName et autres. Voir ce qui nous interesse ici.
             //Faire un save de fileInfo. Lui faire un repo et service.
@@ -72,6 +73,7 @@ public class ClimberProfileController {
         log.debug("REST request to save ClimberProfile : {}", climberProfileDTO);
         try {
             ClimberProfileDTO createdClimberProfileDTO = climberProfileService.saveClimberProfile(climberProfileDTO);
+
             return new ResponseEntity<>(createdClimberProfileDTO, HttpStatus.CREATED);
             //return ResponseEntity.created(new URI("/api/personne-autorises/" + result.getId())).body(result);
         } catch (Exception e) {

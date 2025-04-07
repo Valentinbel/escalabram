@@ -24,9 +24,6 @@ public class FileInfo implements Serializable {
     @Column(name = "url")
     private String url;
 
-    //TODO Relation to Profile.avatar
-
-
     public FileInfo() {
     }
 

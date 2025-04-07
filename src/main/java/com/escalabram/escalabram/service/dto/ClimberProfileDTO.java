@@ -9,8 +9,6 @@ public class ClimberProfileDTO implements Serializable {
 
     private Long id;
 
-    private String avatar;
-
     private Long genderId;
 
     private Long languageId;
@@ -25,14 +23,12 @@ public class ClimberProfileDTO implements Serializable {
     }
 
     public ClimberProfileDTO(Long id,
-                             String avatar,
                              Long genderId,
                              Long languageId,
                              Boolean isNotified,
                              String climberProfileDescription,
                              Long climberUserId) {
         this.id = id;
-        this.avatar = avatar;
         this.genderId = genderId;
         this.languageId = languageId;
         this.isNotified = isNotified;
@@ -46,14 +42,6 @@ public class ClimberProfileDTO implements Serializable {
 
     public void setId(Long id) {
         this.id = id;
-    }
-
-    public String getAvatar() {
-        return avatar;
-    }
-
-    public void setAvatar(String avatar) {
-        this.avatar = avatar;
     }
 
     public Long getGenderId() {
@@ -100,7 +88,6 @@ public class ClimberProfileDTO implements Serializable {
     public String toString() {
         return "ClimberProfileDTO{" +
                 "id=" + id +
-                ", avatar='" + avatar + '\'' +
                 ", genderId=" + genderId +
                 ", languageId=" + languageId +
                 ", isNotified=" + isNotified +

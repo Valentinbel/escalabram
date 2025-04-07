@@ -40,7 +40,7 @@ public class ClimberProfileServiceImplTest {
     ClimberProfileMapper climberProfileMapper;
 
     @BeforeAll
-    public static void init() {
+    static void init() {
         climberUser = new ClimberUser(
                 "AdamOndraUserName",
                 "adam@ondra.com",
@@ -53,7 +53,6 @@ public class ClimberProfileServiceImplTest {
 
         climberProfile = new ClimberProfile(
                 1L,
-                "path/avatar.png",
                 1L,
                 2L,
                 climberUser,
@@ -65,7 +64,6 @@ public class ClimberProfileServiceImplTest {
 
         climberProfileDTO = new ClimberProfileDTO(
                 1L,
-                "path/avatar.png",
                 1L,
                 2L,
                 true,

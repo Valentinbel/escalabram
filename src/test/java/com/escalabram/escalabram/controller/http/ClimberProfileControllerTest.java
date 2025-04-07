@@ -53,14 +53,14 @@ class ClimberProfileControllerTest {
     private List<ClimberProfile> listProfiles;
 
     @BeforeEach
-    public void setupData() {
+    void setupData() {
         // climberUser
         ClimberUser climberUser = new ClimberUser("CrisSharma", "cricri@gmail.com", "password1234", LocalDateTime.now(), LocalDateTime.now());
         this.climberUserRepository.saveAndFlush(climberUser);
         this.listUsers = climberUserRepository.findAll();
 
         //climberProfile
-        ClimberProfile climberProfile = new ClimberProfile(1L, "path/image.png", 1L, 2L, climberUser, true, "Salut salut");
+        ClimberProfile climberProfile = new ClimberProfile(1L, 1L, 2L, climberUser, true, "Salut salut");
         this.climberProfileRepository.saveAndFlush(climberProfile);
         this.listProfiles = climberProfileRepository.findAll();
     }
@@ -82,7 +82,7 @@ class ClimberProfileControllerTest {
         this.mockMvc.perform(get("/api/climber-profiles/climber-users/" + climberUserId))
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect( jsonPath("$.avatar").value("path/image.png"))
+                .andExpect( jsonPath("$.climberProfileDescription").value("Salut salut"))
                 .andExpect(jsonPath("$.climberUserId").value(climberUserId));
     }
 
@@ -104,7 +104,7 @@ class ClimberProfileControllerTest {
         climberUserRepository.saveAndFlush(climberUserToCreate);
         Long newclimberUserId = listUsers.getFirst().getId() +1;
         Long newprofileId = listProfiles.getFirst().getId() +1;
-        ClimberProfileDTO profileDTO = new ClimberProfileDTO(newprofileId, "image.png", 2L, 1L, true, "salut c'est Bertone", newclimberUserId);
+        ClimberProfileDTO profileDTO = new ClimberProfileDTO(newprofileId, 2L, 1L, true, "salut c'est Bertone", newclimberUserId);
 
         mockMvc.perform(post("/api/climber-profiles")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -112,7 +112,7 @@ class ClimberProfileControllerTest {
                 .andDo(print())
                 .andExpect(MockMvcResultMatchers.content().contentType("application/json")) //MediaType.APPLICATION_JSON_VALUE
                 .andExpect(status().isCreated())
-                .andExpect(jsonPath("$.avatar").value("image.png"))
+                .andExpect(jsonPath("$.climberProfileDescription").value("salut c'est Bertone"))
                 .andExpect(jsonPath("$.climberUserId").value(newclimberUserId));
     }
 
@@ -121,7 +121,6 @@ class ClimberProfileControllerTest {
     void saveClimberProfile_climberProfileDto_update() throws Exception {
 
         ClimberProfileDTO profileDTOToUpdate = climberProfileMapper.toClimberProfileDTO(listProfiles.getFirst());
-        profileDTOToUpdate.setAvatar("/path/enfaituneautreimage.png");
 
         mockMvc.perform(post("/api/climber-profiles")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -129,7 +128,7 @@ class ClimberProfileControllerTest {
                 .andDo(print())
                 .andExpect(status().isCreated())
                 .andExpect(MockMvcResultMatchers.content().contentType("application/json"))
-                .andExpect(jsonPath("$.avatar").value("/path/enfaituneautreimage.png"))
+                .andExpect(jsonPath("$.climberProfileDescription").value("Salut salut"))
                 .andExpect(jsonPath("$.climberUserId").value(listProfiles.getFirst().getClimberUser().getId()));
     }
 }

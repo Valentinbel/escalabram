@@ -16,21 +16,14 @@ import java.nio.file.Paths;
 @Service
 public class FilesStorageServiceImpl implements FilesStorageService {
 
-    private final Path root = Paths.get("uploads");
+    private final String parentFolder= "uploads/";
 
     @Override
-    public void init() {
+    public void save(MultipartFile file, String profileId) {
         try {
-            Files.createDirectories(root);
-        } catch (IOException e) {
-            throw new RuntimeException("Could not initialize folder for upload!");
-        }
-    }
-
-    @Override
-    public void save(MultipartFile file) {
-        try {
-            Files.copy(file.getInputStream(), this.root.resolve(file.getOriginalFilename()));
+            Path profileIdFolder = getprofileIdFolder(profileId);
+            init(profileIdFolder);
+            Files.copy(file.getInputStream(), profileIdFolder.resolve(file.getOriginalFilename()));
 
         } catch (Exception e) {
             if (e instanceof FileAlreadyExistsException){
@@ -40,10 +33,23 @@ public class FilesStorageServiceImpl implements FilesStorageService {
         }
     }
 
-    @Override
-    public Resource load(String fileName) {
+    private Path getprofileIdFolder(String profileId) {
+        return Paths.get(parentFolder + profileId);
+    }
+
+    private void init(Path profileIdFolder) {
         try {
-            Path file = root.resolve(fileName);
+            Files.createDirectories(profileIdFolder );
+        } catch (IOException e) {
+            throw new RuntimeException("Could not initialize folder for upload!");
+        }
+    }
+
+    @Override
+    public Resource load(String fileName, String profileId) {
+        try {
+            Path profileIdFolder = getprofileIdFolder(profileId);
+            Path file = profileIdFolder.resolve(fileName);
             Resource resource = new UrlResource(file.toUri());
 
             if (resource.exists() || resource.isReadable()) {

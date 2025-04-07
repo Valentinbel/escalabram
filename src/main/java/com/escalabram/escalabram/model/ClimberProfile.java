@@ -15,9 +15,9 @@ public class ClimberProfile implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    //TODO Relation to fileInfo
-    @Column(name = "avatar")
-    private String avatar;
+    @OneToOne
+    @JoinColumn(name = "file_info_id", referencedColumnName = "id")
+    private FileInfo fileInfo;
 
     @Column(name = "gender_id")
     private Long genderId;
@@ -45,14 +45,12 @@ public class ClimberProfile implements Serializable {
     }
 
     public ClimberProfile(Long id,
-                          String avatar,
                           Long genderId,
                           Long languageId,
                           ClimberUser climberUser,
                           Boolean isNotified,
                           String climberProfileDescription) {
         this.id = id;
-        this.avatar = avatar;
         this.genderId = genderId;
         this.languageId = languageId;
         this.climberUser = climberUser;
@@ -66,14 +64,6 @@ public class ClimberProfile implements Serializable {
 
     public void setId(Long id) {
         this.id = id;
-    }
-
-    public String getAvatar() {
-        return avatar;
-    }
-
-    public void setAvatar(String avatar) {
-        this.avatar = avatar;
     }
 
     public Long getGenderId() {
@@ -120,7 +110,6 @@ public class ClimberProfile implements Serializable {
     public String toString() {
         return "ClimberProfile{" +
                 "id=" + id +
-                ", avatar='" + avatar + '\'' +
                 ", genderId=" + genderId +
                 ", languageId=" + languageId +
                 ", climberUser=" + climberUser +
