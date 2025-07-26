@@ -4,5 +4,5 @@ import com.escalabram.escalabram.model.FileInfo;
 
 public interface FileInfoService {
 
-    FileInfo save();
+    FileInfo save(FileInfo fileInfo);
 }

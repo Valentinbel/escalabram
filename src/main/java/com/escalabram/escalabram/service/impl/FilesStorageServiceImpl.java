@@ -1,5 +1,7 @@
 package com.escalabram.escalabram.service.impl;
 
+import com.escalabram.escalabram.model.FileInfo;
+import com.escalabram.escalabram.service.FileInfoService;
 import com.escalabram.escalabram.service.FilesStorageService;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
@@ -16,14 +18,32 @@ import java.nio.file.Paths;
 @Service
 public class FilesStorageServiceImpl implements FilesStorageService {
 
-    private final String parentFolder= "uploads/";
+    private final FileInfoService fileInfoService;
+
+    public FilesStorageServiceImpl(FileInfoService fileInfoService) {
+        this.fileInfoService = fileInfoService;
+    }
 
     @Override
-    public void save(MultipartFile file, String profileId) {
+    public FileInfo save(MultipartFile file, String userId) {
         try {
-            Path profileIdFolder = getprofileIdFolder(profileId);
-            init(profileIdFolder);
-            Files.copy(file.getInputStream(), profileIdFolder.resolve(file.getOriginalFilename()));
+            //save in Folder
+            Path userIdFolder = getUserIdFolder(userId);
+            initFolder(userIdFolder);
+            // TODO check ici (avant Files.copy) if fileExists
+            // mais si le fichier est différent, il faut l'updater. Comment savoir? CRC?
+            // voici Comment: https://claude.ai/share/a91c1e4d-3002-4bb2-aa3d-388bd02fe607 Si on fait la version simple,
+            // il faut que l'upload se fasse pas depuis le submit
+            // mais depuis le OK du image Cropper
+
+            https://claude.ai/share/a91c1e4d-3002-4bb2-aa3d-388bd02fe607
+            Files.copy(file.getInputStream(), userIdFolder.resolve(file.getOriginalFilename()));
+
+            // save in DB
+            FileInfo fileToSave = new FileInfo();
+            fileToSave.setName(file.getOriginalFilename());
+            fileToSave.setUrl(userIdFolder.toString());
+            return fileInfoService.save(fileToSave);
 
         } catch (Exception e) {
             if (e instanceof FileAlreadyExistsException){
@@ -33,23 +53,23 @@ public class FilesStorageServiceImpl implements FilesStorageService {
         }
     }
 
-    private Path getprofileIdFolder(String profileId) {
-        return Paths.get(parentFolder + profileId);
+    private Path getUserIdFolder(String userId) {
+        return Paths.get("uploads/userId_" + userId);
     }
 
-    private void init(Path profileIdFolder) {
+    private void initFolder(Path userIdFolder) {
         try {
-            Files.createDirectories(profileIdFolder );
+            Files.createDirectories(userIdFolder);
         } catch (IOException e) {
             throw new RuntimeException("Could not initialize folder for upload!");
         }
     }
 
     @Override
-    public Resource load(String fileName, String profileId) {
+    public Resource load(String fileName, String userId) {
         try {
-            Path profileIdFolder = getprofileIdFolder(profileId);
-            Path file = profileIdFolder.resolve(fileName);
+            Path userIdFolder = getUserIdFolder(userId);
+            Path file = userIdFolder.resolve(fileName);
             Resource resource = new UrlResource(file.toUri());
 
             if (resource.exists() || resource.isReadable()) {
@@ -61,18 +81,4 @@ public class FilesStorageServiceImpl implements FilesStorageService {
             throw new RuntimeException("Error: " + e.getMessage());
         }
     }
-
-//    @Override
-//    public void deleteAll() {
-//        FileSystemUtils.deleteRecursively(root.toFile());
-//    }
-//
-//    @Override
-//    public Stream<Path> loadAll() {
-//        try {
-//            return Files.walk(this.root, 1).filter(path -> !path.equals(this.root)).map(this.root::relativize);
-//        } catch (IOException e) {
-//            throw new RuntimeException("Could not load the files!");
-//        }
-//    }
 }
