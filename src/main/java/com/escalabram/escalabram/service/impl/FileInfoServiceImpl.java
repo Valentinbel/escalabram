@@ -16,7 +16,6 @@ public class FileInfoServiceImpl implements FileInfoService {
         this.fileInfoRepository = fileInfoRepository;
     }
 
-
     @Override
     public FileInfo save(FileInfo fileInfo) {
         return fileInfoRepository.save(fileInfo);

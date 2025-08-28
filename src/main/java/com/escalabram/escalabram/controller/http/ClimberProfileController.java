@@ -1,6 +1,6 @@
 package com.escalabram.escalabram.controller.http;
 
-import com.escalabram.escalabram.security.payload.response.MessageResponse;
+import com.escalabram.escalabram.model.FileInfo;
 import com.escalabram.escalabram.service.ClimberProfileService;
 import com.escalabram.escalabram.service.FilesStorageService;
 import com.escalabram.escalabram.service.dto.ClimberProfileDTO;
@@ -23,6 +23,7 @@ public class ClimberProfileController {
     private static final Logger log = LoggerFactory.getLogger(ClimberProfileController.class);
     private final ClimberProfileService climberProfileService;
     private final FilesStorageService filesStorageService;
+    private Long fileInfoId;
 
     public ClimberProfileController(ClimberProfileService climberProfileService, FilesStorageService filesStorageService) {
         this.climberProfileService = climberProfileService;
@@ -40,38 +41,50 @@ public class ClimberProfileController {
         }
     }
 
-    @PostMapping("/upload")
-    public ResponseEntity<MessageResponse> uploadFile(@RequestParam("file") MultipartFile file) {
+    ////`${this.baseUrl}climber-profiles/avatar`
+    /// Depuis avatar.service. juste pour l'avatar et le userId
+    @PostMapping("/climber-profiles/avatar")
+    public ResponseEntity<Long> uploadFile(@RequestParam("file") MultipartFile file, @RequestParam("userId") String userIdString) {
         String message = "";
         try {
-            // TODO PAsser ça dans @PostMapping("/climber-profiles")
-            // On save le profil. Si c'est le premier post, on récupère le profilId et on peut s'occuper de l'avatar.
-
-            // init correspondant au profileid?
-            String profileId = "v2_initDepuisSave";
-            //this.filesStorageService.init(profileId); //passer en parametre l'id et voir si il peut nous retourner le path
-            System.out.println("/////////////////////////////");
-            System.out.println("file.getOriginalFilename: "+ file.getOriginalFilename());
-
-            //Si existe dejà: message: "message": "Could not upload the file: Kavinski - NightCall.txt. Error: A file of that name already exists."
-            //Verifier que le fichier avec le path existe pas dejà ?
-            this.filesStorageService.save(file, profileId);
-
+            // Mettre ce Endpoint dnas un Controller à part ??
+            ///On renvoie un Long qui sera le FileInfoId qui nous servira pour mettre dans le profileId
+            Long userId= Long.parseLong(userIdString);
+            FileInfo fileInfo = this.filesStorageService.save(file, userId);
+            fileInfoId = fileInfo.getId();
             //file a plein de getName et autres. Voir ce qui nous interesse ici.
             //Faire un save de fileInfo. Lui faire un repo et service.
-            message = "Uploaded the file successfully: " + file.getOriginalFilename();
-            return ResponseEntity.status(HttpStatus.OK).body(new MessageResponse(message));
+            //message = "Uploaded the file successfully: " + file.getOriginalFilename();
+            return ResponseEntity.status(HttpStatus.OK).body(fileInfoId);
         } catch (Exception e) {
             message = "Could not upload the file: " + file.getOriginalFilename() + ". Error: " + e.getMessage();
-            return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body(new MessageResponse(message));
+            log.error(message);
+            return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body(fileInfoId);
         }
     }
 
     // Used for create and update
+    // TODO c'est celui ci qu'il faut adapter. pour recevoir le file comme plus haut
     @PostMapping("/climber-profiles")
-    public ResponseEntity<ClimberProfileDTO> saveClimberProfile(@Valid @RequestBody ClimberProfileDTO climberProfileDTO){
+    public ResponseEntity<ClimberProfileDTO> saveClimberProfile(@Valid @RequestBody ClimberProfileDTO climberProfileDTO, @RequestParam("file") MultipartFile file){
         log.debug("REST request to save ClimberProfile : {}", climberProfileDTO);
         try {
+            // TODO Comme tous mes appels sont liés, tout mettre dans un seul endpoint.
+            //  Comme ca on appel le back qu'une seule fois.
+            //  C'est le service qui va gérer ensuite.
+            // => actualiser le username du user.
+            // ==> l'avatar et recuper l'id pour le mettre dans le profile
+
+            if (file != null) // TODO : A mettre dans le service
+                climberProfileDTO.setFileInfo(filesStorageService.save(file, climberProfileDTO.getClimberUserId()));
+
+            log.info("climberProfileDTO: {}", climberProfileDTO);
+            // TODO quoi faire de ces commentaires.
+            //String userId = climberProfileDTO.getClimberUserId().toString();
+            //FileInfo fileInfo = this.filesStorageService.save(file, userId);
+//            if (fileInfo != null)
+//                climberProfileDTO.setAvatarId(fileInfo.getId());
+
             ClimberProfileDTO createdClimberProfileDTO = climberProfileService.saveClimberProfile(climberProfileDTO);
 
             return new ResponseEntity<>(createdClimberProfileDTO, HttpStatus.CREATED);

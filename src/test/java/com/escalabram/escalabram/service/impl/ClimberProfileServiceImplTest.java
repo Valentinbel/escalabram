@@ -2,6 +2,7 @@ package com.escalabram.escalabram.service.impl;
 
 import com.escalabram.escalabram.model.ClimberProfile;
 import com.escalabram.escalabram.model.ClimberUser;
+import com.escalabram.escalabram.model.FileInfo;
 import com.escalabram.escalabram.repository.ClimberProfileRepository;
 import com.escalabram.escalabram.service.dto.ClimberProfileDTO;
 import com.escalabram.escalabram.service.mapper.ClimberProfileMapper;
@@ -22,6 +23,9 @@ import static org.mockito.Mockito.*;
 @ExtendWith(MockitoExtension.class)
 public class ClimberProfileServiceImplTest {
 
+    public static FileInfo fileInfo;
+    public static Long fileInfoId;
+
     public static ClimberUser climberUser;
     public static Long climberUserId;
 
@@ -41,6 +45,13 @@ public class ClimberProfileServiceImplTest {
 
     @BeforeAll
     static void init() {
+        fileInfo = new FileInfo(
+                "selfPortrait",
+                "./upload/1"
+        );
+        fileInfoId = 1L;
+        fileInfo.setId(fileInfoId);
+
         climberUser = new ClimberUser(
                 "AdamOndraUserName",
                 "adam@ondra.com",
@@ -53,6 +64,7 @@ public class ClimberProfileServiceImplTest {
 
         climberProfile = new ClimberProfile(
                 1L,
+                fileInfo,
                 1L,
                 2L,
                 climberUser,
@@ -64,6 +76,7 @@ public class ClimberProfileServiceImplTest {
 
         climberProfileDTO = new ClimberProfileDTO(
                 1L,
+                fileInfo,
                 1L,
                 2L,
                 true,

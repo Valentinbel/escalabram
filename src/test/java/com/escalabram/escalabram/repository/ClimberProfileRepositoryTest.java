@@ -2,6 +2,7 @@ package com.escalabram.escalabram.repository;
 
 import com.escalabram.escalabram.model.ClimberProfile;
 import com.escalabram.escalabram.model.ClimberUser;
+import com.escalabram.escalabram.model.FileInfo;
 import com.escalabram.escalabram.model.Role;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,7 +35,11 @@ class ClimberProfileRepositoryTest {
         relatedUser.setRoles(roleSet);
         entityManager.merge(relatedUser);
 
-        ClimberProfile profileToFind = new ClimberProfile(1L, 1L, 2L, relatedUser, true, "Blah blah, my life...");
+        FileInfo fileInfo = new FileInfo("selfie", "./uploads/uderId");
+        fileInfo.setId(1L);
+        entityManager.merge(fileInfo);
+
+        ClimberProfile profileToFind = new ClimberProfile(1L, fileInfo,1L, 2L, relatedUser, true, "Blah blah, my life...");
         entityManager.merge(profileToFind);
         Optional<ClimberProfile> optprofileToFind = Optional.of(profileToFind);
 
@@ -44,7 +49,8 @@ class ClimberProfileRepositoryTest {
                 () -> assertEquals(retrievedClimberProfile.get().getId(), optprofileToFind.get().getId()),
                 () -> assertEquals(retrievedClimberProfile.get().getClimberUser().getPassword(), optprofileToFind.get().getClimberUser().getPassword()),
                 () -> assertEquals(retrievedClimberProfile.get().getClimberUser().getCreatedAt(), optprofileToFind.get().getClimberUser().getCreatedAt()),
-                () -> assertEquals(retrievedClimberProfile.get().getClimberUser().getRoles(), optprofileToFind.get().getClimberUser().getRoles())
+                () -> assertEquals(retrievedClimberProfile.get().getClimberUser().getRoles(), optprofileToFind.get().getClimberUser().getRoles()),
+                () -> assertEquals(retrievedClimberProfile.get().getFileInfo().getName(), optprofileToFind.get().getFileInfo().getName())
         );
     }
 

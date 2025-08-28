@@ -6,7 +6,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 public interface FilesStorageService {
 
-    FileInfo save(MultipartFile file, String userId);
+    FileInfo save(MultipartFile file, Long userId);
 
+    //TODO no usages
     Resource load(String fileName, String profileId);
 }

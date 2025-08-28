@@ -1,5 +1,7 @@
 package com.escalabram.escalabram.service.dto;
 
+import com.escalabram.escalabram.model.FileInfo;
+
 import java.io.Serial;
 import java.io.Serializable;
 
@@ -8,6 +10,8 @@ public class ClimberProfileDTO implements Serializable {
     private static final long serialVersionUID = -2061960641588724813L;
 
     private Long id;
+
+    private FileInfo fileInfo;
 
     private Long genderId;
 
@@ -23,12 +27,14 @@ public class ClimberProfileDTO implements Serializable {
     }
 
     public ClimberProfileDTO(Long id,
+                             FileInfo fileInfo,
                              Long genderId,
                              Long languageId,
                              Boolean isNotified,
                              String climberProfileDescription,
                              Long climberUserId) {
         this.id = id;
+        this.fileInfo =  fileInfo;
         this.genderId = genderId;
         this.languageId = languageId;
         this.isNotified = isNotified;
@@ -42,6 +48,14 @@ public class ClimberProfileDTO implements Serializable {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public FileInfo getFileInfo() {
+        return fileInfo;
+    }
+
+    public void setFileInfo(FileInfo fileInfo) {
+        this.fileInfo = fileInfo;
     }
 
     public Long getGenderId() {
@@ -88,6 +102,7 @@ public class ClimberProfileDTO implements Serializable {
     public String toString() {
         return "ClimberProfileDTO{" +
                 "id=" + id +
+                ", fileInfo=" + fileInfo +
                 ", genderId=" + genderId +
                 ", languageId=" + languageId +
                 ", isNotified=" + isNotified +

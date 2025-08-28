@@ -45,12 +45,14 @@ public class ClimberProfile implements Serializable {
     }
 
     public ClimberProfile(Long id,
+                          FileInfo fileInfo,
                           Long genderId,
                           Long languageId,
                           ClimberUser climberUser,
                           Boolean isNotified,
                           String climberProfileDescription) {
         this.id = id;
+        this.fileInfo = fileInfo;
         this.genderId = genderId;
         this.languageId = languageId;
         this.climberUser = climberUser;
@@ -64,6 +66,14 @@ public class ClimberProfile implements Serializable {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public FileInfo getFileInfo() {
+        return fileInfo;
+    }
+
+    public void setFileInfo(FileInfo fileInfo) {
+        this.fileInfo = fileInfo;
     }
 
     public Long getGenderId() {
@@ -90,7 +100,7 @@ public class ClimberProfile implements Serializable {
         this.climberUser = climberUser;
     }
 
-    public Boolean isNotified() {
+    public Boolean getNotified() {
         return isNotified;
     }
 
@@ -110,6 +120,7 @@ public class ClimberProfile implements Serializable {
     public String toString() {
         return "ClimberProfile{" +
                 "id=" + id +
+                "fileInfo=" + fileInfo +
                 ", genderId=" + genderId +
                 ", languageId=" + languageId +
                 ", climberUser=" + climberUser +

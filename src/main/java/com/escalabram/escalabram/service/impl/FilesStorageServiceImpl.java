@@ -25,10 +25,10 @@ public class FilesStorageServiceImpl implements FilesStorageService {
     }
 
     @Override
-    public FileInfo save(MultipartFile file, String userId) {
+    public FileInfo save(MultipartFile file, Long userId) {
         try {
             //save in Folder
-            Path userIdFolder = getUserIdFolder(userId);
+            Path userIdFolder = getUserIdFolder(userId.toString());
             initFolder(userIdFolder);
             // TODO check ici (avant Files.copy) if fileExists
             // mais si le fichier est différent, il faut l'updater. Comment savoir? CRC?
@@ -36,7 +36,7 @@ public class FilesStorageServiceImpl implements FilesStorageService {
             // il faut que l'upload se fasse pas depuis le submit
             // mais depuis le OK du image Cropper
 
-            https://claude.ai/share/a91c1e4d-3002-4bb2-aa3d-388bd02fe607
+            //https://claude.ai/share/a91c1e4d-3002-4bb2-aa3d-388bd02fe607
             Files.copy(file.getInputStream(), userIdFolder.resolve(file.getOriginalFilename()));
 
             // save in DB
