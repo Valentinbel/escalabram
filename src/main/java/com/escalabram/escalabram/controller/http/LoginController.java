@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.security.Principal;
 import java.util.Map;
 
-//@CrossOrigin(origins = "http://localhost:8081")
+//@CrossOrigin(origins = {"http://localhost:4200"}, maxAge = 3600, allowCredentials="true")
 //@RestController
 //@RequestMapping("/api")
 //public class LoginController {
