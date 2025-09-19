@@ -27,9 +27,11 @@ public class FilesStorageServiceImpl implements FilesStorageService {
     @Override
     public FileInfo save(MultipartFile file, Long userId) {
         try {
+            // TODO: Il faut réduire la taille de l'image aussi. En front ou en back ??
+            //TODO: FileInfo c'est ok comme nom de table?
             //save in Folder
-            Path userIdFolder = getUserIdFolder(userId.toString());
-            initFolder(userIdFolder);
+            Path userFolder = getUserFolder(userId.toString());
+            initFolder(userFolder);
             // TODO check ici (avant Files.copy) if fileExists
             // mais si le fichier est différent, il faut l'updater. Comment savoir? CRC?
             // voici Comment: https://claude.ai/share/a91c1e4d-3002-4bb2-aa3d-388bd02fe607 Si on fait la version simple,
@@ -37,12 +39,13 @@ public class FilesStorageServiceImpl implements FilesStorageService {
             // mais depuis le OK du image Cropper
 
             //https://claude.ai/share/a91c1e4d-3002-4bb2-aa3d-388bd02fe607
-            Files.copy(file.getInputStream(), userIdFolder.resolve(file.getOriginalFilename()));
+            Files.copy(file.getInputStream(), userFolder.resolve(file.getOriginalFilename()));//A file of that name already exists
+            //Files.
 
             // save in DB
             FileInfo fileToSave = new FileInfo();
             fileToSave.setName(file.getOriginalFilename());
-            fileToSave.setUrl(userIdFolder.toString());
+            fileToSave.setUrl(userFolder.toString());
             return fileInfoService.save(fileToSave);
 
         } catch (Exception e) {
@@ -53,7 +56,7 @@ public class FilesStorageServiceImpl implements FilesStorageService {
         }
     }
 
-    private Path getUserIdFolder(String userId) {
+    private Path getUserFolder(String userId) {
         return Paths.get("uploads/userId_" + userId);
     }
 
@@ -68,7 +71,7 @@ public class FilesStorageServiceImpl implements FilesStorageService {
     @Override
     public Resource load(String fileName, String userId) {
         try {
-            Path userIdFolder = getUserIdFolder(userId);
+            Path userIdFolder = getUserFolder(userId);
             Path file = userIdFolder.resolve(fileName);
             Resource resource = new UrlResource(file.toUri());
 

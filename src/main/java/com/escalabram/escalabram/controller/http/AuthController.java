@@ -5,7 +5,6 @@ import com.escalabram.escalabram.security.payload.request.SignupRequest;
 import com.escalabram.escalabram.security.payload.request.TokenRefreshRequest;
 import com.escalabram.escalabram.security.payload.response.JwtResponse;
 import com.escalabram.escalabram.security.payload.response.MessageResponse;
-import com.escalabram.escalabram.model.ClimberUser;
 import com.escalabram.escalabram.security.payload.response.TokenRefreshResponse;
 import com.escalabram.escalabram.service.AuthService;
 import com.escalabram.escalabram.service.ClimberUSerService;
@@ -38,8 +37,7 @@ public class AuthController {
             return ResponseEntity.badRequest().body(new MessageResponse("Error: UserName is already taken!: " + signUpRequest.getUserName()));
         if (climberUSerService.existsByEmail(signUpRequest.getEmail()))
             return ResponseEntity.badRequest().body(new MessageResponse("Error: Email is already in use!"));
-        ClimberUser newUser =   authService.createUser(signUpRequest);
-        log.info("New user created: {}", newUser); // TODO DO not sent in PROD
+        authService.createUser(signUpRequest);
         return ResponseEntity.ok(new MessageResponse("User registered successfully!"));
     }
 
