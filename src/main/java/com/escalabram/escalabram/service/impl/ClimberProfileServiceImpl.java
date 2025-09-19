@@ -3,12 +3,13 @@ package com.escalabram.escalabram.service.impl;
 import com.escalabram.escalabram.model.ClimberProfile;
 import com.escalabram.escalabram.repository.ClimberProfileRepository;
 import com.escalabram.escalabram.service.ClimberProfileService;
+import com.escalabram.escalabram.service.dto.ClimberProfileDTO;
+import com.escalabram.escalabram.service.mapper.ClimberProfileMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -17,22 +18,21 @@ public class ClimberProfileServiceImpl implements ClimberProfileService {
 
     private static final Logger log = LoggerFactory.getLogger(ClimberProfileServiceImpl.class);
     private final ClimberProfileRepository climberProfileRepository;
+    private final ClimberProfileMapper climberProfileMapper;
 
-    public ClimberProfileServiceImpl(ClimberProfileRepository climberProfileRepository) {
+    public ClimberProfileServiceImpl(ClimberProfileRepository climberProfileRepository, ClimberProfileMapper climberProfileMapper) {
         this.climberProfileRepository = climberProfileRepository;
-    }
-
-
-    @Override
-    public List<ClimberProfile> findAll() {
-        log.debug("findAll ClimberProfile");
-        return climberProfileRepository.findAll();
+        this.climberProfileMapper = climberProfileMapper;
     }
 
     @Override
-    public Optional<ClimberProfile> findById(Long climberProfileId) {
-        log.debug("ClimberProfile findById. climberProfileId : {}", climberProfileId);
-        return climberProfileRepository.findById(climberProfileId);
+    public Optional<ClimberProfileDTO> findByClimberUserId(Long climberUserId) {
+        log.debug("ClimberProfile findByClimberUserId : {}", climberUserId);
+        Optional<ClimberProfile> optionalClimberProfile = climberProfileRepository.findByClimberUserId(climberUserId);
+        if(optionalClimberProfile.isPresent()) {
+            ClimberProfileDTO climberProfileDTO = this.climberProfileMapper.toClimberProfileDTO(optionalClimberProfile.get());
+            return Optional.ofNullable(climberProfileDTO);
+        } else return  Optional.empty();
     }
 
     @Override
@@ -41,13 +41,10 @@ public class ClimberProfileServiceImpl implements ClimberProfileService {
     }
 
     @Override
-    public ClimberProfile createClimberProfile(ClimberProfile climberProfile) {
-        log.debug("createClimberProfile : {}", climberProfile);
-        return save(climberProfile);
-    }
-
-    @Override
-    public ClimberProfile save(ClimberProfile climberProfile) {
-        return climberProfileRepository.save(climberProfile);
+    public ClimberProfileDTO saveClimberProfile(ClimberProfileDTO climberProfileDTO) {
+        log.debug("climberProfileRequestDTO : {}", climberProfileDTO);
+        ClimberProfile climberProfile = this.climberProfileMapper.toClimberProfile(climberProfileDTO);
+        ClimberProfile savedClimberProfile = climberProfileRepository.save(climberProfile);
+        return this.climberProfileMapper.toClimberProfileDTO(savedClimberProfile);
     }
 }

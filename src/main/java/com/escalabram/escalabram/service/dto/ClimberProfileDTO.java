@@ -1,63 +1,45 @@
-package com.escalabram.escalabram.model;
+package com.escalabram.escalabram.service.dto;
 
-import jakarta.persistence.*;
+import com.escalabram.escalabram.model.FileInfo;
 
 import java.io.Serial;
 import java.io.Serializable;
 
-@Entity
-@Table(name="climber_profile")
-public class ClimberProfile implements Serializable {
+public class ClimberProfileDTO implements Serializable {
     @Serial
-    private static final long serialVersionUID = -2789592186380559249L;
+    private static final long serialVersionUID = -2061960641588724813L;
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @OneToOne
-    @JoinColumn(name = "file_info_id", referencedColumnName = "id")
     private FileInfo fileInfo;
 
-    @Column(name = "gender_id")
     private Long genderId;
 
-    @Column(name = "language_id")
     private Long languageId;
 
-    @Column(name = "is_notified", nullable = false)
     private Boolean isNotified;
 
-    @Column(columnDefinition = "TEXT", name = "climber_profile_description")
     private String climberProfileDescription;
 
-    @OneToOne//(cascade = CascadeType.ALL) //fetch = FetchType.LAZY ?
-    @JoinColumn(name = "climber_user_id", referencedColumnName = "id", nullable = false)
-    private ClimberUser climberUser;
+    private Long climberUserId;
 
-    // TODO Gerer les relations de table
-    //hasOne Gender
-    //hasOne Language
-    //hasManySearch ==> Comprendre les différents types de Cascade et autres parametres
-
-    public ClimberProfile() {
-
+    public ClimberProfileDTO() {
     }
 
-    public ClimberProfile(Long id,
-                          FileInfo fileInfo,
-                          Long genderId,
-                          Long languageId,
-                          ClimberUser climberUser,
-                          Boolean isNotified,
-                          String climberProfileDescription) {
+    public ClimberProfileDTO(Long id,
+                             FileInfo fileInfo,
+                             Long genderId,
+                             Long languageId,
+                             Boolean isNotified,
+                             String climberProfileDescription,
+                             Long climberUserId) {
         this.id = id;
-        this.fileInfo = fileInfo;
+        this.fileInfo =  fileInfo;
         this.genderId = genderId;
         this.languageId = languageId;
-        this.climberUser = climberUser;
         this.isNotified = isNotified;
         this.climberProfileDescription = climberProfileDescription;
+        this.climberUserId = climberUserId;
     }
 
     public Long getId() {
@@ -92,14 +74,6 @@ public class ClimberProfile implements Serializable {
         this.languageId = languageId;
     }
 
-    public ClimberUser getClimberUser() {
-        return climberUser;
-    }
-
-    public void setClimberUser(ClimberUser climberUser) {
-        this.climberUser = climberUser;
-    }
-
     public Boolean getNotified() {
         return isNotified;
     }
@@ -116,16 +90,24 @@ public class ClimberProfile implements Serializable {
         this.climberProfileDescription = climberProfileDescription;
     }
 
+    public Long getClimberUserId() {
+        return climberUserId;
+    }
+
+    public void setClimberUserId(Long climberUserId) {
+        this.climberUserId = climberUserId;
+    }
+
     @Override
     public String toString() {
-        return "ClimberProfile{" +
+        return "ClimberProfileDTO{" +
                 "id=" + id +
-                "fileInfo=" + fileInfo +
+                ", fileInfo=" + fileInfo +
                 ", genderId=" + genderId +
                 ", languageId=" + languageId +
-                ", climberUser=" + climberUser +
                 ", isNotified=" + isNotified +
                 ", climberProfileDescription='" + climberProfileDescription + '\'' +
+                ", climberUserId=" + climberUserId +
                 '}';
     }
 }

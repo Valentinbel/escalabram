@@ -67,7 +67,7 @@ public class AuthServiceImpl implements AuthService {
             roles.add(role);
         } else {
             strRoles.forEach(role -> {
-                if(role.equals("admin")) {
+                if(role.equalsIgnoreCase("admin")) {
                     Role adminRole = userRoleService.findByRoleName(EnumRole.ROLE_ADMIN)
                             .orElseThrow(() -> new RuntimeException("Error: RoleName is not found."));
                     roles.add(adminRole);
@@ -87,7 +87,7 @@ public class AuthServiceImpl implements AuthService {
     public JwtResponse authenticateUser(LoginRequest loginRequest) {
 
         Authentication authentication = authenticationManager
-                .authenticate(new UsernamePasswordAuthenticationToken(loginRequest.getUserName(), loginRequest.getPassword()));
+                .authenticate(new UsernamePasswordAuthenticationToken(loginRequest.getEmail(), loginRequest.getPassword()));
 
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
@@ -121,17 +121,16 @@ public class AuthServiceImpl implements AuthService {
                 .map(refreshTokenService::verifyExpiration)
                 .map(RefreshToken::getClimberUser)
                 .map(climberUSer -> {
-                    String token = jwtUtils.generateTokenFromUserName(climberUSer.getUserName());
+                    String token = jwtUtils.generateTokenFromEmail(climberUSer.getUserName());
                     return new TokenRefreshResponse(token, requestRefreshToken);
                 })
                 .orElseThrow(() -> new TokenRefreshException(requestRefreshToken,"Refresh token is not in database!"));
     }
 
     @Override
-    public MessageResponse logoutUser() {
-        UserDetailsImpl userDetails = (UserDetailsImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        Long userId = userDetails.getId();
-        refreshTokenService.deleteByUserId(userId);
+    public MessageResponse logoutUser(Long userId) {
+        ClimberUser climberUser = climberUSerService.findById(userId).orElseThrow();
+        refreshTokenService.deleteByUserId(climberUser.getId());
         return new MessageResponse("Log out successful!");
     }
 }

@@ -17,7 +17,7 @@ import java.util.Optional;
 import java.util.Set;
 
 
-@CrossOrigin(origins = "http://localhost:8081", maxAge = 3600, allowCredentials="true") //, maxAge = 3600, allowCredentials="true"
+//@CrossOrigin(origins = {"http://localhost:4200"}, maxAge = 3600, allowCredentials="true")
 @RestController
 @RequestMapping("/api")
 public class SearchController {
@@ -43,7 +43,7 @@ public class SearchController {
     }
 
     @GetMapping("/searches/climber-profiles/{id}")
-    public ResponseEntity<Set<Search>> getSearchByClimberProfileId(@PathVariable("id") long id ){
+    public ResponseEntity<Set<Search>> getSearchByClimberProfileId(@PathVariable("id") Long id ){
         log.debug("REST request to get list of Search by climberProfileId: {}", id);
         try {
             Optional<Set<Search>> searches= searchService.findByClimberProfileId(id);

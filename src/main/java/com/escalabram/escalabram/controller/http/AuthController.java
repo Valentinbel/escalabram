@@ -17,7 +17,7 @@ import org.springframework.http.ResponseEntity;
 
 import org.springframework.web.bind.annotation.*;
 
-@CrossOrigin(origins = "http://localhost:8081", maxAge = 3600, allowCredentials="true")
+//@CrossOrigin(origins = {"http://localhost:4200"}, maxAge = 3600, allowCredentials="true")
 @RestController
 @RequestMapping("/api/auth")
 public class AuthController {
@@ -34,9 +34,9 @@ public class AuthController {
 
     @PostMapping("/register")
     public ResponseEntity<MessageResponse> registerUser(@Valid @RequestBody SignupRequest signUpRequest) {
-        if (climberUSerService.existsByUserName(signUpRequest.getUserName()).equals(true))
+        if (climberUSerService.existsByUserName(signUpRequest.getUserName()))
             return ResponseEntity.badRequest().body(new MessageResponse("Error: UserName is already taken!: " + signUpRequest.getUserName()));
-        if (climberUSerService.existsByEmail(signUpRequest.getEmail()).equals(true))
+        if (climberUSerService.existsByEmail(signUpRequest.getEmail()))
             return ResponseEntity.badRequest().body(new MessageResponse("Error: Email is already in use!"));
         ClimberUser newUser =   authService.createUser(signUpRequest);
         log.info("New user created: {}", newUser); // TODO DO not sent in PROD
@@ -56,9 +56,9 @@ public class AuthController {
         return ResponseEntity.ok(refreshedToken);
     }
 
-    @PostMapping("/signout")
-    public ResponseEntity<MessageResponse> logoutUser() {
-        MessageResponse logOutResponse = authService.logoutUser();
+    @PostMapping("/signout/{userId}")
+    public ResponseEntity<MessageResponse> logoutUser(@PathVariable Long userId) {
+        MessageResponse logOutResponse = authService.logoutUser(userId);
         return ResponseEntity.ok(logOutResponse);
     }
 }

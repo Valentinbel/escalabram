@@ -5,14 +5,14 @@ import com.escalabram.escalabram.model.Search;
 import com.escalabram.escalabram.model.TimeSlot;
 import com.escalabram.escalabram.repository.SearchRepository;
 import com.escalabram.escalabram.service.ClimbLevelService;
-import com.escalabram.escalabram.service.SearchService;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentMatchers;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.sql.Timestamp;
 import java.util.List;
@@ -27,20 +27,20 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.when;
 import static org.mockito.Mockito.*;
 
-@SpringBootTest
+@ExtendWith(MockitoExtension.class)
 class SearchServiceImplTest {
     public static Set<ClimbLevel> climbLevels;
     public static Set<TimeSlot> timeSlots;
     public static Set<TimeSlot> timeSlot2;
     public static List<Search> searches;
 
-    @Autowired
-    private SearchService searchService;
+    @InjectMocks
+    private SearchServiceImpl searchServiceImpl;
 
-    @MockBean
+    @Mock
     private ClimbLevelService climbLevelService;
 
-    @MockBean
+    @Mock
     private SearchRepository searchRepository;
 
 
@@ -78,11 +78,11 @@ class SearchServiceImplTest {
     }
 
     @Test
-    void testFindAll(){
+    void findAll_returnAll(){
         when(searchRepository.findAll()).thenReturn(searches);
         searches.get(3).setTimeSlots(timeSlots);
 
-        List<Search> findedSearches = searchService.findAll();
+        List<Search> findedSearches = searchServiceImpl.findAll();
 
         assertFalse(searches.isEmpty());
         verify(searchRepository, times(1)).findAll();
@@ -96,29 +96,47 @@ class SearchServiceImplTest {
     }
 
     @Test
-    void testFindById() {
+    void findById_searchId_optionalEntity() {
         when(searchRepository.findById(searches.getFirst().getId())).thenReturn(Optional.of(searches.getFirst()));
         searches.getFirst().setTimeSlots(timeSlots);
 
-        Optional<Search> optSearch = searchService.findById(searches.getFirst().getId());
+        Optional<Search> optSearch = searchServiceImpl.findById(searches.getFirst().getId());
 
         verify(searchRepository, times(1)).findById(searches.getFirst().getId());
         assertEquals(optSearch, Optional.of(searches.getFirst()));
     }
 
     @Test
-    void testFindByClimberProfileId(){
+    void findById_wrongId_optionalEmpty() {
+        when(searchRepository.findById(searches.getLast().getId())).thenReturn(Optional.empty());
+        Optional<Search> optSearch = searchServiceImpl.findById(searches.getLast().getId());
+
+        verify(searchRepository, times(1)).findById(searches.getLast().getId());
+        assertEquals(optSearch, Optional.empty());
+    }
+
+    @Test
+    void findByClimberProfileId_profileId_optionalSetSearch(){
         when(searchRepository.findByClimberProfileId(searches.get(3).getClimberProfileId())).thenReturn(Optional.of(Set.of(searches.get(3))));
         searches.get(3).setTimeSlots(timeSlots);
 
-        Optional<Set<Search>> optSearches = searchService.findByClimberProfileId(4L);
+        Optional<Set<Search>> optSearches = searchServiceImpl.findByClimberProfileId(4L);
 
         verify(searchRepository, times(1)).findByClimberProfileId(searches.get(3).getClimberProfileId());
         assertEquals(optSearches, Optional.of(Set.of(searches.get(3))));
     }
 
     @Test
-    void testCreateSearch(){
+    void findByClimberProfileId_wrongProfileId_empty(){
+        when(searchRepository.findByClimberProfileId(searches.get(2).getClimberProfileId())).thenReturn(Optional.empty());
+        Optional<Set<Search>> optSearches = searchServiceImpl.findByClimberProfileId(2L);
+
+        verify(searchRepository, times(1)).findByClimberProfileId(searches.get(2).getClimberProfileId());
+        assertEquals(optSearches, Optional.empty());
+    }
+
+    @Test
+    void createSearch_insert(){
         Set<ClimbLevel> climbLevelsToCreate = Stream.of(
                 new ClimbLevel(2L , null),
                 new ClimbLevel(7L ,null)
@@ -131,7 +149,7 @@ class SearchServiceImplTest {
         when(climbLevelService.findCimbLevelsByIds(climbLevelsToCreate)).thenReturn(climbLevels);
         when(searchRepository.save(ArgumentMatchers.any())).thenReturn(searches.getFirst());
 
-        Search search = searchService.createSearch(searchToCreate);
+        Search search = searchServiceImpl.createSearch(searchToCreate);
 
         verify(searchRepository, times(1)).save(ArgumentMatchers.any());
         assertEquals(search, searches.getFirst());
@@ -141,7 +159,7 @@ class SearchServiceImplTest {
     }
 
     @Test
-    void testUpdateSearch() {
+    void updateSearch_update() {
         Search searchToUpdate = new Search(1L,1L, "search1modified", true, true, true,
                 true, 1L,1L, climbLevels, true);
         searchToUpdate.setTimeSlots(timeSlot2);
@@ -149,8 +167,8 @@ class SearchServiceImplTest {
         when(searchRepository.save(ArgumentMatchers.any())).thenReturn(searches.getFirst());
         when(searchRepository.save(searchToUpdate)).thenReturn(searchToUpdate);
 
-        searchService.updateSearch(searches.getFirst());
-        Search searchUpdated = searchService.updateSearch(searchToUpdate);
+        searchServiceImpl.updateSearch(searches.getFirst());
+        Search searchUpdated = searchServiceImpl.updateSearch(searchToUpdate);
 
         verify(searchRepository, times(2)).save(ArgumentMatchers.any());
         assertEquals(searchUpdated, searchToUpdate);
@@ -160,8 +178,8 @@ class SearchServiceImplTest {
     }
 
     @Test
-    void deleteEmployeeById() {
-        searchService.deleteById(searches.get(2).getId());
+    void deleteEmployeeById_ok() {
+        searchServiceImpl.deleteById(searches.get(2).getId());
         verify(searchRepository, times(1)).deleteById(searches.get(2).getId());
     }
 }

@@ -26,13 +26,13 @@ public class Match implements Serializable {
     private Long matchedTimeSlotId;
 
     @Column(name = "mutual_match", nullable = false)
-    private boolean mutualMatch;
+    private Boolean mutualMatch;
 
     public Match() {
 
     }
 
-    public Match(Long id, Long matchingSearchId, Long matchedSearchId, Long matchedTimeSlotId, boolean mutualMatch) {
+    public Match(Long id, Long matchingSearchId, Long matchedSearchId, Long matchedTimeSlotId, Boolean mutualMatch) {
         this.id = id;
         this.matchingSearchId = matchingSearchId;
         this.matchedSearchId = matchedSearchId;
@@ -72,11 +72,11 @@ public class Match implements Serializable {
         this.matchedTimeSlotId = matchedTimeSlotId;
     }
 
-    public boolean isMutualMatch() {
+    public Boolean isMutualMatch() {
         return mutualMatch;
     }
 
-    public void setMutualMatch(boolean mutualMatch) {
+    public void setMutualMatch(Boolean mutualMatch) {
         this.mutualMatch = mutualMatch;
     }
 

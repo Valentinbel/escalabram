@@ -21,13 +21,7 @@ public class ClimbLevel implements Serializable {
     @Column(name = "code_fr")
     private String codeFr;
 
-    @ManyToMany(
-            fetch = FetchType.LAZY,
-            cascade = {
-                    CascadeType.PERSIST,
-                    CascadeType.MERGE
-            },
-            mappedBy = "climbLevels")
+    @ManyToMany( cascade = { CascadeType.PERSIST, CascadeType.MERGE }, mappedBy = "climbLevels")
     @JsonIgnore
     private Set<Search> searches = new HashSet<>();
 
