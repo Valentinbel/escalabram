@@ -54,7 +54,7 @@ public class ClimberProfileController {
             fileInfoId = fileInfo.getId();
             //file a plein de getName et autres. Voir ce qui nous interesse ici.
             //Faire un save de fileInfo. Lui faire un repo et service.
-            //message = "Uploaded the file successfully: " + file.getOriginalFilename();
+            //message = "file uploaded successfully: " + file.getOriginalFilename();
             return ResponseEntity.status(HttpStatus.OK).body(fileInfoId);
         } catch (Exception e) {
             message = "Could not upload the file: " + file.getOriginalFilename() + ". Error: " + e.getMessage();

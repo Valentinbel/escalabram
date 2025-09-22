@@ -3,6 +3,9 @@ package com.escalabram.escalabram.service.impl;
 import com.escalabram.escalabram.model.FileInfo;
 import com.escalabram.escalabram.service.FileInfoService;
 import com.escalabram.escalabram.service.FilesStorageService;
+import org.apache.tomcat.util.http.fileupload.FileUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
 import org.springframework.stereotype.Service;
@@ -17,7 +20,7 @@ import java.nio.file.Paths;
 
 @Service
 public class FilesStorageServiceImpl implements FilesStorageService {
-
+    private static final Logger log = LoggerFactory.getLogger(FilesStorageServiceImpl.class);
     private final FileInfoService fileInfoService;
 
     public FilesStorageServiceImpl(FileInfoService fileInfoService) {
@@ -28,27 +31,22 @@ public class FilesStorageServiceImpl implements FilesStorageService {
     public FileInfo save(MultipartFile file, Long userId) {
         try {
             // TODO: Il faut réduire la taille de l'image aussi. En front ou en back ??
-            //TODO: FileInfo c'est ok comme nom de table?
             //save in Folder
-            Path userFolder = getUserFolder(userId.toString());
+            Path userFolder = Paths.get("uploads/userId_" + userId);
+            FileUtils.deleteDirectory(userFolder.toFile());
             initFolder(userFolder);
-            // TODO check ici (avant Files.copy) if fileExists
-            // mais si le fichier est différent, il faut l'updater. Comment savoir? CRC?
-            // voici Comment: https://claude.ai/share/a91c1e4d-3002-4bb2-aa3d-388bd02fe607 Si on fait la version simple,
-            // il faut que l'upload se fasse pas depuis le submit
-            // mais depuis le OK du image Cropper
-
-            //https://claude.ai/share/a91c1e4d-3002-4bb2-aa3d-388bd02fe607
+            // TODO Warning:(38, 66) Argument 'file.getOriginalFilename()' might be null
             Files.copy(file.getInputStream(), userFolder.resolve(file.getOriginalFilename()));//A file of that name already exists
-            //Files.
 
-            // save in DB
+            // save in DB // TODO Faire un replace
+            //TODO: FileInfo c'est ok comme nom de table?
             FileInfo fileToSave = new FileInfo();
             fileToSave.setName(file.getOriginalFilename());
             fileToSave.setUrl(userFolder.toString());
             return fileInfoService.save(fileToSave);
 
         } catch (Exception e) {
+            log.error(e.getMessage());
             if (e instanceof FileAlreadyExistsException){
                 throw new RuntimeException("A file of that name already exists.");
             }
