@@ -55,17 +55,20 @@ class ClimberProfileControllerTest {
 
     @BeforeEach
     void setupData() {
-        // fileInfo
-        FileInfo fileInfo = new FileInfo("myPicture", "./folder/123");
-        this.fileInfoRepository.saveAndFlush(fileInfo);
-
         // climberUser
         ClimberUser climberUser = new ClimberUser("CrisSharma", "cricri@gmail.com", "password1234", LocalDateTime.now(), LocalDateTime.now());
         this.climberUserRepository.saveAndFlush(climberUser);
         this.listUsers = climberUserRepository.findAll();
 
+        // fileInfo
+        FileInfo fileInfo = new FileInfo();
+        fileInfo.setName("myPicture");
+        fileInfo.setUrl("./folder/123");
+        fileInfo.setClimberUser(climberUser);
+        this.fileInfoRepository.saveAndFlush(fileInfo);
+
         //climberProfile
-        ClimberProfile climberProfile = new ClimberProfile(1L, fileInfo,1L, 2L, climberUser, true, "Salut salut");
+        ClimberProfile climberProfile = new ClimberProfile(1L, 1L, 2L, climberUser, true, "Salut salut");
         this.climberProfileRepository.saveAndFlush(climberProfile);
         this.listProfiles = climberProfileRepository.findAll();
     }

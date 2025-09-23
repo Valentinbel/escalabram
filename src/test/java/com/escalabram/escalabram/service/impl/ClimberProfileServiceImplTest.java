@@ -45,13 +45,6 @@ public class ClimberProfileServiceImplTest {
 
     @BeforeAll
     static void init() {
-        fileInfo = new FileInfo(
-                "selfPortrait",
-                "./upload/1"
-        );
-        fileInfoId = 1L;
-        fileInfo.setId(fileInfoId);
-
         climberUser = new ClimberUser(
                 "AdamOndraUserName",
                 "adam@ondra.com",
@@ -62,9 +55,15 @@ public class ClimberProfileServiceImplTest {
         climberUserId = 1L;
         climberUser.setId(climberUserId);
 
+        fileInfo = new FileInfo();
+        fileInfo.setName("selfPortrait");
+        fileInfo.setUrl("./upload/1");
+        fileInfo.setClimberUser(climberUser);
+        fileInfoId = 1L;
+        fileInfo.setId(fileInfoId);
+
         climberProfile = new ClimberProfile(
                 1L,
-                fileInfo,
                 1L,
                 2L,
                 climberUser,
