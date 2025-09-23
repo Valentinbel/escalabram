@@ -23,7 +23,7 @@ public class ClimberProfileController {
     private static final Logger log = LoggerFactory.getLogger(ClimberProfileController.class);
     private final ClimberProfileService climberProfileService;
     private final FilesStorageService filesStorageService;
-    private Long fileInfoId;
+
 
     public ClimberProfileController(ClimberProfileService climberProfileService, FilesStorageService filesStorageService) {
         this.climberProfileService = climberProfileService;
@@ -45,28 +45,23 @@ public class ClimberProfileController {
     /// Depuis avatar.service. juste pour l'avatar et le userId
     @PostMapping("/climber-profiles/avatar")
     public ResponseEntity<Long> uploadFile(@RequestParam("file") MultipartFile file, @RequestParam("userId") String userIdString) {
-        String message = "";
         try {
             // Mettre ce Endpoint dnas un Controller à part ??
             ///On renvoie un Long qui sera le FileInfoId qui nous servira pour mettre dans le profileId
-            Long userId= Long.parseLong(userIdString);
-            FileInfo fileInfo = this.filesStorageService.save(file, userId);
-            fileInfoId = fileInfo.getId();
-            //file a plein de getName et autres. Voir ce qui nous interesse ici.
-            //Faire un save de fileInfo. Lui faire un repo et service.
-            //message = "file uploaded successfully: " + file.getOriginalFilename();
-            return ResponseEntity.status(HttpStatus.OK).body(fileInfoId);
+
+            FileInfo fileInfo = this.filesStorageService.saveAvatar(file, userIdString);
+            return ResponseEntity.status(HttpStatus.OK).body(fileInfo.getId());
         } catch (Exception e) {
-            message = "Could not upload the file: " + file.getOriginalFilename() + ". Error: " + e.getMessage();
+            String message = "Could not upload the file: " + file.getOriginalFilename() + ". Error: " + e.getMessage();
             log.error(message);
-            return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body(fileInfoId);
+            return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body(null);
         }
     }
 
     // Used for create and update
     // TODO c'est celui ci qu'il faut adapter. pour recevoir le file comme plus haut
     @PostMapping("/climber-profiles")
-    public ResponseEntity<ClimberProfileDTO> saveClimberProfile(@Valid @RequestBody ClimberProfileDTO climberProfileDTO, @RequestParam("file") MultipartFile file){
+    public ResponseEntity<ClimberProfileDTO> saveClimberProfile(@Valid @RequestBody ClimberProfileDTO climberProfileDTO){
         log.debug("REST request to save ClimberProfile : {}", climberProfileDTO);
         try {
             // TODO Comme tous mes appels sont liés, tout mettre dans un seul endpoint.
@@ -75,8 +70,8 @@ public class ClimberProfileController {
             // => actualiser le username du user.
             // ==> l'avatar et recuper l'id pour le mettre dans le profile
 
-            if (file != null) // TODO : A mettre dans le service
-                climberProfileDTO.setFileInfo(filesStorageService.save(file, climberProfileDTO.getClimberUserId()));
+//            if (file != null) // TODO : A mettre dans le service
+//                climberProfileDTO.setFileInfo(filesStorageService.saveAvatar(file, climberProfileDTO.getClimberUserId()));
 
             log.info("climberProfileDTO: {}", climberProfileDTO);
             // TODO quoi faire de ces commentaires.

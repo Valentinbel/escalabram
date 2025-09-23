@@ -1,6 +1,8 @@
 package com.escalabram.escalabram.model;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 
 import java.io.Serial;
 import java.io.Serializable;
@@ -18,18 +20,27 @@ public class FileInfo implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "name")
+    @NotBlank
+    @Column(name = "name", nullable = false)
     private String name;
 
-    @Column(name = "url")
+    @NotBlank
+    @Column(name = "url", nullable = false)
     private String url;
+
+    @NotNull
+    @OneToOne
+    @JoinColumn(name = "climber_user_id", referencedColumnName = "id", nullable = false)
+    private ClimberUser climberUser;
 
     public FileInfo() {
     }
 
-    public FileInfo(String name, String url) {
+    public FileInfo(Long id, String name, String url, ClimberUser climberUser) {
+        this.id = id;
         this.name = name;
         this.url = url;
+        this.climberUser = climberUser;
     }
 
     public Long getId() {
@@ -56,12 +67,21 @@ public class FileInfo implements Serializable {
         this.url = url;
     }
 
+    public ClimberUser getClimberUser() {
+        return climberUser;
+    }
+
+    public void setClimberUser(ClimberUser climberUser) {
+        this.climberUser = climberUser;
+    }
+
     @Override
     public String toString() {
         return "FileInfo{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
                 ", url='" + url + '\'' +
+                ", climberUser=" + climberUser +
                 '}';
     }
 }

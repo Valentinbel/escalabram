@@ -17,7 +17,13 @@ public class FileInfoServiceImpl implements FileInfoService {
     }
 
     @Override
+    public void deleteByUrl(String url) {
+        fileInfoRepository.deleteByUrl(url);
+    }
+
+    @Override
     public FileInfo save(FileInfo fileInfo) {
         return fileInfoRepository.save(fileInfo);
     }
+
 }
