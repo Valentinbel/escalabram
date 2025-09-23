@@ -38,12 +38,12 @@ public class FilesStorageServiceImpl implements FilesStorageService {
         try {
             Long userId= Long.parseLong(userIdString);
             // TODO: Il faut réduire la taille de l'image aussi. En front ou en back ??
-            //save in Folder
+            //delete Folder & save in Folder
             Path userFolder = getUserFolder(userId);
             FileUtils.deleteDirectory(userFolder.toFile());
             initFolder(userFolder);
             if (file.getOriginalFilename() != null)
-                Files.copy(file.getInputStream(), userFolder.resolve(file.getOriginalFilename()));//A file of that name already exists
+                Files.copy(file.getInputStream(), userFolder.resolve(file.getOriginalFilename()));
 
             // delete and save in DB
             return deleteAndSaveFileInfo(userId, file);
@@ -86,6 +86,7 @@ public class FilesStorageServiceImpl implements FilesStorageService {
 
     @Override
     public Resource load(String fileName, String userIdString) {
+        // TODO recupérer aussi info from DB ?
         try {
             Long userId= Long.parseLong(userIdString);
             Path userIdFolder = getUserFolder(userId);
