@@ -10,6 +10,7 @@ import com.escalabram.escalabram.service.AuthService;
 import com.escalabram.escalabram.service.ClimberUSerService;
 
 import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
@@ -19,17 +20,12 @@ import org.springframework.web.bind.annotation.*;
 //@CrossOrigin(origins = {"http://localhost:4200"}, maxAge = 3600, allowCredentials="true")
 @RestController
 @RequestMapping("/api/auth")
+@RequiredArgsConstructor
 public class AuthController {
 
     private static final Logger log = LoggerFactory.getLogger(AuthController.class);
-
     private final ClimberUSerService climberUSerService;
     private final AuthService authService;
-
-    public AuthController(ClimberUSerService climberUSerService, AuthService authService) {
-        this.climberUSerService = climberUSerService;
-        this.authService = authService;
-    }
 
     @PostMapping("/register")
     public ResponseEntity<MessageResponse> registerUser(@Valid @RequestBody SignupRequest signUpRequest) {

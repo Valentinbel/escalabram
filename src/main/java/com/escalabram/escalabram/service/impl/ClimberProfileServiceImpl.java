@@ -5,6 +5,7 @@ import com.escalabram.escalabram.repository.ClimberProfileRepository;
 import com.escalabram.escalabram.service.ClimberProfileService;
 import com.escalabram.escalabram.service.dto.ClimberProfileDTO;
 import com.escalabram.escalabram.service.mapper.ClimberProfileMapper;
+import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -14,16 +15,12 @@ import java.util.Optional;
 
 @Service
 @Transactional
+@RequiredArgsConstructor
 public class ClimberProfileServiceImpl implements ClimberProfileService {
 
     private static final Logger log = LoggerFactory.getLogger(ClimberProfileServiceImpl.class);
     private final ClimberProfileRepository climberProfileRepository;
     private final ClimberProfileMapper climberProfileMapper;
-
-    public ClimberProfileServiceImpl(ClimberProfileRepository climberProfileRepository, ClimberProfileMapper climberProfileMapper) {
-        this.climberProfileRepository = climberProfileRepository;
-        this.climberProfileMapper = climberProfileMapper;
-    }
 
     @Override
     public Optional<ClimberProfileDTO> findByClimberUserId(Long climberUserId) {

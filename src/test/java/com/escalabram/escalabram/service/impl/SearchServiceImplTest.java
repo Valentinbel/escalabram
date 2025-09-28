@@ -5,7 +5,7 @@ import com.escalabram.escalabram.model.Search;
 import com.escalabram.escalabram.model.TimeSlot;
 import com.escalabram.escalabram.repository.SearchRepository;
 import com.escalabram.escalabram.service.ClimbLevelService;
-import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -44,11 +44,11 @@ class SearchServiceImplTest {
     private SearchRepository searchRepository;
 
 
-    @BeforeAll
-    public static void init() {
+    @BeforeEach
+    void setupData() {
         climbLevels = Stream.of(
-                new ClimbLevel(2L ,"4+"),
-                new ClimbLevel(7L ,"6A+")
+                ClimbLevel.builder().id(2L).codeFr("4+").build(),
+                ClimbLevel.builder().id(7L).codeFr("6A+").build()
         ).collect(Collectors.toSet());
 
         String beginTime1 = "2024-09-02 13:59:59.123456789";
@@ -57,21 +57,72 @@ class SearchServiceImplTest {
         String beginTime2 = "2024-09-03 19:00:00.123456789";
         String endTime2 = "2024-09-03 21:00:00.123456789";
 
-        timeSlots = Stream.of(
-                new TimeSlot(1L, Timestamp.valueOf(beginTime1), Timestamp.valueOf(endTime1)),
-                new TimeSlot(1L, Timestamp.valueOf(beginTime2), Timestamp.valueOf(endTime2))
-        ).collect(Collectors.toSet());
+        TimeSlot timeslot1 = TimeSlot.builder()
+                .id(1L)
+                .beginTime(Timestamp.valueOf(beginTime1))
+                .endTime(Timestamp.valueOf(endTime1))
+                .build();
+        TimeSlot timeslot2 = TimeSlot.builder()
+                .id(2L)
+                .beginTime(Timestamp.valueOf(beginTime2))
+                .endTime(Timestamp.valueOf(endTime2))
+                .build();
+        timeSlots = Stream.of(timeslot1, timeslot2).collect(Collectors.toSet());
 
-        timeSlot2 = Stream.of(new TimeSlot(1L, Timestamp.valueOf(beginTime1), Timestamp.valueOf(endTime1))).collect(Collectors.toSet());
+        timeSlot2 = Stream.of(timeslot2).collect(Collectors.toSet());
         searches = Stream.of(
-                new Search(1L,1L, "search1Profile1", true, true, true,
-                        true, 1L,1L, climbLevels, true),
-                new Search(2L,1L, "search2Profile1", true, true, true,
-                        true, 2L,1L, climbLevels, true),
-                new Search(3L,2L, "search1Profile2", true, true, true,
-                        true, 2L,1L, climbLevels, true),
-                new Search(4L,4L, "search1Profile3", true, true, true,
-                        true, 2L,1L, climbLevels, true)
+                Search.builder()
+                        .id(1L)
+                        .climberProfileId(1L)
+                        .title("search1Profile1")
+                        .haveRope(true)
+                        .haveBelayDevice(true)
+                        .haveQuickdraw(true)
+                        .haveCarToShare(true)
+                        .placeId(1L)
+                        .preferedGenderId(1L)
+                        .climbLevels(climbLevels)
+                        .isActive(true)
+                        .build(),
+                Search.builder()
+                        .id(2L)
+                        .climberProfileId(1L)
+                        .title("search2Profile1")
+                        .haveRope(true)
+                        .haveBelayDevice(true)
+                        .haveQuickdraw(true)
+                        .haveCarToShare(true)
+                        .placeId(2L)
+                        .preferedGenderId(1L)
+                        .climbLevels(climbLevels)
+                        .isActive(true)
+                        .build(),
+                Search.builder()
+                        .id(3L)
+                        .climberProfileId(2L)
+                        .title("search1Profile2")
+                        .haveRope(true)
+                        .haveBelayDevice(true)
+                        .haveQuickdraw(true)
+                        .haveCarToShare(true)
+                        .placeId(2L)
+                        .preferedGenderId(1L)
+                        .climbLevels(climbLevels)
+                        .isActive(true)
+                        .build(),
+                Search.builder()
+                        .id(4L)
+                        .climberProfileId(4L)
+                        .title("search1Profile3")
+                        .haveRope(true)
+                        .haveBelayDevice(true)
+                        .haveQuickdraw(true)
+                        .haveCarToShare(true)
+                        .placeId(2L)
+                        .preferedGenderId(1L)
+                        .climbLevels(climbLevels)
+                        .isActive(true)
+                        .build()
         ).toList();
 
         searches.forEach(search -> search.setTimeSlots(timeSlots));
@@ -138,12 +189,24 @@ class SearchServiceImplTest {
     @Test
     void createSearch_insert(){
         Set<ClimbLevel> climbLevelsToCreate = Stream.of(
-                new ClimbLevel(2L , null),
-                new ClimbLevel(7L ,null)
+                ClimbLevel.builder().id(2L).codeFr(null).build(),
+                ClimbLevel.builder().id(7L).codeFr(null).build()
+
         ).collect(Collectors.toSet());
 
-        Search searchToCreate = new Search(1L,1L, "search1Profile1", true, true, true,
-                true, 1L,1L, climbLevelsToCreate, true);
+        Search searchToCreate = Search.builder()
+                        .id(1L)
+                        .climberProfileId(1L)
+                        .title("search1Profile1")
+                        .haveRope(true)
+                        .haveBelayDevice(true)
+                        .haveQuickdraw(true)
+                        .haveCarToShare(true)
+                        .placeId(1L)
+                        .preferedGenderId(1L)
+                        .climbLevels(climbLevelsToCreate)
+                        .isActive(true)
+                        .build();
         searchToCreate.setTimeSlots(timeSlots);
 
         when(climbLevelService.findCimbLevelsByIds(climbLevelsToCreate)).thenReturn(climbLevels);
@@ -160,8 +223,19 @@ class SearchServiceImplTest {
 
     @Test
     void updateSearch_update() {
-        Search searchToUpdate = new Search(1L,1L, "search1modified", true, true, true,
-                true, 1L,1L, climbLevels, true);
+        Search searchToUpdate = Search.builder()
+                .id(1L)
+                .climberProfileId(1L)
+                .title("search1modified")
+                .haveRope(true)
+                .haveBelayDevice(true)
+                .haveQuickdraw(true)
+                .haveCarToShare(true)
+                .placeId(1L)
+                .preferedGenderId(1L)
+                .climbLevels(climbLevels)
+                .isActive(true)
+                .build();
         searchToUpdate.setTimeSlots(timeSlot2);
 
         when(searchRepository.save(ArgumentMatchers.any())).thenReturn(searches.getFirst());

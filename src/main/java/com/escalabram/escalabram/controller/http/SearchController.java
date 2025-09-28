@@ -6,6 +6,7 @@ import com.escalabram.escalabram.service.ClimberProfileService;
 import com.escalabram.escalabram.service.SearchService;
 import com.escalabram.escalabram.utils.ResponseUtil;
 import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -20,15 +21,11 @@ import java.util.Set;
 //@CrossOrigin(origins = {"http://localhost:4200"}, maxAge = 3600, allowCredentials="true")
 @RestController
 @RequestMapping("/api")
+@RequiredArgsConstructor
 public class SearchController {
     private static final Logger log = LoggerFactory.getLogger(SearchController.class);
     private final SearchService searchService;
     private final ClimberProfileService climberProfileService;
-
-    public SearchController(SearchService searchService, ClimberProfileService climberProfileService){
-        this.searchService = searchService;
-        this.climberProfileService = climberProfileService;
-    }
 
     @GetMapping("/searches")
     public ResponseEntity<List<Search>> getAllSearches(){

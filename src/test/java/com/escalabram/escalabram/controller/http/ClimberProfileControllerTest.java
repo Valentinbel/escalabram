@@ -56,19 +56,32 @@ class ClimberProfileControllerTest {
     @BeforeEach
     void setupData() {
         // climberUser
-        ClimberUser climberUser = new ClimberUser("CrisSharma", "cricri@gmail.com", "password1234", LocalDateTime.now(), LocalDateTime.now());
+        ClimberUser climberUser = ClimberUser.builder()
+                .userName("CrisSharma")
+                .email("cricri@gmail.com")
+                .password("password1234")
+                .createdAt(LocalDateTime.now())
+                .build();
         this.climberUserRepository.saveAndFlush(climberUser);
         this.listUsers = climberUserRepository.findAll();
 
         // fileInfo
-        FileInfo fileInfo = new FileInfo();
-        fileInfo.setName("myPicture");
-        fileInfo.setUrl("./folder/123");
-        fileInfo.setClimberUser(climberUser);
+        FileInfo fileInfo = FileInfo.builder()
+                .name("myPicture")
+                .url("./folder/123")
+                .climberUser(climberUser)
+                .build();
         this.fileInfoRepository.saveAndFlush(fileInfo);
 
         //climberProfile
-        ClimberProfile climberProfile = new ClimberProfile(1L, 1L, 2L, climberUser, true, "Salut salut");
+        ClimberProfile climberProfile = ClimberProfile.builder()
+                .id(1L)
+                .genderId(1L)
+                .languageId(2L)
+                .isNotified(true)
+                .climberUser(climberUser)
+                .climberProfileDescription("Salut salut")
+                .build();
         this.climberProfileRepository.saveAndFlush(climberProfile);
         this.listProfiles = climberProfileRepository.findAll();
     }

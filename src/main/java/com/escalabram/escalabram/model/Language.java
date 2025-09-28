@@ -1,11 +1,17 @@
 package com.escalabram.escalabram.model;
 
 import jakarta.persistence.*;
+import lombok.*;
 
 import java.io.Serial;
 import java.io.Serializable;
 
 @Entity
+@Getter
+@Setter
+@Builder(toBuilder = true)
+@NoArgsConstructor
+@AllArgsConstructor
 @Table(name="language")
 public class Language implements Serializable {
 
@@ -21,47 +27,4 @@ public class Language implements Serializable {
 
     @Column(name = "code", nullable = false)
     private String code;
-
-    public Language() {
-
-    }
-
-    public Language(Long id, String label, String code) {
-        this.id = id;
-        this.label = label;
-        this.code = code;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getLabel() {
-        return label;
-    }
-
-    public void setLabel(String label) {
-        this.label = label;
-    }
-
-    public String getCode() {
-        return code;
-    }
-
-    public void setCode(String code) {
-        this.code = code;
-    }
-
-    @Override
-    public String toString() {
-        return "Language{" +
-                "id=" + id +
-                ", label='" + label + '\'' +
-                ", code='" + code + '\'' +
-                '}';
-    }
 }

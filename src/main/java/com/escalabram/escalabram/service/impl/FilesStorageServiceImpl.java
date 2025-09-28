@@ -5,6 +5,7 @@ import com.escalabram.escalabram.model.FileInfo;
 import com.escalabram.escalabram.service.ClimberUSerService;
 import com.escalabram.escalabram.service.FileInfoService;
 import com.escalabram.escalabram.service.FilesStorageService;
+import lombok.RequiredArgsConstructor;
 import org.apache.tomcat.util.http.fileupload.FileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,15 +24,11 @@ import java.nio.file.Paths;
 import java.util.Optional;
 
 @Service
+@RequiredArgsConstructor
 public class FilesStorageServiceImpl implements FilesStorageService {
     private static final Logger log = LoggerFactory.getLogger(FilesStorageServiceImpl.class);
     private final FileInfoService fileInfoService;
     private final ClimberUSerService climberUSerService;
-
-    public FilesStorageServiceImpl(FileInfoService fileInfoService, ClimberUSerService climberUSerService) {
-        this.fileInfoService = fileInfoService;
-        this.climberUSerService = climberUSerService;
-    }
 
     @Override
     public FileInfo saveAvatar(MultipartFile file, String userIdString) {
@@ -68,10 +65,11 @@ public class FilesStorageServiceImpl implements FilesStorageService {
         if (optUser.isPresent()) {
             Path userFolder = getUserFolder(userId);
             fileInfoService.deleteByUrl(userFolder.toString());
-            FileInfo fileToSave = new FileInfo();
-            fileToSave.setName(file.getOriginalFilename());
-            fileToSave.setUrl(userFolder.toString());
-            fileToSave.setClimberUser(optUser.get());
+            FileInfo fileToSave = FileInfo.builder()
+                    .name(file.getOriginalFilename())
+                    .url(userFolder.toString())
+                    .climberUser(optUser.get())
+                    .build();
             try {
                 return fileInfoService.save(fileToSave);
             } catch (DataIntegrityViolationException e) {

@@ -30,19 +30,32 @@ class ClimberProfileRepositoryTest {
         roleSet.add(entityManager.find(Role.class, 1L));
         entityManager.persist(entityManager.find(Role.class, 1L));
 
-        ClimberUser relatedUser = new ClimberUser("ChrisSharma", "cricri2@hotmail.com", "password", LocalDateTime.now(), LocalDateTime.now());
+        ClimberUser relatedUser = ClimberUser.builder()
+                .userName("CrisSharma")
+                .email("cricri@gmail.com")
+                .password("password1234")
+                .createdAt(LocalDateTime.now())
+                .build();
         relatedUser.setId(1L);
         relatedUser.setRoles(roleSet);
         entityManager.merge(relatedUser);
 
-        FileInfo fileInfo = new FileInfo();
-        fileInfo.setId(1L);
-        fileInfo.setName("selfie");
-        fileInfo.setUrl("./uploads/uderId");
-        fileInfo.setClimberUser(relatedUser);
+        FileInfo fileInfo = FileInfo.builder()
+                .id(1L)
+                .name("selfie")
+                .url("./uploads/uderId")
+                .climberUser(relatedUser)
+                .build();
         entityManager.merge(fileInfo);
 
-        ClimberProfile profileToFind = new ClimberProfile(1L,1L, 2L, relatedUser, true, "Blah blah, my life...");
+        ClimberProfile profileToFind =ClimberProfile.builder()
+                .id(1L)
+                .genderId(1L)
+                .languageId(2L)
+                .isNotified(true)
+                .climberUser(relatedUser)
+                .climberProfileDescription("Blah blah, my life...")
+                .build();
         entityManager.merge(profileToFind);
         Optional<ClimberProfile> optprofileToFind = Optional.of(profileToFind);
 

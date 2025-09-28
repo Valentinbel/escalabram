@@ -6,6 +6,7 @@ import com.escalabram.escalabram.service.FilesStorageService;
 import com.escalabram.escalabram.service.dto.ClimberProfileDTO;
 import com.escalabram.escalabram.utils.ResponseUtil;
 import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -18,17 +19,12 @@ import java.util.Optional;
 //@CrossOrigin(origins = {"http://localhost:4200"}, maxAge = 3600, allowCredentials="true")
 @RestController
 @RequestMapping("/api")
+@RequiredArgsConstructor
 public class ClimberProfileController {
 
     private static final Logger log = LoggerFactory.getLogger(ClimberProfileController.class);
     private final ClimberProfileService climberProfileService;
     private final FilesStorageService filesStorageService;
-
-
-    public ClimberProfileController(ClimberProfileService climberProfileService, FilesStorageService filesStorageService) {
-        this.climberProfileService = climberProfileService;
-        this.filesStorageService = filesStorageService;
-    }
 
     @GetMapping("/climber-profiles/climber-users/{climberUserId}")
     public ResponseEntity<ClimberProfileDTO> getClimberProfileByClimberUserId(@PathVariable Long climberUserId) {

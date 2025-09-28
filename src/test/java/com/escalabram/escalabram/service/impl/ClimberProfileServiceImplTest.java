@@ -6,7 +6,7 @@ import com.escalabram.escalabram.model.FileInfo;
 import com.escalabram.escalabram.repository.ClimberProfileRepository;
 import com.escalabram.escalabram.service.dto.ClimberProfileDTO;
 import com.escalabram.escalabram.service.mapper.ClimberProfileMapper;
-import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -24,10 +24,8 @@ import static org.mockito.Mockito.*;
 public class ClimberProfileServiceImplTest {
 
     public static FileInfo fileInfo;
-    public static Long fileInfoId;
 
     public static ClimberUser climberUser;
-    public static Long climberUserId;
 
     public static ClimberProfile climberProfile;
     public static ClimberProfile climberProfileNoId;
@@ -43,44 +41,45 @@ public class ClimberProfileServiceImplTest {
     @Mock
     ClimberProfileMapper climberProfileMapper;
 
-    @BeforeAll
-    static void init() {
-        climberUser = new ClimberUser(
-                "AdamOndraUserName",
-                "adam@ondra.com",
-                "Password_123",
-                LocalDateTime.now(),
-                LocalDateTime.now()
-        );
-        climberUserId = 1L;
-        climberUser.setId(climberUserId);
+    @BeforeEach
+    void setupData() {
+        climberUser = ClimberUser.builder()
+                .id(1L)
+                .userName("AdamOndra")
+                .email("adam@ondra.com")
+                .password("Password_123")
+                .createdAt(LocalDateTime.now())
+                .build();
 
-        fileInfo = new FileInfo();
-        fileInfo.setName("selfPortrait");
-        fileInfo.setUrl("./upload/1");
-        fileInfo.setClimberUser(climberUser);
-        fileInfoId = 1L;
-        fileInfo.setId(fileInfoId);
 
-        climberProfile = new ClimberProfile(
-                1L,
-                1L,
-                2L,
-                climberUser,
-                true,
-                "Salut les boys, c'est Adam" );
+        fileInfo = FileInfo.builder()
+                //.id(1L)
+                .name("selfPortrait")
+                .url("./uploads/userId_1")
+                .climberUser(climberUser)
+                .build();
+
+        climberProfile =  ClimberProfile.builder()
+                .id(1L)
+                .genderId(1L)
+                .languageId(2L)
+                .climberUser(climberUser)
+                .isNotified(true)
+                .climberProfileDescription("Salut les boys, c'est Adam")
+                .build();
 
         climberProfileNoId = climberProfile;
         climberProfileNoId.setId(null);
 
-        climberProfileDTO = new ClimberProfileDTO(
-                1L,
-                fileInfo,
-                1L,
-                2L,
-                true,
-                "Salut les boys, c'est Adam",
-                1L);
+        climberProfileDTO = ClimberProfileDTO.builder()
+                .id(1L)
+                .avatarId(1L)
+                .userName("Just Adam")
+                .genderId(1L)
+                .languageId(2L)
+                .climberProfileDescription("Salut les boys, c'est Adam")
+                .climberUserId(1L)
+                .build();
 
         climberProfileDTONoId = climberProfileDTO;
         climberProfileDTONoId.setId(null);

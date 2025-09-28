@@ -9,7 +9,7 @@ import com.escalabram.escalabram.repository.SearchRepository;
 import com.escalabram.escalabram.service.dto.ISearchClimbLevelDTO;
 import com.escalabram.escalabram.service.dto.SearchClimbLevelDTO;
 import com.escalabram.escalabram.service.dto.SearchMatchDTO;
-import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentMatchers;
@@ -48,33 +48,44 @@ class MatchServiceImplTest {
     @Mock
     private SearchRepository searchRepository;
 
-    @BeforeAll
-    public static void init() {
+    @BeforeEach
+    void setupData() {
+
         climbLevelsMatching1 = Stream.of(
-                new ClimbLevel(2L ,"4+"),
-                new ClimbLevel(7L ,"6A+")
+                ClimbLevel.builder().id(2L).codeFr("4+").build(),
+                ClimbLevel.builder().id(7L).codeFr("6A+").build()
         ).collect(Collectors.toSet());
 
         climbLevelsMatching2 = Stream.of(
-                new ClimbLevel(6L ,"6A"),
-                new ClimbLevel(9L ,"6B+")
+                ClimbLevel.builder().id(6L).codeFr("6A").build(),
+                ClimbLevel.builder().id(9L).codeFr("6B+").build()
         ).collect(Collectors.toSet());
         climbLevelsNOTMatching = Stream.of(
-                new ClimbLevel(9L ,"6B+"),
-                new ClimbLevel(12L ,"7A")
+                ClimbLevel.builder().id(9L).codeFr("6B+").build(),
+                ClimbLevel.builder().id(12L).codeFr("7A").build()
         ).collect(Collectors.toSet());
 
         String beginTime1 = "2024-09-02 13:59:59.123456789";
         String endTime1 = "2024-09-02 18:59:59.123456789";
 
         timeSlotsMatching1 = Stream.of(
-                new TimeSlot(1L, Timestamp.valueOf(beginTime1), Timestamp.valueOf(endTime1))).collect(Collectors.toSet());
+                TimeSlot.builder()
+                        .id(1L)
+                        .beginTime(Timestamp.valueOf(beginTime1))
+                        .endTime(Timestamp.valueOf(endTime1))
+                        .build()
+    ).collect(Collectors.toSet());
 
         String beginTime2 = "2024-09-02 15:59:59.123456789";
         String endTime2 = "2024-09-02 19:59:59.123456789";
 
         timeSlotsMatching2 = Stream.of(
-                new TimeSlot(3L, Timestamp.valueOf(beginTime2), Timestamp.valueOf(endTime2))).collect(Collectors.toSet());
+                TimeSlot.builder()
+                        .id(3L)
+                        .beginTime(Timestamp.valueOf(beginTime2))
+                        .endTime(Timestamp.valueOf(endTime2))
+                        .build()
+        ).collect(Collectors.toSet());
 
         String beginTime3 = "2024-09-02 22:59:59.123456789";
         String endTime3 = "2024-09-02 23:59:59.123456789";
@@ -83,19 +94,71 @@ class MatchServiceImplTest {
         String endTime4 = "2024-09-03 06:00:00.123456789";
 
         timeSlotsNOTMatching = Stream.of(
-                new TimeSlot(5L, Timestamp.valueOf(beginTime3), Timestamp.valueOf(endTime3)),
-                new TimeSlot(6L, Timestamp.valueOf(beginTime4), Timestamp.valueOf(endTime4))
+                TimeSlot.builder()
+                        .id(5L)
+                        .beginTime(Timestamp.valueOf(beginTime3))
+                        .endTime(Timestamp.valueOf(endTime3))
+                        .build(),
+                TimeSlot.builder()
+                        .id(6L)
+                        .beginTime(Timestamp.valueOf(beginTime4))
+                        .endTime(Timestamp.valueOf(endTime4))
+                        .build()
         ).collect(Collectors.toSet());
 
         searches = Stream.of(
-                new Search(1L,1L, "search1Profile1", true, true, true,
-                        true, 1L,1L, climbLevelsMatching1, true),
-                new Search(2L,1L, "search2Profile1", true, true, true,
-                        true, 2L,1L, climbLevelsMatching1, true),
-                new Search(3L,2L, "search1Profile2", true, true, true,
-                        true, 2L,1L, climbLevelsMatching2, true),
-                new Search(4L,4L, "search1Profile3", true, true, true,
-                        true, 2L,1L, climbLevelsNOTMatching, true)
+                Search.builder()
+                        .id(1L)
+                        .climberProfileId(1L)
+                        .title("search1Profile1")
+                        .haveRope(true)
+                        .haveBelayDevice(true)
+                        .haveQuickdraw(true)
+                        .haveCarToShare(true)
+                        .placeId(1L)
+                        .preferedGenderId(1L)
+                        .climbLevels(climbLevelsMatching1)
+                        .isActive(true)
+                        .build(),
+                Search.builder()
+                        .id(2L)
+                        .climberProfileId(1L)
+                        .title("search2Profile1")
+                        .haveRope(true)
+                        .haveBelayDevice(true)
+                        .haveQuickdraw(true)
+                        .haveCarToShare(true)
+                        .placeId(2L)
+                        .preferedGenderId(1L)
+                        .climbLevels(climbLevelsMatching1)
+                        .isActive(true)
+                        .build(),
+                Search.builder()
+                        .id(3L)
+                        .climberProfileId(2L)
+                        .title("search1Profile2")
+                        .haveRope(true)
+                        .haveBelayDevice(true)
+                        .haveQuickdraw(true)
+                        .haveCarToShare(true)
+                        .placeId(2L)
+                        .preferedGenderId(1L)
+                        .climbLevels(climbLevelsMatching2)
+                        .isActive(true)
+                        .build(),
+                Search.builder()
+                        .id(4L)
+                        .climberProfileId(4L)
+                        .title("search1Profile3")
+                        .haveRope(true)
+                        .haveBelayDevice(true)
+                        .haveQuickdraw(true)
+                        .haveCarToShare(true)
+                        .placeId(2L)
+                        .preferedGenderId(1L)
+                        .climbLevels(climbLevelsNOTMatching)
+                        .isActive(true)
+                        .build()
         ).toList();
     }
 
@@ -141,7 +204,7 @@ class MatchServiceImplTest {
 
         verify(searchRepository, times(1)).findAllSearchesByCriterias(searchMatching.getClimberProfileId(), searchMatching.getPlaceId(), matchingBeginTimesSearchMatching);
         verify(searchRepository, times(1)).findClimbLevelsByIdSearchId(searchToMatched.getId());
-        verify(matchRepository, times(1)).findByCriterias(match.getMatchingSearchId(), match.getMatchedSearchId(),match.getMatchedTimeSlotId(), match.isMutualMatch());
+        verify(matchRepository, times(1)).findByCriterias(match.getMatchingSearchId(), match.getMatchedSearchId(),match.getMatchedTimeSlotId(), match.getMutualMatch());
         verify(matchRepository, times(1)).save(ArgumentMatchers.any());
 
         assertEquals(matches, matchesToResult);
@@ -183,14 +246,14 @@ class MatchServiceImplTest {
 
         when(searchRepository.findClimbLevelsByIdSearchId(searchToMatched.getId())).thenReturn(matchedClimbLevelDTOs);
 
-        when(matchRepository.findByCriterias(match.getMatchingSearchId(), match.getMatchedSearchId(),match.getMatchedTimeSlotId(), match.isMutualMatch()))
+        when(matchRepository.findByCriterias(match.getMatchingSearchId(), match.getMatchedSearchId(),match.getMatchedTimeSlotId(), match.getMutualMatch()))
                 .thenReturn(Optional.of(match));
 
         List<Match> matches = matchServiceImpl.createMatchesIfFit(searchMatching);
 
         verify(searchRepository, times(1)).findAllSearchesByCriterias(searchMatching.getClimberProfileId(), searchMatching.getPlaceId(), matchingBeginTimesSearchMatching);
         verify(searchRepository, times(1)).findClimbLevelsByIdSearchId(searchToMatched.getId());
-        verify(matchRepository, times(1)).findByCriterias(match.getMatchingSearchId(), match.getMatchedSearchId(),match.getMatchedTimeSlotId(), match.isMutualMatch());
+        verify(matchRepository, times(1)).findByCriterias(match.getMatchingSearchId(), match.getMatchedSearchId(),match.getMatchedTimeSlotId(), match.getMutualMatch());
 
         assertEquals(matches, matchesToResult);
     }

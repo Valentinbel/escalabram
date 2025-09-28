@@ -1,17 +1,29 @@
 package com.escalabram.escalabram.service.dto;
 
 import com.escalabram.escalabram.model.FileInfo;
+import lombok.*;
 
 import java.io.Serial;
 import java.io.Serializable;
 
+@Getter
+@Setter
+@ToString
+@Builder(toBuilder = true)
+@NoArgsConstructor
+@AllArgsConstructor
 public class ClimberProfileDTO implements Serializable {
+
     @Serial
     private static final long serialVersionUID = -2061960641588724813L;
 
     private Long id;
 
     private FileInfo fileInfo;
+
+    private Long avatarId;
+
+    private String userName;
 
     private Long genderId;
 
@@ -22,92 +34,4 @@ public class ClimberProfileDTO implements Serializable {
     private String climberProfileDescription;
 
     private Long climberUserId;
-
-    public ClimberProfileDTO() {
-    }
-
-    public ClimberProfileDTO(Long id,
-                             FileInfo fileInfo,
-                             Long genderId,
-                             Long languageId,
-                             Boolean isNotified,
-                             String climberProfileDescription,
-                             Long climberUserId) {
-        this.id = id;
-        this.fileInfo =  fileInfo;
-        this.genderId = genderId;
-        this.languageId = languageId;
-        this.isNotified = isNotified;
-        this.climberProfileDescription = climberProfileDescription;
-        this.climberUserId = climberUserId;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public FileInfo getFileInfo() {
-        return fileInfo;
-    }
-
-    public void setFileInfo(FileInfo fileInfo) {
-        this.fileInfo = fileInfo;
-    }
-
-    public Long getGenderId() {
-        return genderId;
-    }
-
-    public void setGenderId(Long genderId) {
-        this.genderId = genderId;
-    }
-
-    public Long getLanguageId() {
-        return languageId;
-    }
-
-    public void setLanguageId(Long languageId) {
-        this.languageId = languageId;
-    }
-
-    public Boolean getNotified() {
-        return isNotified;
-    }
-
-    public void setNotified(Boolean notified) {
-        isNotified = notified;
-    }
-
-    public String getClimberProfileDescription() {
-        return climberProfileDescription;
-    }
-
-    public void setClimberProfileDescription(String climberProfileDescription) {
-        this.climberProfileDescription = climberProfileDescription;
-    }
-
-    public Long getClimberUserId() {
-        return climberUserId;
-    }
-
-    public void setClimberUserId(Long climberUserId) {
-        this.climberUserId = climberUserId;
-    }
-
-    @Override
-    public String toString() {
-        return "ClimberProfileDTO{" +
-                "id=" + id +
-                ", fileInfo=" + fileInfo +
-                ", genderId=" + genderId +
-                ", languageId=" + languageId +
-                ", isNotified=" + isNotified +
-                ", climberProfileDescription='" + climberProfileDescription + '\'' +
-                ", climberUserId=" + climberUserId +
-                '}';
-    }
 }

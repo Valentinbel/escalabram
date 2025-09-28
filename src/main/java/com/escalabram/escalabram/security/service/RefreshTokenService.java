@@ -6,6 +6,7 @@ import com.escalabram.escalabram.model.RefreshToken;
 import com.escalabram.escalabram.repository.RefreshTokenRepository;
 import com.escalabram.escalabram.service.ClimberUSerService;
 import jakarta.transaction.Transactional;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -14,6 +15,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 @Service
+@RequiredArgsConstructor
 public class RefreshTokenService { ///////////////////// Mettre une implémentation???????????????????????????????
 
     @Value("${pinya.app.jwtRefreshExpirationMs}")
@@ -21,11 +23,6 @@ public class RefreshTokenService { ///////////////////// Mettre une implémentat
 
     private final RefreshTokenRepository refreshTokenRepository;
     private final ClimberUSerService climberUSerService;
-
-    public RefreshTokenService(RefreshTokenRepository refreshTokenRepository, ClimberUSerService climberUSerService) {
-        this.refreshTokenRepository = refreshTokenRepository;
-        this.climberUSerService = climberUSerService;
-    }
 
     public Optional<RefreshToken> findByToken(String token) {
         return refreshTokenRepository.findByToken(token);

@@ -3,6 +3,7 @@ package com.escalabram.escalabram.service.impl;
 import com.escalabram.escalabram.model.ClimberUser;
 import com.escalabram.escalabram.repository.ClimberUserRepository;
 import com.escalabram.escalabram.service.ClimberUSerService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -10,13 +11,10 @@ import java.util.Optional;
 
 @Service
 @Transactional
+@RequiredArgsConstructor
 public class ClimberUserServiceImpl implements ClimberUSerService {
 
     private final ClimberUserRepository climberUserRepository;
-
-    public ClimberUserServiceImpl(ClimberUserRepository climberUserRepository) {
-        this.climberUserRepository = climberUserRepository;
-    }
 
     @Override
     public boolean existsById(Long id) {
