@@ -29,6 +29,7 @@ public class AuthController {
 
     @PostMapping("/register")
     public ResponseEntity<MessageResponse> registerUser(@Valid @RequestBody SignupRequest signUpRequest) {
+        log.info("REST request to register a user: {}", signUpRequest);
         if (climberUSerService.existsByUserName(signUpRequest.getUserName()))
             return ResponseEntity.badRequest().body(new MessageResponse("Error: UserName is already taken!: " + signUpRequest.getUserName()));
         if (climberUSerService.existsByEmail(signUpRequest.getEmail()))
@@ -39,6 +40,7 @@ public class AuthController {
 
     @PostMapping("/login")
     public ResponseEntity<JwtResponse> authenticateUser(@Valid @RequestBody LoginRequest loginRequest) {
+        log.info("REST request to log a user: {}", loginRequest);
         JwtResponse authenticatedUser = authService.authenticateUser(loginRequest);
         log.info("User logged");
         return ResponseEntity.ok(authenticatedUser);
@@ -46,12 +48,14 @@ public class AuthController {
 
     @PostMapping("/refreshtoken")
     public ResponseEntity<TokenRefreshResponse> refreshtoken(@Valid @RequestBody TokenRefreshRequest request) {
+        log.info("REST request to refresh token");
         TokenRefreshResponse refreshedToken = authService.refreshtoken(request);
         return ResponseEntity.ok(refreshedToken);
     }
 
     @PostMapping("/signout/{userId}")
     public ResponseEntity<MessageResponse> logoutUser(@PathVariable Long userId) {
+        log.info("REST request to logout userId: {}", userId);
         MessageResponse logOutResponse = authService.logoutUser(userId);
         return ResponseEntity.ok(logOutResponse);
     }

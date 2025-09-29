@@ -23,7 +23,7 @@ public class ClimberUserController {
     public ResponseEntity<String> updateUserNameById(@PathVariable Long userId,
                                                      @PathVariable @Size(min = 4, max = 20) String userName) {
         try {
-            log.debug("REST request to updateUserNameById. userId: {}. userName: {}", userId, userName);
+            log.info("REST request to updateUserNameById. userId: {}. userName: {}", userId, userName);
             if(this.climberUSerService.existsById(userId)){
                 this.climberUSerService.updateUserNameById(userId, userName);
                 return new ResponseEntity<>(HttpStatus.OK);

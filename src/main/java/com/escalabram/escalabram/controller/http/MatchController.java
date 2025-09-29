@@ -26,7 +26,7 @@ public class MatchController {
 
     @GetMapping("/matches/search/{searchId}")
     public ResponseEntity<List<Match>> getMatchesBySearchId(@PathVariable Long searchId) {
-        log.debug("REST request to get list of matches, or create them if necessary, from searchId: {}", searchId);
+        log.info("REST request to get list of matches, or create them if necessary, from searchId: {}", searchId);
         try {
             List<Match> matches = new ArrayList<>();
             Optional<Search> optSearch = searchService.findById(searchId);

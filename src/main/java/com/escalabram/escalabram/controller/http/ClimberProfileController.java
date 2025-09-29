@@ -28,6 +28,7 @@ public class ClimberProfileController {
 
     @GetMapping("/climber-profiles/climber-users/{climberUserId}")
     public ResponseEntity<ClimberProfileDTO> getClimberProfileByClimberUserId(@PathVariable Long climberUserId) {
+        log.info("REST request to get profile from userId: {}", climberUserId);
         try {
             Optional<ClimberProfileDTO> climberProfileDTO = climberProfileService.findByClimberUserId(climberUserId);
             return ResponseUtil.wrapOrNotFound(climberProfileDTO);
@@ -41,6 +42,7 @@ public class ClimberProfileController {
     /// Depuis avatar.service. juste pour l'avatar et le userId
     @PostMapping("/climber-profiles/avatar")
     public ResponseEntity<Long> uploadFile(@RequestParam("file") MultipartFile file, @RequestParam("userId") String userIdString) {
+        log.info("REST request to save avatar of userId: {}", userIdString);
         try {
             // Mettre ce Endpoint dnas un Controller à part ??
             ///On renvoie un Long qui sera le FileInfoId qui nous servira pour mettre dans le profileId
@@ -58,16 +60,12 @@ public class ClimberProfileController {
     // TODO c'est celui ci qu'il faut adapter. pour recevoir le file comme plus haut
     @PostMapping("/climber-profiles")
     public ResponseEntity<ClimberProfileDTO> saveClimberProfile(@Valid @RequestBody ClimberProfileDTO climberProfileDTO){
-        log.debug("REST request to save ClimberProfile : {}", climberProfileDTO);
+        log.info("REST request to save ClimberProfile : {}", climberProfileDTO);
         try {
             // TODO Comme tous mes appels sont liés, tout mettre dans un seul endpoint.
             //  Comme ca on appel le back qu'une seule fois.
             //  C'est le service qui va gérer ensuite.
             // => actualiser le username du user.
-            // ==> l'avatar et recuper l'id pour le mettre dans le profile
-
-//            if (file != null) // TODO : A mettre dans le service
-//                climberProfileDTO.setFileInfo(filesStorageService.saveAvatar(file, climberProfileDTO.getClimberUserId()));
 
             log.info("climberProfileDTO: {}", climberProfileDTO);
             // TODO quoi faire de ces commentaires.

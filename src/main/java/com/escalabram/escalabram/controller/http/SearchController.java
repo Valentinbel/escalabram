@@ -29,7 +29,7 @@ public class SearchController {
 
     @GetMapping("/searches")
     public ResponseEntity<List<Search>> getAllSearches(){
-        log.debug("REST request to get list of All Searches");
+        log.info("REST request to get list of All Searches");
         try{
             List<Search> searches = searchService.findAll();
             return ResponseEntity.ok(searches);
@@ -41,7 +41,7 @@ public class SearchController {
 
     @GetMapping("/searches/climber-profiles/{id}")
     public ResponseEntity<Set<Search>> getSearchByClimberProfileId(@PathVariable("id") Long id ){
-        log.debug("REST request to get list of Search by climberProfileId: {}", id);
+        log.info("REST request to get list of Search by climberProfileId: {}", id);
         try {
             Optional<Set<Search>> searches= searchService.findByClimberProfileId(id);
             log.debug("SEARCHES: {}", searches);
@@ -54,7 +54,7 @@ public class SearchController {
 
     @PostMapping("/searches")
     public ResponseEntity<Search> createSearch(@Valid @RequestBody Search search) {
-        log.debug("REST request to save Search : {}", search);
+        log.info("REST request to save Search : {}", search);
         try {
             if (search.getId() != null)
                 throw new BadRequestAlertException("A new search cannot already have an ID");
@@ -76,7 +76,7 @@ public class SearchController {
 
     @PutMapping("/searches")
     public ResponseEntity<Search> updateSeach(@Valid @RequestBody Search search) {
-        log.debug("REST request to update Search : {}", search);
+        log.info("REST request to update Search : {}", search);
         if (search.getId() == null)
             throw new BadRequestAlertException("You cannot update a Search that have no Id");
         Search updatedSearch = searchService.updateSearch(search);
@@ -85,7 +85,7 @@ public class SearchController {
 
     @DeleteMapping("/searches/{id}")
     public ResponseEntity<HttpStatus> deleteSearch(@PathVariable Long id) {
-        log.debug("REST request to delete Search : {}", id);
+        log.info("REST request to delete Search : {}", id);
         try {
             searchService.deleteById(id);
             return ResponseEntity.noContent().build();
