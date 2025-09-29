@@ -29,7 +29,7 @@ public class AuthController {
 
     @PostMapping("/register")
     public ResponseEntity<MessageResponse> registerUser(@Valid @RequestBody SignupRequest signUpRequest) {
-        log.info("REST request to register a user: {}", signUpRequest);
+        log.info("REST request to register a user: {}", signUpRequest.getEmail());
         if (climberUSerService.existsByUserName(signUpRequest.getUserName()))
             return ResponseEntity.badRequest().body(new MessageResponse("Error: UserName is already taken!: " + signUpRequest.getUserName()));
         if (climberUSerService.existsByEmail(signUpRequest.getEmail()))
@@ -40,7 +40,7 @@ public class AuthController {
 
     @PostMapping("/login")
     public ResponseEntity<JwtResponse> authenticateUser(@Valid @RequestBody LoginRequest loginRequest) {
-        log.info("REST request to log a user: {}", loginRequest);
+        log.info("REST request to log a user: {}", loginRequest.getEmail());
         JwtResponse authenticatedUser = authService.authenticateUser(loginRequest);
         log.info("User logged");
         return ResponseEntity.ok(authenticatedUser);

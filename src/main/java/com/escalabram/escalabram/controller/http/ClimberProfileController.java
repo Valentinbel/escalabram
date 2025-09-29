@@ -60,7 +60,7 @@ public class ClimberProfileController {
     // TODO c'est celui ci qu'il faut adapter. pour recevoir le file comme plus haut
     @PostMapping("/climber-profiles")
     public ResponseEntity<ClimberProfileDTO> saveClimberProfile(@Valid @RequestBody ClimberProfileDTO climberProfileDTO){
-        log.info("REST request to save ClimberProfile : {}", climberProfileDTO);
+        log.info("REST request to save ClimberProfile of userid: {}", climberProfileDTO.getClimberUserId());
         try {
             // TODO Comme tous mes appels sont liés, tout mettre dans un seul endpoint.
             //  Comme ca on appel le back qu'une seule fois.
