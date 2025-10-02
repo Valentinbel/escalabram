@@ -43,6 +43,16 @@ public class ClimberUserServiceImpl implements ClimberUSerService {
 
     @Override
     public int updateUserNameById(Long userId, String userName) {
-        return climberUserRepository.updateUserNameById(userId, userName);
+        if(existsById(userId))
+            return climberUserRepository.updateUserNameById(userId, userName);
+        else throw new IllegalStateException("Error thrown trying to update username for userId: " + userId);
+    }
+
+    @Override
+    public int updateFileInfoByUserId(Long userId, Long fileInfoId) {
+        if(existsById(userId))
+            return climberUserRepository.updateFileInfoByUserId(userId, fileInfoId);
+        else throw new IllegalStateException("Error thrown trying to update username for userId: " + userId);
+
     }
 }

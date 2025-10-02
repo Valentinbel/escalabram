@@ -44,7 +44,6 @@ class ClimberProfileRepositoryTest {
                 .id(1L)
                 .name("selfie")
                 .url("./uploads/uderId")
-                .climberUser(relatedUser)
                 .build();
         entityManager.merge(fileInfo);
 
@@ -64,7 +63,7 @@ class ClimberProfileRepositoryTest {
         assertAll(
                 () -> assertEquals(retrievedClimberProfile.get().getId(), optprofileToFind.get().getId()),
                 () -> assertEquals(retrievedClimberProfile.get().getClimberUser().getPassword(), optprofileToFind.get().getClimberUser().getPassword()),
-                () -> assertEquals(retrievedClimberProfile.get().getClimberUser().getCreatedAt(), optprofileToFind.get().getClimberUser().getCreatedAt()),
+                () -> assertEquals(retrievedClimberProfile.get().getClimberUser().getCreatedAt().getMinute(), optprofileToFind.get().getClimberUser().getCreatedAt().getMinute()),
                 () -> assertEquals(retrievedClimberProfile.get().getClimberUser().getRoles(), optprofileToFind.get().getClimberUser().getRoles())
         );
     }

@@ -21,4 +21,8 @@ public interface ClimberUserRepository extends JpaRepository<ClimberUser, Long> 
     @Modifying
     @Query("update ClimberUser u set u.userName = :userName where u.id = :id")
     int updateUserNameById(@Param("id") Long userId, @Param("userName") String userName);
+
+    @Modifying
+    @Query("update ClimberUser u set u.fileInfo.id = :fileInfoId where u.id = :id")
+    int updateFileInfoByUserId(@Param("id") Long userId, @Param("fileInfoId") Long fileInfoId);
 }

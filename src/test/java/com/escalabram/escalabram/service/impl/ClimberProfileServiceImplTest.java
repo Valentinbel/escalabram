@@ -4,6 +4,7 @@ import com.escalabram.escalabram.model.ClimberProfile;
 import com.escalabram.escalabram.model.ClimberUser;
 import com.escalabram.escalabram.model.FileInfo;
 import com.escalabram.escalabram.repository.ClimberProfileRepository;
+import com.escalabram.escalabram.service.ClimberUSerService;
 import com.escalabram.escalabram.service.dto.ClimberProfileDTO;
 import com.escalabram.escalabram.service.mapper.ClimberProfileMapper;
 import org.junit.jupiter.api.BeforeEach;
@@ -21,46 +22,42 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
-public class ClimberProfileServiceImplTest {
+class ClimberProfileServiceImplTest {
 
-    public static FileInfo fileInfo;
-
-    public static ClimberUser climberUser;
-
-    public static ClimberProfile climberProfile;
-    public static ClimberProfile climberProfileNoId;
-    public static ClimberProfileDTO climberProfileDTO;
-    public static ClimberProfileDTO climberProfileDTONoId;
-
+    @Mock
+    private ClimberUSerService climberUSerService;
+    @Mock
+    private ClimberProfileRepository climberProfileRepository;
+    @Mock
+    private ClimberProfileMapper climberProfileMapper;
     @InjectMocks
-    ClimberProfileServiceImpl climberProfileServiceImpl;
+    private ClimberProfileServiceImpl climberProfileServiceImpl;
 
-    @Mock
-    ClimberProfileRepository climberProfileRepository;
-
-    @Mock
-    ClimberProfileMapper climberProfileMapper;
+    private ClimberUser climberUser;
+    private ClimberProfile climberProfile;
+    private ClimberProfile climberProfileNoId;
+    private ClimberProfileDTO climberProfileDTO;
+    private ClimberProfileDTO climberProfileDTONoId;
 
     @BeforeEach
     void setupData() {
+        FileInfo fileInfo = FileInfo.builder()
+                //.id(1L)
+                .name("selfPortrait")
+                .url("./uploads/userId_1")
+                .build();
+
         climberUser = ClimberUser.builder()
-                .id(1L)
+                .id(1984L)
                 .userName("AdamOndra")
                 .email("adam@ondra.com")
                 .password("Password_123")
                 .createdAt(LocalDateTime.now())
-                .build();
-
-
-        fileInfo = FileInfo.builder()
-                //.id(1L)
-                .name("selfPortrait")
-                .url("./uploads/userId_1")
-                .climberUser(climberUser)
+                .fileInfo(fileInfo)
                 .build();
 
         climberProfile =  ClimberProfile.builder()
-                .id(1L)
+                //.id(1L)
                 .genderId(1L)
                 .languageId(2L)
                 .climberUser(climberUser)
@@ -72,13 +69,13 @@ public class ClimberProfileServiceImplTest {
         climberProfileNoId.setId(null);
 
         climberProfileDTO = ClimberProfileDTO.builder()
-                .id(1L)
+                //.id(1L)
                 .avatarId(1L)
                 .userName("Just Adam")
                 .genderId(1L)
                 .languageId(2L)
                 .climberProfileDescription("Salut les boys, c'est Adam")
-                .climberUserId(1L)
+                .climberUserId(climberProfile.getClimberUser().getId())
                 .build();
 
         climberProfileDTONoId = climberProfileDTO;
@@ -129,13 +126,17 @@ public class ClimberProfileServiceImplTest {
 
     @Test
     void saveClimberProfile_insert() {
+        when(climberUSerService.updateUserNameById(climberProfileDTO.getClimberUserId(), climberProfileDTO.getUserName())).thenReturn(1);
         when(climberProfileMapper.toClimberProfile(climberProfileDTONoId)).thenReturn(climberProfileNoId);
         when(climberProfileRepository.save(climberProfileNoId)).thenReturn(climberProfile);
         when(climberProfileMapper.toClimberProfileDTO(climberProfile)).thenReturn(climberProfileDTO);
 
         ClimberProfileDTO insertedClimberProfileDTO = climberProfileServiceImpl.saveClimberProfile(climberProfileDTONoId);
 
+        verify(climberUSerService).updateUserNameById(climberProfileDTO.getClimberUserId(), climberProfileDTO.getUserName());
+        verify(climberProfileMapper).toClimberProfile(climberProfileDTONoId);
         verify(climberProfileRepository, times(1)).save(climberProfileNoId);
+        verify(climberProfileMapper).toClimberProfileDTO(climberProfile);
         assertEquals(insertedClimberProfileDTO, climberProfileDTO);
     }
 }

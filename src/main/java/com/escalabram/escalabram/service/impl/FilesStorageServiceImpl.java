@@ -43,8 +43,14 @@ public class FilesStorageServiceImpl implements FilesStorageService {
                 Files.copy(file.getInputStream(), userFolder.resolve(file.getOriginalFilename()));
 
             // delete and save in DB
-            return deleteAndSaveFileInfo(userId, file);
+            FileInfo newFileInfo = deleteAndSaveFileInfo(userId, file);
 
+            //update user with fileInfo
+            int updated = climberUSerService.updateFileInfoByUserId(userId, newFileInfo.getId());
+
+            if (updated != 0 )
+                return newFileInfo;
+            throw new IllegalStateException("We couldn't associate fileInfo to user. FileInfo: " + newFileInfo + "userId: " + userId);
         } catch (FileAlreadyExistsException e) {
             throw new IllegalArgumentException("A file of that name already exists." + e.getMessage());
         } catch (IOException  e) {
@@ -68,7 +74,6 @@ public class FilesStorageServiceImpl implements FilesStorageService {
             FileInfo fileToSave = FileInfo.builder()
                     .name(file.getOriginalFilename())
                     .url(userFolder.toString())
-                    .climberUser(optUser.get())
                     .build();
             try {
                 return fileInfoService.save(fileToSave);

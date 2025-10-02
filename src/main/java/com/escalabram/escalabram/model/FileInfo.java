@@ -2,7 +2,6 @@ package com.escalabram.escalabram.model;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
 import java.io.Serial;
@@ -32,9 +31,4 @@ public class FileInfo implements Serializable {
     @NotBlank
     @Column(name = "url", nullable = false)
     private String url;
-
-    @NotNull
-    @OneToOne
-    @JoinColumn(name = "climber_user_id", referencedColumnName = "id", nullable = false)
-    private ClimberUser climberUser;
 }

@@ -3,6 +3,7 @@ package com.escalabram.escalabram.service.impl;
 import com.escalabram.escalabram.model.ClimberProfile;
 import com.escalabram.escalabram.repository.ClimberProfileRepository;
 import com.escalabram.escalabram.service.ClimberProfileService;
+import com.escalabram.escalabram.service.ClimberUSerService;
 import com.escalabram.escalabram.service.dto.ClimberProfileDTO;
 import com.escalabram.escalabram.service.mapper.ClimberProfileMapper;
 import lombok.RequiredArgsConstructor;
@@ -19,6 +20,7 @@ import java.util.Optional;
 public class ClimberProfileServiceImpl implements ClimberProfileService {
 
     private static final Logger log = LoggerFactory.getLogger(ClimberProfileServiceImpl.class);
+    private final ClimberUSerService climberUSerService;
     private final ClimberProfileRepository climberProfileRepository;
     private final ClimberProfileMapper climberProfileMapper;
 
@@ -40,6 +42,9 @@ public class ClimberProfileServiceImpl implements ClimberProfileService {
     @Override
     public ClimberProfileDTO saveClimberProfile(ClimberProfileDTO climberProfileDTO) {
         log.debug("climberProfileRequestDTO : {}", climberProfileDTO);
+        if (climberProfileDTO.getClimberUserId() != null &&  climberProfileDTO.getUserName() != null)
+            climberUSerService.updateUserNameById(climberProfileDTO.getClimberUserId(), climberProfileDTO.getUserName());
+
         ClimberProfile climberProfile = this.climberProfileMapper.toClimberProfile(climberProfileDTO);
         ClimberProfile savedClimberProfile = climberProfileRepository.save(climberProfile);
         return this.climberProfileMapper.toClimberProfileDTO(savedClimberProfile);

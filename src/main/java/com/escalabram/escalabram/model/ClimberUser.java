@@ -3,8 +3,11 @@ package com.escalabram.escalabram.model;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.*;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import java.io.Serial;
 import java.io.Serializable;
@@ -51,10 +54,16 @@ public class ClimberUser implements Serializable {
     @Builder.Default
     private Set<Role> roles = new HashSet<>();
 
-    @NotBlank
-    @Column(name = "created_at", nullable = false)
+    @NotNull
+    @Column(name = "created_at", nullable = false, updatable = false)
+    @CreationTimestamp
     private LocalDateTime createdAt;
 
     @Column(name = "updated_at")
+    @UpdateTimestamp
     private LocalDateTime updatedAt;
+
+    @OneToOne
+    @JoinColumn(name = "file_info_id", referencedColumnName = "id")
+    private FileInfo fileInfo;
 }

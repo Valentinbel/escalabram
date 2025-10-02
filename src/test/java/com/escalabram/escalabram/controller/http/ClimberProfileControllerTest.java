@@ -69,7 +69,6 @@ class ClimberProfileControllerTest {
         FileInfo fileInfo = FileInfo.builder()
                 .name("myPicture")
                 .url("./folder/123")
-                .climberUser(climberUser)
                 .build();
         this.fileInfoRepository.saveAndFlush(fileInfo);
 
