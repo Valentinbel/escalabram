@@ -24,14 +24,14 @@ import static org.mockito.Mockito.*;
 @ExtendWith(MockitoExtension.class)
 class ClimberProfileServiceImplTest {
 
+    @InjectMocks
+    private ClimberProfileServiceImpl climberProfileServiceImpl;
     @Mock
     private ClimberUSerService climberUSerService;
     @Mock
     private ClimberProfileRepository climberProfileRepository;
     @Mock
     private ClimberProfileMapper climberProfileMapper;
-    @InjectMocks
-    private ClimberProfileServiceImpl climberProfileServiceImpl;
 
     private ClimberUser climberUser;
     private ClimberProfile climberProfile;

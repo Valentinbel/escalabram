@@ -29,20 +29,18 @@ import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class SearchServiceImplTest {
-    public static Set<ClimbLevel> climbLevels;
-    public static Set<TimeSlot> timeSlots;
-    public static Set<TimeSlot> timeSlot2;
-    public static List<Search> searches;
 
     @InjectMocks
     private SearchServiceImpl searchServiceImpl;
-
     @Mock
     private ClimbLevelService climbLevelService;
-
     @Mock
     private SearchRepository searchRepository;
 
+    private Set<ClimbLevel> climbLevels;
+    private Set<TimeSlot> timeSlots;
+    private Set<TimeSlot> timeSlot2;
+    private List<Search> searches;
 
     @BeforeEach
     void setupData() {

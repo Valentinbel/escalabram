@@ -34,19 +34,14 @@ class ClimberProfileControllerTest {
 
     @Autowired
     private MockMvc mockMvc;
-
     @Autowired
     private ObjectMapper objectMapper; // Utilisé pour sérialiser/désérialiser JSON
-
     @Autowired
     private ClimberProfileRepository climberProfileRepository;
-
     @Autowired
     private FileInfoRepository fileInfoRepository;
-
     @Autowired
     private ClimberUserRepository climberUserRepository;
-
     @Autowired
     private ClimberProfileMapper climberProfileMapper;
 

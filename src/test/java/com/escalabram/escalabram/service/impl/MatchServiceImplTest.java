@@ -31,36 +31,32 @@ import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class MatchServiceImplTest {
-    public static List<Search> searches;
-    public static Set<ClimbLevel> climbLevelsMatching1;
-    public static Set<ClimbLevel> climbLevelsMatching2;
-    public static Set<ClimbLevel> climbLevelsNOTMatching;
-    public static Set<TimeSlot> timeSlotsMatching1;
-    public static Set<TimeSlot> timeSlotsMatching2;
-    public static Set<TimeSlot> timeSlotsNOTMatching;
 
     @InjectMocks
     private MatchServiceImpl matchServiceImpl;
-
     @Mock
     private MatchRepository matchRepository;
-
     @Mock
     private SearchRepository searchRepository;
+
+    private List<Search> searches;
+    private Set<TimeSlot> timeSlotsMatching1;
+    private Set<TimeSlot> timeSlotsMatching2;
+    private Set<TimeSlot> timeSlotsNOTMatching;
 
     @BeforeEach
     void setupData() {
 
-        climbLevelsMatching1 = Stream.of(
+        Set<ClimbLevel> climbLevelsMatching1 = Stream.of(
                 ClimbLevel.builder().id(2L).codeFr("4+").build(),
                 ClimbLevel.builder().id(7L).codeFr("6A+").build()
         ).collect(Collectors.toSet());
 
-        climbLevelsMatching2 = Stream.of(
+        Set<ClimbLevel> climbLevelsMatching2 = Stream.of(
                 ClimbLevel.builder().id(6L).codeFr("6A").build(),
                 ClimbLevel.builder().id(9L).codeFr("6B+").build()
         ).collect(Collectors.toSet());
-        climbLevelsNOTMatching = Stream.of(
+        Set<ClimbLevel> climbLevelsNOTMatching = Stream.of(
                 ClimbLevel.builder().id(9L).codeFr("6B+").build(),
                 ClimbLevel.builder().id(12L).codeFr("7A").build()
         ).collect(Collectors.toSet());
