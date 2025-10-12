@@ -44,6 +44,7 @@ class ClimberProfileRepositoryTest {
                 .id(1L)
                 .name("selfie")
                 .url("./uploads/uderId")
+                .climberUser(relatedUser)
                 .build();
         entityManager.merge(fileInfo);
 

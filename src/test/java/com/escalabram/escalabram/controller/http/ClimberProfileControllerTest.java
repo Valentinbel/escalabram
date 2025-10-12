@@ -39,8 +39,6 @@ class ClimberProfileControllerTest {
     @Autowired
     private ClimberProfileRepository climberProfileRepository;
     @Autowired
-    private FileInfoRepository fileInfoRepository;
-    @Autowired
     private ClimberUserRepository climberUserRepository;
     @Autowired
     private ClimberProfileMapper climberProfileMapper;
@@ -59,13 +57,6 @@ class ClimberProfileControllerTest {
                 .build();
         this.climberUserRepository.saveAndFlush(climberUser);
         this.listUsers = climberUserRepository.findAll();
-
-        // fileInfo
-        FileInfo fileInfo = FileInfo.builder()
-                .name("myPicture")
-                .url("./folder/123")
-                .build();
-        this.fileInfoRepository.saveAndFlush(fileInfo);
 
         //climberProfile
         ClimberProfile climberProfile = ClimberProfile.builder()
