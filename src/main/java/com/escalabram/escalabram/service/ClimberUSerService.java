@@ -17,6 +17,4 @@ public interface ClimberUSerService {
     ClimberUser save(ClimberUser user);
 
     int updateUserNameById(Long userId, String userName);
-
-    int updateFileInfoByUserId(Long userId, Long fileInfoId);
 }

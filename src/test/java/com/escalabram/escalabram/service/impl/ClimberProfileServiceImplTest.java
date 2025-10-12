@@ -2,7 +2,6 @@ package com.escalabram.escalabram.service.impl;
 
 import com.escalabram.escalabram.model.ClimberProfile;
 import com.escalabram.escalabram.model.ClimberUser;
-import com.escalabram.escalabram.model.FileInfo;
 import com.escalabram.escalabram.repository.ClimberProfileRepository;
 import com.escalabram.escalabram.service.ClimberUSerService;
 import com.escalabram.escalabram.service.dto.ClimberProfileDTO;
@@ -41,19 +40,12 @@ class ClimberProfileServiceImplTest {
 
     @BeforeEach
     void setupData() {
-        FileInfo fileInfo = FileInfo.builder()
-                //.id(1L)
-                .name("selfPortrait")
-                .url("./uploads/userId_1")
-                .build();
-
         climberUser = ClimberUser.builder()
                 .id(1984L)
                 .userName("AdamOndra")
                 .email("adam@ondra.com")
                 .password("Password_123")
                 .createdAt(LocalDateTime.now())
-                .fileInfo(fileInfo)
                 .build();
 
         climberProfile =  ClimberProfile.builder()
@@ -70,7 +62,6 @@ class ClimberProfileServiceImplTest {
 
         climberProfileDTO = ClimberProfileDTO.builder()
                 //.id(1L)
-                .avatarId(1L)
                 .userName("Just Adam")
                 .genderId(1L)
                 .languageId(2L)

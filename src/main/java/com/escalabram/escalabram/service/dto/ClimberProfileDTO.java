@@ -1,6 +1,5 @@
 package com.escalabram.escalabram.service.dto;
 
-import com.escalabram.escalabram.model.FileInfo;
 import lombok.*;
 
 import java.io.Serial;
@@ -18,10 +17,6 @@ public class ClimberProfileDTO implements Serializable {
     private static final long serialVersionUID = -2061960641588724813L;
 
     private Long id;
-
-    private FileInfo fileInfo;
-
-    private Long avatarId;
 
     private String userName;
 

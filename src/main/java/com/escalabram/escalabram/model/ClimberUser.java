@@ -62,8 +62,4 @@ public class ClimberUser implements Serializable {
     @Column(name = "updated_at")
     @UpdateTimestamp
     private LocalDateTime updatedAt;
-
-    @OneToOne
-    @JoinColumn(name = "file_info_id", referencedColumnName = "id")
-    private FileInfo fileInfo;
 }
