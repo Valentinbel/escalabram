@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.Optional;
 
 @Service
@@ -44,7 +45,7 @@ public class ClimberUserServiceImpl implements ClimberUSerService {
     @Override
     public int updateUserNameById(Long userId, String userName) {
         if(existsById(userId))
-            return climberUserRepository.updateUserNameById(userId, userName);
+            return climberUserRepository.updateUserNameById(userId, userName, LocalDateTime.now());
         else throw new IllegalStateException("Error thrown trying to update username for userId: " + userId);
     }
 }
