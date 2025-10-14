@@ -17,10 +17,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.net.MalformedURLException;
-import java.nio.file.FileAlreadyExistsException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
+import java.nio.file.*;
 import java.util.Optional;
 
 @Service
@@ -88,9 +85,6 @@ public class FilesStorageServiceImpl implements FilesStorageService {
             if (optFileInfo.isEmpty())
                 throw new IllegalArgumentException("There is no file related to this user: {}" + userId);
 
-
-            /// Voir où ca pète si il n'y a pas de fichier et faire un if un peu propre. Renvoyer un Path au Controller.
-        //voir si path.toFile fiat qqch...
             Path userFolder = getUserFolder(userId);
             Path file = userFolder.resolve(optFileInfo.get().getName());
             Resource resource = new UrlResource(file.toUri());
@@ -107,5 +101,31 @@ public class FilesStorageServiceImpl implements FilesStorageService {
 
     private Path getUserFolder(Long userId) {
         return Paths.get("uploads/userId_" + userId);
+    }
+
+    @Override
+    public String getContentType(Resource avatar, Long userId) throws IOException {
+        Path imagePath = Paths.get(avatar.getURI());
+
+        // Déterminer le Content-Type de manière robuste
+        String contentType = Files.probeContentType(imagePath);
+
+        // Fallback basé sur l'extension si probeContentType échoue
+        if (contentType != null)
+            return contentType;
+
+        // if content type is null
+        String filename = imagePath.getFileName().toString().toLowerCase();
+        if (filename.endsWith(".png")) {
+            return "image/png";
+        } else if (filename.endsWith(".jpg") || filename.endsWith(".jpeg")) {
+            return "image/jpeg";
+        } else if (filename.endsWith(".gif")) {
+            return "image/gif";
+        } else if (filename.endsWith(".webp")) {
+            return "image/webp";
+        } else {
+            return "application/octet-stream";
+        }
     }
 }

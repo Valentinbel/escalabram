@@ -6,8 +6,8 @@ import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.io.Resource;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -40,9 +40,11 @@ public class FileInfoController {
         log.info("REST request to get File from userId: {}", userId);
         try {
             Resource avatar =  this.filesStorageService.loadAvatar(userId);
-            //return ResponseEntity.status(HttpStatus.OK).body(avatar);
+            String contentType = this.filesStorageService.getContentType(avatar, userId);
+
             return ResponseEntity.ok()
-                    .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + avatar.getFilename() + "\"").body(avatar);
+                    .contentType(MediaType.parseMediaType(contentType))
+                    .body(avatar);
         } catch (Exception e) {
             log.error("Could not getFile from userId: {}", userId ,e);
             return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body(null);
