@@ -68,8 +68,9 @@ public class SpringSecurityConfig {
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth ->
                         auth.requestMatchers("/api/auth/**").permitAll()
-                        .requestMatchers("/api/climber-profiles/**").hasAnyRole("USER")
                         .requestMatchers("/api/climber-user/**").hasAnyRole("USER")
+                        .requestMatchers("/api/climber-profiles/**").hasAnyRole("USER")
+                        .requestMatchers("/api/avatar/**").hasAnyRole("USER")
                         .requestMatchers("/api/matches/**").hasAnyRole("USER")
                         .requestMatchers("/api/searches/**").hasAnyRole("USER")
                         .anyRequest().authenticated()
@@ -88,9 +89,6 @@ public class SpringSecurityConfig {
 
         // IMPORTANT: Spécifier l'origine exacte au lieu du wildcard
         configuration.setAllowedOrigins(Arrays.asList("http://localhost:4200"));
-
-        // Ou si vous voulez être plus flexible en développement :
-        // configuration.setAllowedOriginPatterns(Arrays.asList("http://localhost:*"));
 
         // Méthodes HTTP autorisées
         configuration.setAllowedMethods(Arrays.asList(

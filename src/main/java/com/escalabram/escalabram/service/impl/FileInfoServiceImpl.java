@@ -7,6 +7,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Optional;
+
 @Service
 @Transactional
 @RequiredArgsConstructor
@@ -24,4 +26,8 @@ public class FileInfoServiceImpl implements FileInfoService {
         return fileInfoRepository.save(fileInfo);
     }
 
+    @Override
+    public Optional<FileInfo> findByUderId(Long userId) {
+        return fileInfoRepository.findByclimberUserId(userId);
+    }
 }

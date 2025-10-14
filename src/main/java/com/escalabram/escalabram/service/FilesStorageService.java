@@ -8,6 +8,5 @@ public interface FilesStorageService {
 
     FileInfo saveAvatar(MultipartFile file, String userIdString);
 
-    //TODO no usages
-    Resource load(String fileName, String userIdString);
+    Resource loadAvatar(Long userId);
 }

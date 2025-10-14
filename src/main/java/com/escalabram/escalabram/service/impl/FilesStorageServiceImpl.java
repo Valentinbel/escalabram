@@ -82,12 +82,17 @@ public class FilesStorageServiceImpl implements FilesStorageService {
     }
 
     @Override
-    public Resource load(String fileName, String userIdString) {
-        // TODO recupérer aussi info from DB ?
+    public Resource loadAvatar(Long userId) {
         try {
-            Long userId= Long.parseLong(userIdString);
-            Path userIdFolder = getUserFolder(userId);
-            Path file = userIdFolder.resolve(fileName);
+            Optional<FileInfo> optFileInfo = fileInfoService.findByUderId(userId);
+            if (optFileInfo.isEmpty())
+                throw new IllegalArgumentException("There is no file related to this user: {}" + userId);
+
+
+            /// Voir où ca pète si il n'y a pas de fichier et faire un if un peu propre. Renvoyer un Path au Controller.
+        //voir si path.toFile fiat qqch...
+            Path userFolder = getUserFolder(userId);
+            Path file = userFolder.resolve(optFileInfo.get().getName());
             Resource resource = new UrlResource(file.toUri());
 
             if (resource.exists() || resource.isReadable()) {
