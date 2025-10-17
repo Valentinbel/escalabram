@@ -44,7 +44,7 @@ public class FilesStorageServiceImpl implements FilesStorageService {
         } catch (FileAlreadyExistsException e) {
             throw new IllegalArgumentException("A file of that name already exists." + e.getMessage());
         } catch (IOException  e) {
-            throw new IllegalStateException(e.getMessage());
+            throw new IllegalStateException("Exception occurred trying to save Avatar: ", e);
         }
     }
 
@@ -95,7 +95,7 @@ public class FilesStorageServiceImpl implements FilesStorageService {
                 throw new IllegalStateException("Could not read the file!");
             }
         } catch (MalformedURLException e) {
-            throw new IllegalStateException("Error: " + e.getMessage());
+            throw new IllegalStateException("Error due to a MalformedURLException: " + e.getMessage());
         }
     }
 

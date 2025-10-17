@@ -29,8 +29,8 @@ public class FileInfoController {
             FileInfo fileInfo = this.filesStorageService.saveAvatar(file, userIdString);
             return ResponseEntity.status(HttpStatus.OK).body(fileInfo.getId());
         } catch (Exception e) {
-            String message = "Could not upload the file: " + file.getOriginalFilename() + ". Error: " + e.getMessage();
-            log.error(message);
+            String message = "Could not upload the file: " + file.getOriginalFilename();
+            log.error(message,e);
             return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body(null);
         }
     }
