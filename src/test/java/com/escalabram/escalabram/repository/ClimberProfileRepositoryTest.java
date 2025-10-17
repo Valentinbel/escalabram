@@ -8,14 +8,17 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
+import org.springframework.test.context.ActiveProfiles;
 
 import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
 
+import static com.escalabram.escalabram.model.enumeration.EnumRole.ROLE_USER;
 import static org.junit.jupiter.api.Assertions.*;
 
+@ActiveProfiles("test")
 @DataJpaTest
 class ClimberProfileRepositoryTest {
 
@@ -26,9 +29,12 @@ class ClimberProfileRepositoryTest {
 
     @Test
     void findByClimberUserId_whenFindById_thenSuccess() {
+
+        Role roleUser = Role.builder()
+                .roleName(ROLE_USER).build();
+        entityManager.persist(roleUser);
         Set<Role> roleSet = new HashSet<>();
-        roleSet.add(entityManager.find(Role.class, 1L));
-        entityManager.persist(entityManager.find(Role.class, 1L));
+        roleSet.add(roleUser);
 
         ClimberUser relatedUser = ClimberUser.builder()
                 .userName("CrisSharma")
