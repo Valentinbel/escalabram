@@ -35,7 +35,7 @@ public class ClimberProfile implements Serializable {
     @Column(columnDefinition = "TEXT", name = "climber_profile_description")
     private String climberProfileDescription;
 
-    @OneToOne//(cascade = CascadeType.ALL) //fetch = FetchType.LAZY ?
+    @OneToOne(orphanRemoval = true)
     @JoinColumn(name = "climber_user_id", referencedColumnName = "id", nullable = false)
     private ClimberUser climberUser;
 
