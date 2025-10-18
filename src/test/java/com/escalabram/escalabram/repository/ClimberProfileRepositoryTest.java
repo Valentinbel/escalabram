@@ -4,6 +4,7 @@ import com.escalabram.escalabram.model.ClimberProfile;
 import com.escalabram.escalabram.model.ClimberUser;
 import com.escalabram.escalabram.model.FileInfo;
 import com.escalabram.escalabram.model.Role;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
@@ -27,9 +28,10 @@ class ClimberProfileRepositoryTest {
     @Autowired
     private TestEntityManager entityManager;
 
-    @Test
-    void findByClimberUserId_Id_thenSuccess() {
+    private ClimberProfile profile;
 
+    @BeforeEach
+    void setup() {
         Role roleUser = Role.builder()
                 .roleName(ROLE_USER).build();
         entityManager.persist(roleUser);
@@ -54,7 +56,7 @@ class ClimberProfileRepositoryTest {
                 .build();
         entityManager.merge(fileInfo);
 
-        ClimberProfile profileToFind =ClimberProfile.builder()
+        profile =ClimberProfile.builder()
                 .id(1L)
                 .genderId(1L)
                 .languageId(2L)
@@ -62,16 +64,18 @@ class ClimberProfileRepositoryTest {
                 .climberUser(relatedUser)
                 .climberProfileDescription("Blah blah, my life...")
                 .build();
-        entityManager.merge(profileToFind);
-        Optional<ClimberProfile> optprofileToFind = Optional.of(profileToFind);
+        entityManager.merge(profile);
+    }
 
-        Optional<ClimberProfile> retrievedClimberProfile = climberProfileRepository.findByClimberUserId(1L);
+    @Test
+    void findByClimberUserId_Id_thenSuccess() {
+        Optional<ClimberProfile> optResult = climberProfileRepository.findByClimberUserId(1L);
 
         assertAll(
-                () -> assertEquals(retrievedClimberProfile.get().getId(), optprofileToFind.get().getId()),
-                () -> assertEquals(retrievedClimberProfile.get().getClimberUser().getPassword(), optprofileToFind.get().getClimberUser().getPassword()),
-                () -> assertEquals(retrievedClimberProfile.get().getClimberUser().getCreatedAt().getMinute(), optprofileToFind.get().getClimberUser().getCreatedAt().getMinute()),
-                () -> assertEquals(retrievedClimberProfile.get().getClimberUser().getRoles(), optprofileToFind.get().getClimberUser().getRoles())
+                () -> assertEquals(profile.getId(), optResult.get().getId()),
+                () -> assertEquals(profile.getClimberUser().getPassword(), optResult.get().getClimberUser().getPassword()),
+                () -> assertEquals(profile.getClimberUser().getCreatedAt().getMinute(), optResult.get().getClimberUser().getCreatedAt().getMinute()),
+                () -> assertEquals(profile.getClimberUser().getRoles(), optResult.get().getClimberUser().getRoles())
         );
     }
 
