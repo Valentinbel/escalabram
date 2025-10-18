@@ -28,7 +28,7 @@ class ClimberProfileRepositoryTest {
     private TestEntityManager entityManager;
 
     @Test
-    void findByClimberUserId_whenFindById_thenSuccess() {
+    void findByClimberUserId_Id_thenSuccess() {
 
         Role roleUser = Role.builder()
                 .roleName(ROLE_USER).build();
@@ -76,7 +76,7 @@ class ClimberProfileRepositoryTest {
     }
 
     @Test
-    void findByClimberUserId_whenFindById_thenEmpty() {
+    void findByClimberUserId_WrongId_thenEmpty() {
         Optional<ClimberProfile> retrievedClimberProfile = climberProfileRepository.findByClimberUserId(99L);
         assertEquals(retrievedClimberProfile, Optional.empty());
     }
