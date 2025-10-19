@@ -17,8 +17,8 @@ public class FileInfoServiceImpl implements FileInfoService {
     private final FileInfoRepository fileInfoRepository;
 
     @Override
-    public void deleteByUrl(String url) {
-        fileInfoRepository.deleteByUrl(url);
+    public Optional<FileInfo> findByUserId(Long userId) {
+        return fileInfoRepository.findByclimberUserId(userId);
     }
 
     @Override
@@ -27,7 +27,7 @@ public class FileInfoServiceImpl implements FileInfoService {
     }
 
     @Override
-    public Optional<FileInfo> findByUderId(Long userId) {
-        return fileInfoRepository.findByclimberUserId(userId);
+    public void deleteByUrl(String url) {
+        fileInfoRepository.deleteByUrl(url);
     }
 }

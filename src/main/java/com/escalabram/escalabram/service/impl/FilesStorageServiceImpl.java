@@ -81,7 +81,7 @@ public class FilesStorageServiceImpl implements FilesStorageService {
     @Override
     public Resource loadAvatar(Long userId) {
         try {
-            Optional<FileInfo> optFileInfo = fileInfoService.findByUderId(userId);
+            Optional<FileInfo> optFileInfo = fileInfoService.findByUserId(userId);
             if (optFileInfo.isEmpty())
                 throw new IllegalArgumentException("There is no file related to this user: {}" + userId);
 

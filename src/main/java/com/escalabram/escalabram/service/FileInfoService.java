@@ -5,9 +5,10 @@ import com.escalabram.escalabram.model.FileInfo;
 import java.util.Optional;
 
 public interface FileInfoService {
-    void deleteByUrl(String url);
+
+    Optional<FileInfo> findByUserId(Long userId);
 
     FileInfo save(FileInfo fileInfo);
 
-    Optional<FileInfo> findByUderId(Long userId);
+    void deleteByUrl(String url);
 }

@@ -18,11 +18,6 @@ public class ClimberUserServiceImpl implements ClimberUSerService {
     private final ClimberUserRepository climberUserRepository;
 
     @Override
-    public boolean existsById(Long id) {
-        return climberUserRepository.existsById(id);
-    }
-
-    @Override
     public boolean existsByUserName(String userName) {
         return climberUserRepository.existsByUserName(userName);
     }
@@ -47,5 +42,9 @@ public class ClimberUserServiceImpl implements ClimberUSerService {
         if(existsById(userId))
             return climberUserRepository.updateUserNameById(userId, userName, LocalDateTime.now());
         else throw new IllegalStateException("Error thrown trying to update username for userId: " + userId);
+    }
+
+    private boolean existsById(Long id) {
+        return climberUserRepository.existsById(id);
     }
 }

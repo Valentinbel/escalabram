@@ -9,6 +9,7 @@ import com.escalabram.escalabram.service.mapper.ClimberProfileMapper;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -42,11 +43,16 @@ public class ClimberProfileServiceImpl implements ClimberProfileService {
     @Override
     public ClimberProfileDTO saveClimberProfile(ClimberProfileDTO climberProfileDTO) {
         log.debug("climberProfileRequestDTO : {}", climberProfileDTO);
-        if (climberProfileDTO.getClimberUserId() != null &&  climberProfileDTO.getUserName() != null)
-            climberUSerService.updateUserNameById(climberProfileDTO.getClimberUserId(), climberProfileDTO.getUserName());
+        try {
+            if (climberProfileDTO.getClimberUserId() != null &&  climberProfileDTO.getUserName() != null)
+                climberUSerService.updateUserNameById(climberProfileDTO.getClimberUserId(), climberProfileDTO.getUserName());
 
-        ClimberProfile climberProfile = this.climberProfileMapper.toClimberProfile(climberProfileDTO);
-        ClimberProfile savedClimberProfile = climberProfileRepository.save(climberProfile);
-        return this.climberProfileMapper.toClimberProfileDTO(savedClimberProfile);
+            ClimberProfile climberProfile = this.climberProfileMapper.toClimberProfile(climberProfileDTO);
+
+            ClimberProfile savedClimberProfile = climberProfileRepository.save(climberProfile);
+            return this.climberProfileMapper.toClimberProfileDTO(savedClimberProfile);
+        } catch (DataIntegrityViolationException e) {
+            throw new IllegalStateException("Error thrown trying to save profile with userId: " + climberProfileDTO.getClimberUserId());
+        }
     }
 }
