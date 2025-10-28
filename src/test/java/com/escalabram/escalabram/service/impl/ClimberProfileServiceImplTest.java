@@ -24,7 +24,7 @@ import static org.mockito.Mockito.*;
 class ClimberProfileServiceImplTest {
 
     @InjectMocks
-    private ClimberProfileServiceImpl climberProfileServiceImpl;
+    private ClimberProfileServiceImpl climberProfileService;
     @Mock
     private ClimberUSerService climberUSerService;
     @Mock
@@ -68,7 +68,7 @@ class ClimberProfileServiceImplTest {
         when(climberProfileRepository.findByClimberUserId(climberUser.getId())).thenReturn(Optional.of(climberProfile));
         when(climberProfileMapper.toClimberProfileDTO(climberProfile)).thenReturn(climberProfileDTO);
 
-        Optional<ClimberProfileDTO> optionalClimberProfileDTO = climberProfileServiceImpl.findByClimberUserId(climberUser.getId());
+        Optional<ClimberProfileDTO> optionalClimberProfileDTO = climberProfileService.findByClimberUserId(climberUser.getId());
 
         verify(climberProfileRepository).findByClimberUserId(climberUser.getId());
         verify(climberProfileMapper).toClimberProfileDTO(climberProfile);
@@ -83,7 +83,7 @@ class ClimberProfileServiceImplTest {
         climberProfileDTO.setClimberUserId(666L);
         when(climberProfileRepository.findByClimberUserId(climberUser.getId())).thenReturn(Optional.empty());
 
-        Optional<ClimberProfileDTO> optionalClimberProfileDTO = climberProfileServiceImpl.findByClimberUserId(climberUser.getId());
+        Optional<ClimberProfileDTO> optionalClimberProfileDTO = climberProfileService.findByClimberUserId(climberUser.getId());
 
         verify(climberProfileRepository).findByClimberUserId(climberUser.getId());
         verify(climberProfileMapper, never()).toClimberProfileDTO(climberProfile);
@@ -94,7 +94,7 @@ class ClimberProfileServiceImplTest {
     void existsById_climberProfileId_true() {
         when(climberProfileRepository.existsById(climberProfile.getId())).thenReturn(true);
 
-        boolean isTrue = climberProfileServiceImpl.existsById(climberProfile.getId());
+        boolean isTrue = climberProfileService.existsById(climberProfile.getId());
 
         verify(climberProfileRepository).existsById(climberProfile.getId());
         assertTrue(isTrue);
@@ -105,7 +105,7 @@ class ClimberProfileServiceImplTest {
         climberProfileDTO.setClimberUserId(666L);
         when(climberProfileRepository.existsById(climberProfile.getId())).thenReturn(false);
 
-        boolean isFalse = climberProfileServiceImpl.existsById(climberProfile.getId());
+        boolean isFalse = climberProfileService.existsById(climberProfile.getId());
 
         verify(climberProfileRepository).existsById(climberProfile.getId());
         assertFalse(isFalse);
@@ -118,7 +118,7 @@ class ClimberProfileServiceImplTest {
         when(climberProfileRepository.save(climberProfile)).thenReturn(climberProfile);
         when(climberProfileMapper.toClimberProfileDTO(climberProfile)).thenReturn(climberProfileDTO);
 
-        ClimberProfileDTO insertedClimberProfileDTO = climberProfileServiceImpl.saveClimberProfile(climberProfileDTO);
+        ClimberProfileDTO insertedClimberProfileDTO = climberProfileService.saveClimberProfile(climberProfileDTO);
 
         verify(climberUSerService, never()).updateUserNameById(anyLong(), anyString());
         verify(climberProfileMapper).toClimberProfile(climberProfileDTO);
@@ -134,7 +134,7 @@ class ClimberProfileServiceImplTest {
         when(climberProfileRepository.save(climberProfile)).thenReturn(climberProfile);
         when(climberProfileMapper.toClimberProfileDTO(climberProfile)).thenReturn(climberProfileDTO);
 
-        ClimberProfileDTO insertedClimberProfileDTO = climberProfileServiceImpl.saveClimberProfile(climberProfileDTO);
+        ClimberProfileDTO insertedClimberProfileDTO = climberProfileService.saveClimberProfile(climberProfileDTO);
 
         verify(climberUSerService).updateUserNameById(climberProfileDTO.getClimberUserId(), climberProfileDTO.getUserName());
         verify(climberProfileMapper).toClimberProfile(climberProfileDTO);
@@ -149,7 +149,7 @@ class ClimberProfileServiceImplTest {
                 .thenThrow(new IllegalStateException("Error thrown trying to update username for userId: " + climberProfileDTO.getClimberUserId()));
 
         IllegalStateException exception = assertThrows(IllegalStateException.class,() ->
-                climberProfileServiceImpl.saveClimberProfile(climberProfileDTO));
+                climberProfileService.saveClimberProfile(climberProfileDTO));
 
         verify(climberUSerService).updateUserNameById(climberProfileDTO.getClimberUserId(), climberProfileDTO.getUserName());
         verify(climberProfileMapper, never()).toClimberProfile(climberProfileDTO);
@@ -166,7 +166,7 @@ class ClimberProfileServiceImplTest {
                 .thenThrow(new IllegalStateException("Error thrown trying to save profile with userId: " + climberProfileDTO.getClimberUserId()));
 
         IllegalStateException exception = assertThrows(IllegalStateException.class,() ->
-                climberProfileServiceImpl.saveClimberProfile(climberProfileDTO));
+                climberProfileService.saveClimberProfile(climberProfileDTO));
 
         verify(climberUSerService).updateUserNameById(climberProfileDTO.getClimberUserId(), climberProfileDTO.getUserName());
         verify(climberProfileMapper).toClimberProfile(climberProfileDTO);
