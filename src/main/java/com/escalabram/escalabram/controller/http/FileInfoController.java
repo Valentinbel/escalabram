@@ -21,8 +21,7 @@ public class FileInfoController {
     private static final Logger log = LoggerFactory.getLogger(FileInfoController.class);
     private final FilesStorageService filesStorageService;
 
-    ////`${this.baseUrl}climber-profiles/avatar`
-    @PostMapping("/avatar")
+    @PostMapping("/avatar/")
     public ResponseEntity<Long> uploadFile(@RequestParam("file") MultipartFile file, @RequestParam("userId") String userIdString) {
         log.info("REST request to save avatar of userId: {}", userIdString);
         try {
