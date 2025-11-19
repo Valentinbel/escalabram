@@ -28,6 +28,54 @@ public class FilesStorageServiceImpl implements FilesStorageService {
     private final ClimberUSerService climberUSerService;
 
     @Override
+    public Long getAvatarId(Long userId) {
+        try {
+            Optional<FileInfo> optFileInfo = fileInfoService.findByUserId(userId);
+            if (optFileInfo.isEmpty()) {
+                log.info("There is no avatar in DB for this userId: {}", userId);
+                return null;
+            }
+
+            Path userFolder = getUserFolder(userId);
+            Path file = userFolder.resolve(optFileInfo.get().getName());
+            Resource resource = new UrlResource(file.toUri());
+
+            if (resource.exists() || resource.isReadable()) {
+                return optFileInfo.get().getId();
+            } else {
+                throw new IllegalStateException("Could not read the file!");
+            }
+        } catch (MalformedURLException e) {
+            throw new IllegalStateException("Error due to a MalformedURLException: " + e.getMessage());
+        }
+    }
+
+    @Override
+    public Resource loadAvatarResource(Long userId) {
+        try {
+            Optional<FileInfo> optFileInfo = fileInfoService.findByUserId(userId);
+            if (optFileInfo.isEmpty())
+                throw new IllegalArgumentException("There is no file related to this user: {}" + userId);
+
+            Path userFolder = getUserFolder(userId);
+            Path file = userFolder.resolve(optFileInfo.get().getName());
+            Resource resource = new UrlResource(file.toUri());
+
+            if (resource.exists() || resource.isReadable()) {
+                return resource;
+            } else {
+                throw new IllegalStateException("Could not read the file!");
+            }
+        } catch (MalformedURLException e) {
+            throw new IllegalStateException("Error due to a MalformedURLException: " + e.getMessage());
+        }
+    }
+
+    private Path getUserFolder(Long userId) {
+        return Paths.get("uploads/userId_" + userId);
+    }
+
+    @Override
     public FileInfo saveAvatar(MultipartFile file, String userIdString) {
         try {
             Long userId= Long.parseLong(userIdString);
@@ -76,31 +124,6 @@ public class FilesStorageServiceImpl implements FilesStorageService {
             log.error("user not found with id: {}", userId);
             throw new IllegalArgumentException("user not found with id: {}" + userId);
         }
-    }
-
-    @Override
-    public Resource loadAvatar(Long userId) {
-        try {
-            Optional<FileInfo> optFileInfo = fileInfoService.findByUserId(userId);
-            if (optFileInfo.isEmpty())
-                throw new IllegalArgumentException("There is no file related to this user: {}" + userId);
-
-            Path userFolder = getUserFolder(userId);
-            Path file = userFolder.resolve(optFileInfo.get().getName());
-            Resource resource = new UrlResource(file.toUri());
-
-            if (resource.exists() || resource.isReadable()) {
-                return resource;
-            } else {
-                throw new IllegalStateException("Could not read the file!");
-            }
-        } catch (MalformedURLException e) {
-            throw new IllegalStateException("Error due to a MalformedURLException: " + e.getMessage());
-        }
-    }
-
-    private Path getUserFolder(Long userId) {
-        return Paths.get("uploads/userId_" + userId);
     }
 
     @Override

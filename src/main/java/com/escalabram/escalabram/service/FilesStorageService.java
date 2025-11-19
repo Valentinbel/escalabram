@@ -8,9 +8,11 @@ import java.io.IOException;
 
 public interface FilesStorageService {
 
-    FileInfo saveAvatar(MultipartFile file, String userIdString);
+    Long getAvatarId(Long userId);
 
-    Resource loadAvatar(Long userId);
+    Resource loadAvatarResource(Long userId);
+
+    FileInfo saveAvatar(MultipartFile file, String userIdString);
 
     String getContentType(Resource avatar, Long userId) throws IOException;
 }
