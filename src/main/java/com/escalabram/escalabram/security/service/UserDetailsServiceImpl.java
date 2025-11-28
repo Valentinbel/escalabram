@@ -2,6 +2,7 @@ package com.escalabram.escalabram.security.service;
 
 import com.escalabram.escalabram.model.ClimberUser;
 import com.escalabram.escalabram.repository.ClimberUserRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -9,12 +10,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
+@RequiredArgsConstructor
 public class UserDetailsServiceImpl implements UserDetailsService {
     private final ClimberUserRepository climberUserRepository;
-
-    public UserDetailsServiceImpl(ClimberUserRepository climberUserRepository) {
-        this.climberUserRepository = climberUserRepository;
-    }
 
     @Override
     @Transactional

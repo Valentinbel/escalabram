@@ -3,6 +3,7 @@ package com.escalabram.escalabram.security;
 import com.escalabram.escalabram.security.jwt.AuthEntryPointJwt;
 import com.escalabram.escalabram.security.jwt.AuthTokenFilter;
 import com.escalabram.escalabram.security.service.UserDetailsServiceImpl;
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -26,20 +27,12 @@ import java.util.Arrays;
 @EnableWebSecurity //Pas necessaire (?)
 @EnableMethodSecurity
 @Configuration
+@RequiredArgsConstructor
 public class SpringSecurityConfig {
 
     //private final CustomUserDetailsService customUserDetailsService;
     private final UserDetailsServiceImpl userDetailsService;
     private final AuthEntryPointJwt unauthorizedHandler;
-
-    public SpringSecurityConfig(
-            //CustomUserDetailsService customUserDetailsService,
-                                UserDetailsServiceImpl userDetailsService,
-                                AuthEntryPointJwt unauthorizedHandler) {
-        //this.customUserDetailsService = customUserDetailsService;
-        this.userDetailsService = userDetailsService;
-        this.unauthorizedHandler = unauthorizedHandler;
-    }
 
     @Bean
     public AuthTokenFilter authenticationJwtTokenFilter() {
@@ -75,11 +68,11 @@ public class SpringSecurityConfig {
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth ->
                         auth.requestMatchers("/api/auth/**").permitAll()
-                        .requestMatchers("/api/climber-profiles/**").hasAnyRole("USER")
                         .requestMatchers("/api/climber-user/**").hasAnyRole("USER")
+                        .requestMatchers("/api/climber-profiles/**").hasAnyRole("USER")
+                        .requestMatchers("/api/avatar/**").hasAnyRole("USER")
                         .requestMatchers("/api/matches/**").hasAnyRole("USER")
                         .requestMatchers("/api/searches/**").hasAnyRole("USER")
-                        .requestMatchers("/api/test/**").hasAnyRole("USER") // TODO TEST à enlever
                         .anyRequest().authenticated()
                 );
 
@@ -96,9 +89,6 @@ public class SpringSecurityConfig {
 
         // IMPORTANT: Spécifier l'origine exacte au lieu du wildcard
         configuration.setAllowedOrigins(Arrays.asList("http://localhost:4200"));
-
-        // Ou si vous voulez être plus flexible en développement :
-        // configuration.setAllowedOriginPatterns(Arrays.asList("http://localhost:*"));
 
         // Méthodes HTTP autorisées
         configuration.setAllowedMethods(Arrays.asList(

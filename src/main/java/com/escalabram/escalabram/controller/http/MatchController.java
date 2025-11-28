@@ -4,6 +4,7 @@ import com.escalabram.escalabram.model.Match;
 import com.escalabram.escalabram.model.Search;
 import com.escalabram.escalabram.service.MatchService;
 import com.escalabram.escalabram.service.SearchService;
+import lombok.RequiredArgsConstructor;
 import org.slf4j.LoggerFactory;
 import org.slf4j.Logger;
 import org.springframework.http.HttpStatus;
@@ -17,19 +18,15 @@ import java.util.Optional;
 //@CrossOrigin(origins = {"http://localhost:4200"}, maxAge = 3600, allowCredentials="true")
 @RestController
 @RequestMapping("/api")
+@RequiredArgsConstructor
 public class MatchController {
     private static final Logger log = LoggerFactory.getLogger(MatchController.class);
     private final MatchService matchService;
     private final SearchService searchService;
 
-    public MatchController(MatchService matchService, SearchService searchService) {
-        this.matchService = matchService;
-        this.searchService = searchService;
-    }
-
     @GetMapping("/matches/search/{searchId}")
     public ResponseEntity<List<Match>> getMatchesBySearchId(@PathVariable Long searchId) {
-        log.debug("REST request to get list of matches, or create them if necessary, from searchId: {}", searchId);
+        log.info("REST request to get list of matches, or create them if necessary, from searchId: {}", searchId);
         try {
             List<Match> matches = new ArrayList<>();
             Optional<Search> optSearch = searchService.findById(searchId);

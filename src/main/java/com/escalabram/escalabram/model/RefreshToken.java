@@ -1,12 +1,16 @@
 package com.escalabram.escalabram.model;
 
 import jakarta.persistence.*;
+import lombok.*;
 
 import java.io.Serial;
 import java.io.Serializable;
 import java.time.Instant;
 
 @Entity
+@Getter
+@Setter
+@NoArgsConstructor
 @Table(name = "refreshtoken")
 public class RefreshToken implements Serializable {
 
@@ -26,39 +30,4 @@ public class RefreshToken implements Serializable {
 
     @Column(nullable = false)
     private Instant expiryDate;
-
-    public RefreshToken() {
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public ClimberUser getClimberUser() {
-        return climberUser;
-    }
-
-    public void setClimberUser(ClimberUser climberUser) {
-        this.climberUser = climberUser;
-    }
-
-    public String getToken() {
-        return token;
-    }
-
-    public void setToken(String token) {
-        this.token = token;
-    }
-
-    public Instant getExpiryDate() {
-        return expiryDate;
-    }
-
-    public void setExpiryDate(Instant expiryDate) {
-        this.expiryDate = expiryDate;
-    }
 }

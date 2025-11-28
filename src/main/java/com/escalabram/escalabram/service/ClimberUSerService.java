@@ -6,8 +6,6 @@ import java.util.Optional;
 
 public interface ClimberUSerService {
 
-    boolean existsById(Long id);
-
     boolean existsByUserName(String userName);
 
     boolean existsByEmail(String email);

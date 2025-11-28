@@ -4,19 +4,15 @@ import com.escalabram.escalabram.model.ClimberProfile;
 import com.escalabram.escalabram.service.dto.ClimberProfileDTO;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
-import org.mapstruct.Mappings;
 
 @Mapper(componentModel = "spring")
 public interface ClimberProfileMapper {
-    @Mappings({
-            @Mapping(target="climberUserId", source = "climberUser.id"),
-            //@Mapping(target="avatarId", source = "fileInfo.id")
-    })
+
+    @Mapping(source = "climberProfile.climberUser.id", target="climberUserId")
+    @Mapping(source = "climberProfile.climberUser.userName", target="userName")
     ClimberProfileDTO toClimberProfileDTO(ClimberProfile climberProfile);
- // TODO clean
-    @Mappings({
-            @Mapping(target="climberUser.id", source = "climberUserId"),
-            //@Mapping(target="fileInfo.id", source = "avatarId")
-    })
+
+    @Mapping(source = "dto.climberUserId", target="climberUser.id" )
+    @Mapping(source = "dto.userName", target="climberUser.userName")
     ClimberProfile toClimberProfile(ClimberProfileDTO dto);
 }

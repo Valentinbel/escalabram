@@ -5,27 +5,25 @@ import com.escalabram.escalabram.model.ClimberUser;
 import com.escalabram.escalabram.model.RefreshToken;
 import com.escalabram.escalabram.repository.RefreshTokenRepository;
 import com.escalabram.escalabram.service.ClimberUSerService;
-import jakarta.transaction.Transactional;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Instant;
 import java.util.Optional;
 import java.util.UUID;
 
 @Service
-public class RefreshTokenService { ///////////////////// Mettre une implémentation???????????????????????????????
+@RequiredArgsConstructor
+public class RefreshTokenService { //TODO Mettre une interface/implémentation?
 
     @Value("${pinya.app.jwtRefreshExpirationMs}")
     private Long refreshTokenDurationMs;
 
     private final RefreshTokenRepository refreshTokenRepository;
     private final ClimberUSerService climberUSerService;
-
-    public RefreshTokenService(RefreshTokenRepository refreshTokenRepository, ClimberUSerService climberUSerService) {
-        this.refreshTokenRepository = refreshTokenRepository;
-        this.climberUSerService = climberUSerService;
-    }
 
     public Optional<RefreshToken> findByToken(String token) {
         return refreshTokenRepository.findByToken(token);
@@ -56,7 +54,7 @@ public class RefreshTokenService { ///////////////////// Mettre une implémentat
         return token;
     }
 
-    @Transactional(Transactional.TxType.REQUIRES_NEW)
+    @Transactional(propagation = Propagation.REQUIRES_NEW)
     public int deleteByUserId(Long userId) {
         int numoflines = refreshTokenRepository.deleteByClimberUser(climberUSerService.findById(userId).orElseThrow());
         refreshTokenRepository.flush();

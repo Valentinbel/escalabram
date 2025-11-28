@@ -17,6 +17,7 @@ import com.escalabram.escalabram.service.AuthService;
 import com.escalabram.escalabram.service.ClimberUSerService;
 import com.escalabram.escalabram.service.UserRoleService;
 import com.escalabram.escalabram.security.jwt.JwtUtils;
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -34,6 +35,7 @@ import java.util.Set;
 
 @Service
 @Transactional
+@RequiredArgsConstructor
 public class AuthServiceImpl implements AuthService {
 
     private final PasswordEncoder encoder;
@@ -43,20 +45,14 @@ public class AuthServiceImpl implements AuthService {
     private final JwtUtils jwtUtils;
     private final RefreshTokenService refreshTokenService;
 
-    public AuthServiceImpl(PasswordEncoder encoder, UserRoleService userRoleService, ClimberUSerService climberUSerService,
-                           AuthenticationManager authenticationManager, JwtUtils jwtUtils, RefreshTokenService refreshTokenService) {
-        this.encoder = encoder;
-        this.userRoleService = userRoleService;
-        this.climberUSerService = climberUSerService;
-        this.authenticationManager = authenticationManager;
-        this.jwtUtils = jwtUtils;
-        this.refreshTokenService = refreshTokenService;
-    }
-
     @Override
     public ClimberUser createUser(SignupRequest signUpRequest) {
-        ClimberUser user = new ClimberUser(signUpRequest.getUserName(), signUpRequest.getEmail(),
-                encoder.encode(signUpRequest.getPassword()), LocalDateTime.now(), LocalDateTime.now());
+        ClimberUser user = ClimberUser.builder()
+                .userName(signUpRequest.getUserName())
+                .email(signUpRequest.getEmail())
+                .password(encoder.encode(signUpRequest.getPassword()))
+                .createdAt(LocalDateTime.now())
+                .build();
 
         Set<String> strRoles = signUpRequest.getRole();
         Set<Role> roles = new HashSet<>();

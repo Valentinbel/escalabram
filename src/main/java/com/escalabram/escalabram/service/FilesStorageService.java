@@ -4,10 +4,15 @@ import com.escalabram.escalabram.model.FileInfo;
 import org.springframework.core.io.Resource;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
+
 public interface FilesStorageService {
 
-    FileInfo save(MultipartFile file, Long userId);
+    Long getAvatarId(Long userId);
 
-    //TODO no usages
-    Resource load(String fileName, String profileId);
+    Resource loadAvatarResource(Long userId);
+
+    FileInfo saveAvatar(MultipartFile file, String userIdString);
+
+    String getContentType(Resource avatar, Long userId) throws IOException;
 }

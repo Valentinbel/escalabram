@@ -1,14 +1,21 @@
 package com.escalabram.escalabram.model;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import lombok.*;
 
 import java.io.Serial;
 import java.io.Serializable;
 
 @Entity
+@Getter
+@Setter
+@Builder(toBuilder = true)
+@NoArgsConstructor
+@AllArgsConstructor
 @Table(name="file_info",
-        uniqueConstraints = {
-                @UniqueConstraint(columnNames = { "name", "url" })})
+        uniqueConstraints = { @UniqueConstraint(columnNames = { "name", "url" })})
 public class FileInfo implements Serializable {
 
     @Serial
@@ -18,50 +25,16 @@ public class FileInfo implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "name")
+    @NotBlank
+    @Column(name = "name", nullable = false)
     private String name;
 
-    @Column(name = "url")
+    @NotBlank
+    @Column(name = "url", nullable = false)
     private String url;
 
-    public FileInfo() {
-    }
-
-    public FileInfo(String name, String url) {
-        this.name = name;
-        this.url = url;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getUrl() {
-        return url;
-    }
-
-    public void setUrl(String url) {
-        this.url = url;
-    }
-
-    @Override
-    public String toString() {
-        return "FileInfo{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", url='" + url + '\'' +
-                '}';
-    }
+    @NotNull
+    @OneToOne
+    @JoinColumn(name = "climber_user_id", referencedColumnName = "id", nullable = false)
+    private ClimberUser climberUser;
 }

@@ -34,19 +34,12 @@ class ClimberProfileControllerTest {
 
     @Autowired
     private MockMvc mockMvc;
-
     @Autowired
     private ObjectMapper objectMapper; // Utilisé pour sérialiser/désérialiser JSON
-
     @Autowired
     private ClimberProfileRepository climberProfileRepository;
-
-    @Autowired
-    private FileInfoRepository fileInfoRepository;
-
     @Autowired
     private ClimberUserRepository climberUserRepository;
-
     @Autowired
     private ClimberProfileMapper climberProfileMapper;
 
@@ -55,17 +48,25 @@ class ClimberProfileControllerTest {
 
     @BeforeEach
     void setupData() {
-        // fileInfo
-        FileInfo fileInfo = new FileInfo("myPicture", "./folder/123");
-        this.fileInfoRepository.saveAndFlush(fileInfo);
-
         // climberUser
-        ClimberUser climberUser = new ClimberUser("CrisSharma", "cricri@gmail.com", "password1234", LocalDateTime.now(), LocalDateTime.now());
+        ClimberUser climberUser = ClimberUser.builder()
+                .userName("CrisSharma")
+                .email("cricri@gmail.com")
+                .password("password1234")
+                .createdAt(LocalDateTime.now())
+                .build();
         this.climberUserRepository.saveAndFlush(climberUser);
         this.listUsers = climberUserRepository.findAll();
 
         //climberProfile
-        ClimberProfile climberProfile = new ClimberProfile(1L, fileInfo,1L, 2L, climberUser, true, "Salut salut");
+        ClimberProfile climberProfile = ClimberProfile.builder()
+                .id(1L)
+                .genderId(1L)
+                .languageId(2L)
+                .isNotified(true)
+                .climberUser(climberUser)
+                .climberProfileDescription("Salut salut")
+                .build();
         this.climberProfileRepository.saveAndFlush(climberProfile);
         this.listProfiles = climberProfileRepository.findAll();
     }

@@ -6,6 +6,7 @@ import com.escalabram.escalabram.model.TimeSlot;
 import com.escalabram.escalabram.repository.SearchRepository;
 import com.escalabram.escalabram.service.ClimbLevelService;
 import com.escalabram.escalabram.service.SearchService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -13,15 +14,11 @@ import java.util.*;
 
 @Service
 @Transactional
+@RequiredArgsConstructor
 public class SearchServiceImpl implements SearchService {
 
     private final SearchRepository searchRepository;
     private final ClimbLevelService climbLevelService;
-
-    public SearchServiceImpl(SearchRepository searchRepository, ClimbLevelService climbLevelService) {
-        this.searchRepository = searchRepository;
-        this.climbLevelService = climbLevelService;
-    }
 
     @Override
     public List<Search> findAll() {
@@ -45,8 +42,12 @@ public class SearchServiceImpl implements SearchService {
 
         Set<TimeSlot> timeslots = new HashSet<>();
         for (TimeSlot timeSlotIn : search.getTimeSlots()) {
-            TimeSlot timeSlot = new TimeSlot(timeSlotIn.getId(), timeSlotIn.getBeginTime(), timeSlotIn.getEndTime());
-            timeSlot.setSearch(search);
+            TimeSlot timeSlot = TimeSlot.builder()
+                    .id(timeSlotIn.getId())
+                    .beginTime(timeSlotIn.getBeginTime())
+                    .endTime(timeSlotIn.getEndTime())
+                    .search(search)
+                    .build();
             timeslots.add(timeSlot);
         }
         search.setTimeSlots(timeslots);

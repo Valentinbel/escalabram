@@ -9,6 +9,7 @@ import com.escalabram.escalabram.repository.SearchRepository;
 import com.escalabram.escalabram.service.MatchService;
 import com.escalabram.escalabram.service.dto.ISearchClimbLevelDTO;
 import com.escalabram.escalabram.service.dto.SearchMatchDTO;
+import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -19,17 +20,13 @@ import java.util.*;
 
 @Service
 @Transactional
+@RequiredArgsConstructor
 public class MatchServiceImpl implements MatchService {
     private static final Logger log = LoggerFactory.getLogger(MatchServiceImpl.class);
     Set<Long> matchedSearchIds = new HashSet<>();
 
     private final MatchRepository matchRepository;
     private final SearchRepository searchRepository;
-
-    public MatchServiceImpl(MatchRepository matchRepository, SearchRepository searchRepository) {
-        this.matchRepository = matchRepository;
-        this.searchRepository = searchRepository;
-    }
 
     @Override
     public List<Match> createMatchesIfFit(Search search) {

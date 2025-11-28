@@ -1,5 +1,6 @@
 package com.escalabram.escalabram.controller.http;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.User;
@@ -19,13 +20,10 @@ import java.util.Map;
 //@CrossOrigin(origins = {"http://localhost:4200"}, maxAge = 3600, allowCredentials="true")
 //@RestController
 //@RequestMapping("/api")
+//@RequiredArgsConstructor
 //public class LoginController {
     //private static final Logger log = LoggerFactory.getLogger(LoginController.class);
 //    private final OAuth2AuthorizedClientService authorizedClientService;
-//
-//    public LoginController(OAuth2AuthorizedClientService authorizedClientService) {
-//        this.authorizedClientService = authorizedClientService;
-//    }
 //
 //    @GetMapping("/user")
 //    public String getUser() {
