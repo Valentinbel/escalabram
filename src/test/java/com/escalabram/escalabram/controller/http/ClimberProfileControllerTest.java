@@ -60,7 +60,6 @@ class ClimberProfileControllerTest {
 
         //climberProfile
         ClimberProfile climberProfile = ClimberProfile.builder()
-                .id(1L)
                 .genderId(1L)
                 .languageId(2L)
                 .isNotified(true)

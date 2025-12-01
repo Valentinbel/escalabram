@@ -32,36 +32,33 @@ class ClimberProfileRepositoryTest {
 
     @BeforeEach
     void setup() {
-        Role roleUser = Role.builder()
+        Role userRole = Role.builder()
                 .roleName(ROLE_USER).build();
-        entityManager.persist(roleUser);
+        entityManager.persist(userRole);
         Set<Role> roleSet = new HashSet<>();
-        roleSet.add(roleUser);
+        roleSet.add(userRole);
 
-        ClimberUser relatedUser = ClimberUser.builder()
+        ClimberUser user = ClimberUser.builder()
                 .userName("CrisSharma")
                 .email("cricri@gmail.com")
                 .password("password1234")
+                .roles(roleSet)
                 .createdAt(LocalDateTime.now())
                 .build();
-        relatedUser.setId(1L);
-        relatedUser.setRoles(roleSet);
-        entityManager.merge(relatedUser);
+        entityManager.merge(user);
 
         FileInfo fileInfo = FileInfo.builder()
-                .id(1L)
                 .name("selfie")
                 .url("./uploads/uderId")
-                .climberUser(relatedUser)
+                .climberUser(user)
                 .build();
         entityManager.merge(fileInfo);
 
         profile =ClimberProfile.builder()
-                .id(1L)
                 .genderId(1L)
                 .languageId(2L)
                 .isNotified(true)
-                .climberUser(relatedUser)
+                .climberUser(user)
                 .climberProfileDescription("Blah blah, my life...")
                 .build();
         entityManager.merge(profile);
@@ -69,7 +66,7 @@ class ClimberProfileRepositoryTest {
 
     @Test
     void findByClimberUserId_Id_thenSuccess() {
-        Optional<ClimberProfile> optResult = climberProfileRepository.findByClimberUserId(1L);
+        Optional<ClimberProfile> optResult = climberProfileRepository.findByClimberUserId(profile.getClimberUser().getId());
 
         assertAll(
                 () -> assertEquals(profile.getId(), optResult.get().getId()),

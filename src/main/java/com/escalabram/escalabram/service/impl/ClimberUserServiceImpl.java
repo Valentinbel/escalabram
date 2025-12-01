@@ -4,6 +4,7 @@ import com.escalabram.escalabram.model.ClimberUser;
 import com.escalabram.escalabram.repository.ClimberUserRepository;
 import com.escalabram.escalabram.service.ClimberUSerService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -34,7 +35,11 @@ public class ClimberUserServiceImpl implements ClimberUSerService {
 
     @Override
     public ClimberUser save(ClimberUser user) {
-        return climberUserRepository.save(user);
+        try {
+            return climberUserRepository.save(user);
+        } catch (DataIntegrityViolationException e) {
+            throw new IllegalStateException("Error thrown trying to save user: {}" +  user, e);
+        }
     }
 
     @Override

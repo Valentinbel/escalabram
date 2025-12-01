@@ -30,7 +30,6 @@ public class AuthController {
     @PostMapping("/register")
     public ResponseEntity<MessageResponse> registerUser(@Valid @RequestBody SignupRequest signUpRequest) {
         log.info("REST request to register a user: {}", signUpRequest.getEmail());
-        // TODO mettre cette logique dans un Service.
         if (climberUSerService.existsByUserName(signUpRequest.getUserName()))
             return ResponseEntity.badRequest().body(new MessageResponse("Error: UserName is already taken!: " + signUpRequest.getUserName()));
         if (climberUSerService.existsByEmail(signUpRequest.getEmail()))
