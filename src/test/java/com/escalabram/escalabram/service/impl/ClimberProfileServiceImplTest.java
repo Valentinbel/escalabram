@@ -32,13 +32,13 @@ class ClimberProfileServiceImplTest {
     @Mock
     private ClimberProfileMapper climberProfileMapper;
 
-    private ClimberUser climberUser;
-    private ClimberProfile climberProfile;
-    private ClimberProfileDTO climberProfileDTO;
+    private ClimberUser user;
+    private ClimberProfile profile;
+    private ClimberProfileDTO profileDTO;
 
     @BeforeEach
     void setupData() {
-        climberUser = ClimberUser.builder()
+        user = ClimberUser.builder()
                 .id(1984L)
                 .userName("AdamOndra")
                 .email("adam@ondra.com")
@@ -46,132 +46,132 @@ class ClimberProfileServiceImplTest {
                 .createdAt(LocalDateTime.now())
                 .build();
 
-        climberProfile =  ClimberProfile.builder()
+        profile = ClimberProfile.builder()
                 .genderId(1L)
                 .languageId(2L)
-                .climberUser(climberUser)
+                .climberUser(user)
                 .isNotified(true)
                 .climberProfileDescription("Salut les boys, c'est Adam")
                 .build();
 
-        climberProfileDTO = ClimberProfileDTO.builder()
+        profileDTO = ClimberProfileDTO.builder()
                 .userName("Just Adam")
                 .genderId(1L)
                 .languageId(2L)
                 .climberProfileDescription("Salut les boys, c'est Adam")
-                .climberUserId(climberProfile.getClimberUser().getId())
+                .climberUserId(profile.getClimberUser().getId())
                 .build();
     }
 
     @Test
     void findByClimberUserId_UserId_ThenFound() {
-        when(climberProfileRepository.findByClimberUserId(climberUser.getId())).thenReturn(Optional.of(climberProfile));
-        when(climberProfileMapper.toClimberProfileDTO(climberProfile)).thenReturn(climberProfileDTO);
+        when(climberProfileRepository.findByClimberUserId(user.getId())).thenReturn(Optional.of(profile));
+        when(climberProfileMapper.toClimberProfileDTO(profile)).thenReturn(profileDTO);
 
-        Optional<ClimberProfileDTO> optionalClimberProfileDTO = climberProfileService.findByClimberUserId(climberUser.getId());
+        Optional<ClimberProfileDTO> optionalClimberProfileDTO = climberProfileService.findByClimberUserId(user.getId());
 
-        verify(climberProfileRepository).findByClimberUserId(climberUser.getId());
-        verify(climberProfileMapper).toClimberProfileDTO(climberProfile);
+        verify(climberProfileRepository).findByClimberUserId(user.getId());
+        verify(climberProfileMapper).toClimberProfileDTO(profile);
         assertAll(
                 () -> assertTrue(optionalClimberProfileDTO.isPresent()),
-                () -> assertEquals(optionalClimberProfileDTO, Optional.of(climberProfileDTO))
+                () -> assertEquals(optionalClimberProfileDTO, Optional.of(profileDTO))
         );
     }
 
     @Test
     void findByClimberUserId_WrongUserId_ThenEmpty() {
-        climberProfileDTO.setClimberUserId(666L);
-        when(climberProfileRepository.findByClimberUserId(climberUser.getId())).thenReturn(Optional.empty());
+        profileDTO.setClimberUserId(666L);
+        when(climberProfileRepository.findByClimberUserId(user.getId())).thenReturn(Optional.empty());
 
-        Optional<ClimberProfileDTO> optionalClimberProfileDTO = climberProfileService.findByClimberUserId(climberUser.getId());
+        Optional<ClimberProfileDTO> optionalClimberProfileDTO = climberProfileService.findByClimberUserId(user.getId());
 
-        verify(climberProfileRepository).findByClimberUserId(climberUser.getId());
-        verify(climberProfileMapper, never()).toClimberProfileDTO(climberProfile);
+        verify(climberProfileRepository).findByClimberUserId(user.getId());
+        verify(climberProfileMapper, never()).toClimberProfileDTO(profile);
         assertTrue(optionalClimberProfileDTO.isEmpty());
     }
 
     @Test
     void existsById_climberProfileId_true() {
-        when(climberProfileRepository.existsById(climberProfile.getId())).thenReturn(true);
+        when(climberProfileRepository.existsById(profile.getId())).thenReturn(true);
 
-        boolean isTrue = climberProfileService.existsById(climberProfile.getId());
+        boolean isTrue = climberProfileService.existsById(profile.getId());
 
-        verify(climberProfileRepository).existsById(climberProfile.getId());
+        verify(climberProfileRepository).existsById(profile.getId());
         assertTrue(isTrue);
     }
 
     @Test
     void existsById_wrongClimberProfileId_false() {
-        climberProfileDTO.setClimberUserId(666L);
-        when(climberProfileRepository.existsById(climberProfile.getId())).thenReturn(false);
+        profileDTO.setClimberUserId(666L);
+        when(climberProfileRepository.existsById(profile.getId())).thenReturn(false);
 
-        boolean isFalse = climberProfileService.existsById(climberProfile.getId());
+        boolean isFalse = climberProfileService.existsById(profile.getId());
 
-        verify(climberProfileRepository).existsById(climberProfile.getId());
+        verify(climberProfileRepository).existsById(profile.getId());
         assertFalse(isFalse);
     }
 
     @Test
     void saveClimberProfile_insert() {
-        climberProfileDTO.setClimberUserId(null);
-        when(climberProfileMapper.toClimberProfile(climberProfileDTO)).thenReturn(climberProfile);
-        when(climberProfileRepository.save(climberProfile)).thenReturn(climberProfile);
-        when(climberProfileMapper.toClimberProfileDTO(climberProfile)).thenReturn(climberProfileDTO);
+        profileDTO.setClimberUserId(null);
+        when(climberProfileMapper.toClimberProfile(profileDTO)).thenReturn(profile);
+        when(climberProfileRepository.save(profile)).thenReturn(profile);
+        when(climberProfileMapper.toClimberProfileDTO(profile)).thenReturn(profileDTO);
 
-        ClimberProfileDTO insertedClimberProfileDTO = climberProfileService.saveClimberProfile(climberProfileDTO);
+        ClimberProfileDTO insertedClimberProfileDTO = climberProfileService.saveClimberProfile(profileDTO);
 
         verify(climberUSerService, never()).updateUserNameById(anyLong(), anyString());
-        verify(climberProfileMapper).toClimberProfile(climberProfileDTO);
-        verify(climberProfileRepository).save(climberProfile);
-        verify(climberProfileMapper).toClimberProfileDTO(climberProfile);
-        assertEquals(insertedClimberProfileDTO, climberProfileDTO);
+        verify(climberProfileMapper).toClimberProfile(profileDTO);
+        verify(climberProfileRepository).save(profile);
+        verify(climberProfileMapper).toClimberProfileDTO(profile);
+        assertEquals(insertedClimberProfileDTO, profileDTO);
     }
 
     @Test
     void saveClimberProfile_update() {
-        when(climberUSerService.updateUserNameById(climberProfileDTO.getClimberUserId(), climberProfileDTO.getUserName())).thenReturn(1);
-        when(climberProfileMapper.toClimberProfile(climberProfileDTO)).thenReturn(climberProfile);
-        when(climberProfileRepository.save(climberProfile)).thenReturn(climberProfile);
-        when(climberProfileMapper.toClimberProfileDTO(climberProfile)).thenReturn(climberProfileDTO);
+        when(climberUSerService.updateUserNameById(profileDTO.getClimberUserId(), profileDTO.getUserName())).thenReturn(1);
+        when(climberProfileMapper.toClimberProfile(profileDTO)).thenReturn(profile);
+        when(climberProfileRepository.save(profile)).thenReturn(profile);
+        when(climberProfileMapper.toClimberProfileDTO(profile)).thenReturn(profileDTO);
 
-        ClimberProfileDTO insertedClimberProfileDTO = climberProfileService.saveClimberProfile(climberProfileDTO);
+        ClimberProfileDTO insertedClimberProfileDTO = climberProfileService.saveClimberProfile(profileDTO);
 
-        verify(climberUSerService).updateUserNameById(climberProfileDTO.getClimberUserId(), climberProfileDTO.getUserName());
-        verify(climberProfileMapper).toClimberProfile(climberProfileDTO);
-        verify(climberProfileRepository).save(climberProfile);
-        verify(climberProfileMapper).toClimberProfileDTO(climberProfile);
-        assertEquals(insertedClimberProfileDTO, climberProfileDTO);
+        verify(climberUSerService).updateUserNameById(profileDTO.getClimberUserId(), profileDTO.getUserName());
+        verify(climberProfileMapper).toClimberProfile(profileDTO);
+        verify(climberProfileRepository).save(profile);
+        verify(climberProfileMapper).toClimberProfileDTO(profile);
+        assertEquals(insertedClimberProfileDTO, profileDTO);
     }
 
     @Test
     void saveClimberProfile_CatchOnUpdateUserName_Catch() {
         when(climberUSerService.updateUserNameById(anyLong(), anyString()))
-                .thenThrow(new IllegalStateException("Error thrown trying to update username for userId: " + climberProfileDTO.getClimberUserId()));
+                .thenThrow(new IllegalStateException("Error thrown trying to update username for userId: " + profileDTO.getClimberUserId()));
 
         IllegalStateException exception = assertThrows(IllegalStateException.class,() ->
-                climberProfileService.saveClimberProfile(climberProfileDTO));
+                climberProfileService.saveClimberProfile(profileDTO));
 
-        verify(climberUSerService).updateUserNameById(climberProfileDTO.getClimberUserId(), climberProfileDTO.getUserName());
-        verify(climberProfileMapper, never()).toClimberProfile(climberProfileDTO);
-        verify(climberProfileRepository, never()).save(climberProfile);
-        verify(climberProfileMapper, never()).toClimberProfileDTO(climberProfile);
-        assertEquals("Error thrown trying to update username for userId: " + climberProfileDTO.getClimberUserId(), exception.getMessage());
+        verify(climberUSerService).updateUserNameById(profileDTO.getClimberUserId(), profileDTO.getUserName());
+        verify(climberProfileMapper, never()).toClimberProfile(profileDTO);
+        verify(climberProfileRepository, never()).save(profile);
+        verify(climberProfileMapper, never()).toClimberProfileDTO(profile);
+        assertEquals("Error thrown trying to update username for userId: " + profileDTO.getClimberUserId(), exception.getMessage());
     }
 
     @Test
     void saveClimberProfile_CatchOnSaveProfile_Catch() {
-        when(climberUSerService.updateUserNameById(climberProfileDTO.getClimberUserId(), climberProfileDTO.getUserName())).thenReturn(1);
-        when(climberProfileMapper.toClimberProfile(climberProfileDTO)).thenReturn(climberProfile);
-        when(climberProfileRepository.save(climberProfile))
-                .thenThrow(new IllegalStateException("Error thrown trying to save profile with userId: " + climberProfileDTO.getClimberUserId()));
+        when(climberUSerService.updateUserNameById(profileDTO.getClimberUserId(), profileDTO.getUserName())).thenReturn(1);
+        when(climberProfileMapper.toClimberProfile(profileDTO)).thenReturn(profile);
+        when(climberProfileRepository.save(profile))
+                .thenThrow(new IllegalStateException("Error thrown trying to save profile with userId: " + profileDTO.getClimberUserId()));
 
         IllegalStateException exception = assertThrows(IllegalStateException.class,() ->
-                climberProfileService.saveClimberProfile(climberProfileDTO));
+                climberProfileService.saveClimberProfile(profileDTO));
 
-        verify(climberUSerService).updateUserNameById(climberProfileDTO.getClimberUserId(), climberProfileDTO.getUserName());
-        verify(climberProfileMapper).toClimberProfile(climberProfileDTO);
-        verify(climberProfileRepository).save(climberProfile);
-        verify(climberProfileMapper, never()).toClimberProfileDTO(climberProfile);
-        assertEquals("Error thrown trying to save profile with userId: " + climberProfileDTO.getClimberUserId(), exception.getMessage());
+        verify(climberUSerService).updateUserNameById(profileDTO.getClimberUserId(), profileDTO.getUserName());
+        verify(climberProfileMapper).toClimberProfile(profileDTO);
+        verify(climberProfileRepository).save(profile);
+        verify(climberProfileMapper, never()).toClimberProfileDTO(profile);
+        assertEquals("Error thrown trying to save profile with userId: " + profileDTO.getClimberUserId(), exception.getMessage());
     }
 }

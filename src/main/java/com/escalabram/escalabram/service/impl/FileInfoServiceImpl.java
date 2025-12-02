@@ -4,6 +4,7 @@ import com.escalabram.escalabram.model.FileInfo;
 import com.escalabram.escalabram.repository.FileInfoRepository;
 import com.escalabram.escalabram.service.FileInfoService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -23,7 +24,11 @@ public class FileInfoServiceImpl implements FileInfoService {
 
     @Override
     public FileInfo save(FileInfo fileInfo) {
-        return fileInfoRepository.save(fileInfo);
+        try {
+            return fileInfoRepository.save(fileInfo);
+        } catch (DataIntegrityViolationException e) {
+            throw new IllegalStateException("Error thrown trying to save fileInfo: {}" +  fileInfo, e);
+        }
     }
 
     @Override

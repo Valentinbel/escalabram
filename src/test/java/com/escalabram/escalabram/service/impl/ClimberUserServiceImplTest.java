@@ -26,11 +26,11 @@ class ClimberUserServiceImplTest {
     @Mock
     private ClimberUserRepository climberUserRepository;
 
-    private ClimberUser climberUser;
+    private ClimberUser user;
 
     @BeforeEach
     void setupData() {
-        climberUser = ClimberUser.builder()
+        user = ClimberUser.builder()
                 .id(1984L)
                 .userName("AdamOndra")
                 .email("adam@ondra.com")
@@ -41,33 +41,33 @@ class ClimberUserServiceImplTest {
 
     @Test
     void existsByUserName_Exists_True() {
-        when(climberUserRepository.existsByUserName(climberUser.getUserName())).thenReturn(true);
-        boolean result = climberUserService.existsByUserName(climberUser.getUserName());
-        verify(climberUserRepository).existsByUserName(climberUser.getUserName());
+        when(climberUserRepository.existsByUserName(user.getUserName())).thenReturn(true);
+        boolean result = climberUserService.existsByUserName(user.getUserName());
+        verify(climberUserRepository).existsByUserName(user.getUserName());
         assertTrue(result);
     }
 
     @Test
     void existsByUserName_NoExists_False() {
-        when(climberUserRepository.existsByUserName(climberUser.getUserName())).thenReturn(false);
-        boolean result = climberUserService.existsByUserName(climberUser.getUserName());
-        verify(climberUserRepository).existsByUserName(climberUser.getUserName());
+        when(climberUserRepository.existsByUserName(user.getUserName())).thenReturn(false);
+        boolean result = climberUserService.existsByUserName(user.getUserName());
+        verify(climberUserRepository).existsByUserName(user.getUserName());
         assertFalse(result);
     }
 
     @Test
     void existsByEmail_Exists_True() {
-        when(climberUserRepository.existsByEmail(climberUser.getEmail())).thenReturn(true);
-        boolean result = climberUserService.existsByEmail(climberUser.getEmail());
-        verify(climberUserRepository).existsByEmail(climberUser.getEmail());
+        when(climberUserRepository.existsByEmail(user.getEmail())).thenReturn(true);
+        boolean result = climberUserService.existsByEmail(user.getEmail());
+        verify(climberUserRepository).existsByEmail(user.getEmail());
         assertTrue(result);
     }
 
     @Test
     void existsByEmail_Exists_False() {
-        when(climberUserRepository.existsByEmail(climberUser.getEmail())).thenReturn(false);
-        boolean result = climberUserService.existsByEmail(climberUser.getEmail());
-        verify(climberUserRepository).existsByEmail(climberUser.getEmail());
+        when(climberUserRepository.existsByEmail(user.getEmail())).thenReturn(false);
+        boolean result = climberUserService.existsByEmail(user.getEmail());
+        verify(climberUserRepository).existsByEmail(user.getEmail());
         assertFalse(result);
     }
 
@@ -82,25 +82,25 @@ class ClimberUserServiceImplTest {
 
     @Test
     void findById_Id_UserOk() {
-        when(climberUserRepository.findById(climberUser.getId())).thenReturn(Optional.of(climberUser));
-        Optional<ClimberUser> optResult = climberUserService.findById(climberUser.getId());
+        when(climberUserRepository.findById(user.getId())).thenReturn(Optional.of(user));
+        Optional<ClimberUser> optResult = climberUserService.findById(user.getId());
         verify(climberUserRepository).findById(anyLong());
         assertAll(
                 () -> assertTrue(optResult.isPresent()),
-                () -> assertEquals(climberUser, optResult.get())
+                () -> assertEquals(user, optResult.get())
         );
     }
 
     @Test
     void save_User_SaveOk() {
-        when(climberUserRepository.save(any(ClimberUser.class))).thenReturn(climberUser);
+        when(climberUserRepository.save(any(ClimberUser.class))).thenReturn(user);
 
-        ClimberUser result = climberUserService.save(climberUser);
+        ClimberUser result = climberUserService.save(user);
 
         verify(climberUserRepository).save(any(ClimberUser.class));
         assertAll(
                 () -> assertNotNull(result),
-                () -> assertEquals(climberUser, result)
+                () -> assertEquals(user, result)
         );
     }
 
@@ -110,23 +110,23 @@ class ClimberUserServiceImplTest {
                 .thenThrow(new DataIntegrityViolationException("We have some trouble, dude"));
 
         IllegalStateException exception = assertThrows(IllegalStateException.class,() ->
-                climberUserService.save(climberUser));
+                climberUserService.save(user));
 
         verify(climberUserRepository).save(any(ClimberUser.class));
         assertAll(
                 () -> assertNotNull(exception),
-                () -> assertEquals("Error thrown trying to save user: {}" +  climberUser, exception.getMessage())
+                () -> assertEquals("Error thrown trying to save user: {}" +  user, exception.getMessage())
         );
     }
 
     @Test
     void updateUserNameById_userIdUsername_Success() {
         String newName = "UnDrame Audrap";
-        when(climberUserRepository.existsById(climberUser.getId())).thenReturn(true);
+        when(climberUserRepository.existsById(user.getId())).thenReturn(true);
         when(climberUserRepository.updateUserNameById(anyLong(), anyString(), any())).thenReturn(1);
-        int result = climberUserService.updateUserNameById(climberUser.getId(), newName);
+        int result = climberUserService.updateUserNameById(user.getId(), newName);
 
-        verify(climberUserRepository).existsById(climberUser.getId());
+        verify(climberUserRepository).existsById(user.getId());
         verify(climberUserRepository).updateUserNameById(anyLong(), anyString(), any());
         assertEquals( 1, result);
     }
@@ -134,16 +134,16 @@ class ClimberUserServiceImplTest {
     @Test
     void updateUserNameById_UserNoExists_Catch() {
         String newName = "UneDame Honda";
-        when(climberUserRepository.existsById(climberUser.getId())).thenReturn(false);
+        when(climberUserRepository.existsById(user.getId())).thenReturn(false);
 
         IllegalStateException exception = assertThrows(IllegalStateException.class,() ->
-                climberUserService.updateUserNameById(climberUser.getId(), newName));
+                climberUserService.updateUserNameById(user.getId(), newName));
 
-        verify(climberUserRepository).existsById(climberUser.getId());
+        verify(climberUserRepository).existsById(user.getId());
         verify(climberUserRepository, never()).updateUserNameById(anyLong(), anyString(), any());
         assertAll(
                 () -> assertNotNull(exception),
-                () -> assertEquals("Error thrown trying to update username for userId: " + climberUser.getId(), exception.getMessage())
+                () -> assertEquals("Error thrown trying to update username for userId: " + user.getId(), exception.getMessage())
         );
     }
 }
