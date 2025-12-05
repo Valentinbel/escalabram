@@ -38,7 +38,7 @@ public class FilesStorageServiceImpl implements FilesStorageService {
 
             Path userFolder = getUserFolder(userId);
             Path file = userFolder.resolve(optFileInfo.get().getName());
-            Resource resource = new UrlResource(file.toUri());
+            Resource resource = createResource(file);
 
             if (resource.exists() || resource.isReadable()) {
                 return optFileInfo.get().getId();
@@ -59,7 +59,7 @@ public class FilesStorageServiceImpl implements FilesStorageService {
 
             Path userFolder = getUserFolder(userId);
             Path file = userFolder.resolve(optFileInfo.get().getName());
-            Resource resource = new UrlResource(file.toUri());
+            Resource resource = createResource(file);
 
             if (resource.exists() || resource.isReadable()) {
                 return resource;
@@ -75,11 +75,14 @@ public class FilesStorageServiceImpl implements FilesStorageService {
         return Paths.get("uploads/userId_" + userId);
     }
 
+    protected Resource createResource(Path file) throws MalformedURLException {
+        return new UrlResource(file.toUri());
+    }
+
     @Override
     public FileInfo saveAvatar(MultipartFile file, String userIdString) {
         try {
             Long userId= Long.parseLong(userIdString);
-            // TODO: Il faut réduire la taille de l'image aussi. En front ou en back ??
             //delete Folder & save in Folder
             Path userFolder = getUserFolder(userId);
             FileUtils.deleteDirectory(userFolder.toFile());
