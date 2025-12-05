@@ -14,5 +14,5 @@ public interface FilesStorageService {
 
     FileInfo saveAvatar(MultipartFile file, String userIdString);
 
-    String getContentType(Resource avatar, Long userId) throws IOException;
+    String getContentType(Resource avatar) throws IOException;
 }

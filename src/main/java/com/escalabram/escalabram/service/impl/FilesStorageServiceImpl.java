@@ -130,7 +130,7 @@ public class FilesStorageServiceImpl implements FilesStorageService {
     }
 
     @Override
-    public String getContentType(Resource avatar, Long userId) throws IOException {
+    public String getContentType(Resource avatar) throws IOException {
         Path imagePath = Paths.get(avatar.getURI());
 
         // Déterminer le Content-Type de manière robuste
