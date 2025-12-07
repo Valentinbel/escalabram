@@ -19,7 +19,7 @@ public class FileInfoServiceImpl implements FileInfoService {
 
     @Override
     public Optional<FileInfo> findByUserId(Long userId) {
-        return fileInfoRepository.findByclimberUserId(userId);
+        return fileInfoRepository.findByUserId(userId);
     }
 
     @Override

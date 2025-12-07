@@ -2,6 +2,7 @@ package com.escalabram.escalabram.service.impl;
 
 import com.escalabram.escalabram.exception.TokenRefreshException;
 import com.escalabram.escalabram.model.RefreshToken;
+import com.escalabram.escalabram.model.User;
 import com.escalabram.escalabram.security.payload.request.TokenRefreshRequest;
 import com.escalabram.escalabram.security.payload.response.MessageResponse;
 import com.escalabram.escalabram.security.payload.response.TokenRefreshResponse;
@@ -10,11 +11,10 @@ import com.escalabram.escalabram.security.service.UserDetailsImpl;
 import com.escalabram.escalabram.security.payload.request.LoginRequest;
 import com.escalabram.escalabram.security.payload.request.SignupRequest;
 import com.escalabram.escalabram.security.payload.response.JwtResponse;
-import com.escalabram.escalabram.model.ClimberUser;
 import com.escalabram.escalabram.model.Role;
 import com.escalabram.escalabram.model.enumeration.EnumRole;
 import com.escalabram.escalabram.service.AuthService;
-import com.escalabram.escalabram.service.ClimberUSerService;
+import com.escalabram.escalabram.service.UserService;
 import com.escalabram.escalabram.service.UserRoleService;
 import com.escalabram.escalabram.security.jwt.JwtUtils;
 import lombok.RequiredArgsConstructor;
@@ -40,14 +40,14 @@ public class AuthServiceImpl implements AuthService {
 
     private final PasswordEncoder encoder;
     private final UserRoleService userRoleService;
-    private final ClimberUSerService climberUSerService;
+    private final UserService USerService;
     private final AuthenticationManager authenticationManager;
     private final JwtUtils jwtUtils;
     private final RefreshTokenService refreshTokenService;
 
     @Override
-    public ClimberUser createUser(SignupRequest signUpRequest) {
-        ClimberUser user = ClimberUser.builder()
+    public User createUser(SignupRequest signUpRequest) {
+        User user = User.builder()
                 .userName(signUpRequest.getUserName())
                 .email(signUpRequest.getEmail())
                 .password(encoder.encode(signUpRequest.getPassword()))
@@ -76,7 +76,7 @@ public class AuthServiceImpl implements AuthService {
             });
         }
         user.setRoles(roles);
-        return climberUSerService.save(user);
+        return USerService.save(user);
     }
 
     @Override
@@ -96,7 +96,7 @@ public class AuthServiceImpl implements AuthService {
 
         Long userId = userDetails.getId();
 
-        Optional<RefreshToken> existingUserToken =  refreshTokenService.findByClimberUserId(userId);
+        Optional<RefreshToken> existingUserToken =  refreshTokenService.findByUserId(userId);
         if (existingUserToken.isPresent() // Token still active, we return the existing one
                 && existingUserToken.orElseThrow().getExpiryDate().isAfter(Instant.now())) {
             return new JwtResponse(jwt, existingUserToken.orElseThrow().getToken(), userDetails.getId(),
@@ -115,9 +115,9 @@ public class AuthServiceImpl implements AuthService {
 
         return refreshTokenService.findByToken(requestRefreshToken)
                 .map(refreshTokenService::verifyExpiration)
-                .map(RefreshToken::getClimberUser)
-                .map(climberUSer -> {
-                    String token = jwtUtils.generateTokenFromEmail(climberUSer.getUserName());
+                .map(RefreshToken::getUser)
+                .map(user -> {
+                    String token = jwtUtils.generateTokenFromEmail(user.getUserName());
                     return new TokenRefreshResponse(token, requestRefreshToken);
                 })
                 .orElseThrow(() -> new TokenRefreshException(requestRefreshToken,"Refresh token is not in database!"));
@@ -125,8 +125,8 @@ public class AuthServiceImpl implements AuthService {
 
     @Override
     public MessageResponse logoutUser(Long userId) {
-        ClimberUser climberUser = climberUSerService.findById(userId).orElseThrow();
-        refreshTokenService.deleteByUserId(climberUser.getId());
+        User user = USerService.findById(userId).orElseThrow();
+        refreshTokenService.deleteByUserId(user.getId());
         return new MessageResponse("Log out successful!");
     }
 }

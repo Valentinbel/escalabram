@@ -2,7 +2,7 @@ package com.escalabram.escalabram.controller.http;
 
 import com.escalabram.escalabram.exception.BadRequestAlertException;
 import com.escalabram.escalabram.model.Search;
-import com.escalabram.escalabram.service.ClimberProfileService;
+import com.escalabram.escalabram.service.ProfileService;
 import com.escalabram.escalabram.service.SearchService;
 import com.escalabram.escalabram.utils.ResponseUtil;
 import jakarta.validation.Valid;
@@ -25,7 +25,7 @@ import java.util.Set;
 public class SearchController {
     private static final Logger log = LoggerFactory.getLogger(SearchController.class);
     private final SearchService searchService;
-    private final ClimberProfileService climberProfileService;
+    private final ProfileService profileService;
 
     @GetMapping("/searches")
     public ResponseEntity<List<Search>> getAllSearches(){
@@ -39,15 +39,15 @@ public class SearchController {
         }
     }
 
-    @GetMapping("/searches/climber-profiles/{id}")
-    public ResponseEntity<Set<Search>> getSearchByClimberProfileId(@PathVariable("id") Long id ){
-        log.info("REST request to get list of Search by climberProfileId: {}", id);
+    @GetMapping("/searches/profiles/{id}")
+    public ResponseEntity<Set<Search>> getSearchByProfileId(@PathVariable("id") Long id ){
+        log.info("REST request to get list of Search by ProfileId: {}", id);
         try {
-            Optional<Set<Search>> searches= searchService.findByClimberProfileId(id);
+            Optional<Set<Search>> searches= searchService.findByProfileId(id);
             log.debug("SEARCHES: {}", searches);
             return ResponseUtil.wrapOrNotFound(searches);
         } catch (Exception e) {
-            log.error("An error was encountered while retrieving data in getSearchByClimberProfileId",e);
+            log.error("An error was encountered while retrieving data in getSearchByProfileId",e);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
@@ -59,8 +59,8 @@ public class SearchController {
             if (search.getId() != null)
                 throw new BadRequestAlertException("A new search cannot already have an ID");
 
-            if(!climberProfileService.existsById(search.getClimberProfileId()))
-                throw new BadRequestAlertException("There is no ClimberProfile matching with this search");
+            if(!profileService.existsById(search.getProfileId()))
+                throw new BadRequestAlertException("There is no Profile matching with this search");
 
             // TODO Remplacer SEARCH par un DTO
             Search createdSearch = searchService.createSearch(search);

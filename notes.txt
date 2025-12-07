@@ -5,7 +5,7 @@ On ne veut pas que les autres changent leur pseudo. Donc je ne veux pas pouvoir 
 ==> ACTION en BACK:
     On Supprime le userName du Profile
         Supprimer de l'entity
-        Modifier dans le ClimberProfileMapper voir dans TIG comment on fait plusieurs parametres de mapper
+        Modifier dans le ProfileMapper voir dans TIG comment on fait plusieurs parametres de mapper
 
 ==> Action en FRONT:
     linker en Front avec un update du userName du User
@@ -15,9 +15,9 @@ On ne veut pas que les autres changent leur pseudo. Donc je ne veux pas pouvoir 
     Dans les Controllers si on ne respecrte pas les @Size...
 
 ==> Revalider:
-    On a : @PostMapping("/climber-profiles") ==> Pluriel
+    On a : @PostMapping("/profiles") ==> Pluriel
 
-    et: @PutMapping("/climber-user/{userId}/{userName}") ==> Singulier
+    et: @PutMapping("/user/{userId}/{userName}") ==> Singulier
 
     // FILE UPLOAD:
     https://www.bezkoder.com/spring-boot-file-upload/

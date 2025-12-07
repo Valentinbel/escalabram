@@ -1,7 +1,7 @@
 //package com.escalabram.escalabram.configuration;
 //
-//import com.escalabram.escalabram.model.ClimberUser;
-//import com.escalabram.escalabram.repository.ClimberUserRepository;
+//import com.escalabram.escalabram.model.User;
+//import com.escalabram.escalabram.repository.UserRepository;
 //import org.slf4j.Logger;
 //import org.slf4j.LoggerFactory;
 //import org.springframework.security.authentication.InternalAuthenticationServiceException;
@@ -20,10 +20,10 @@
 //public class CustomUserDetailsService implements UserDetailsService {
 //
 //    private static final Logger log = LoggerFactory.getLogger(CustomUserDetailsService.class);
-//    private final ClimberUserRepository climberUserRepository;
+//    private final UserRepository userRepository;
 //
-//    public CustomUserDetailsService(ClimberUserRepository climberUserRepository) {
-//        this.climberUserRepository = climberUserRepository;
+//    public CustomUserDetailsService(UserRepository userRepository) {
+//        this.userRepository = userRepository;
 //    }
 //
 //    // Me semble mieux que UserDetailsServiceImpl de BezKoder
@@ -33,8 +33,8 @@
 //    @Override
 //    public UserDetails loadUserByUsername(String userName) throws UsernameNotFoundException, InternalAuthenticationServiceException {
 //        //try {
-//            ClimberUser user = climberUserRepository.findByUserName(userName)
-//                    .orElseThrow(() -> new UsernameNotFoundException("ClimberUser not found with userName: " + userName));;
+//            User user = userRepository.findByUserName(userName)
+//                    .orElseThrow(() -> new UsernameNotFoundException("User not found with userName: " + userName));;
 //            return new User(user.getUserName(), user.getPassword(), getGrantedAuthorities(user.getRoles().toString())); ///// tostring ??
 //
 ////        } catch (UsernameNotFoundException e) {

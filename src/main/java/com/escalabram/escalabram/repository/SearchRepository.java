@@ -14,16 +14,16 @@ import java.util.*;
 @Repository
 public interface SearchRepository extends JpaRepository<Search, Long> {
 
-    Optional<Set<Search>> findByClimberProfileId(Long climberProfileId);
+    Optional<Set<Search>> findByProfileId(Long profileId);
 
     @Query("SELECT DISTINCT new com.escalabram.escalabram.service.dto.SearchMatchDTO( s.id, ts.id, ts.beginTime, ts.endTime) " +
             "FROM Search s " +
             "INNER JOIN s.timeSlots ts " +
             "WHERE s.placeId = :placeId " +
-            "AND s.climberProfileId <> :climberProfileId " +
+            "AND s.profileId <> :profileId " +
             "AND DATE(ts.beginTime) IN :matchingBeginTimes ")
     List<SearchMatchDTO> findAllSearchesByCriterias(
-            @Param("climberProfileId") Long searchClimberProfile,
+            @Param("profileId") Long profileId,
             @Param("placeId") Long placeId,
             @Param("matchingBeginTimes") List<Timestamp> matchingBeginTimes);
 

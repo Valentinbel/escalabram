@@ -24,8 +24,8 @@ public class Search implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "climber_profile_id", nullable = false)
-    private Long climberProfileId;
+    @Column(name = "profile_id", nullable = false)
+    private Long profileId;
 
     @Size(max = 80, message = "Title cannot be longer than 80 characters")
     @Column(name = "title")

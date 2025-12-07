@@ -11,7 +11,7 @@ import java.io.Serializable;
 @Builder(toBuilder = true)
 @NoArgsConstructor
 @AllArgsConstructor
-public class ClimberProfileDTO implements Serializable {
+public class ProfileDTO implements Serializable {
 
     @Serial
     private static final long serialVersionUID = -2061960641588724813L;
@@ -26,7 +26,7 @@ public class ClimberProfileDTO implements Serializable {
 
     private Boolean isNotified;
 
-    private String climberProfileDescription;
+    private String profileDescription;
 
-    private Long climberUserId;
+    private Long userId;
 }

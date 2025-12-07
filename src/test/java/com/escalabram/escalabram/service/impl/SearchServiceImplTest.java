@@ -71,7 +71,7 @@ class SearchServiceImplTest {
         searches = Stream.of(
                 Search.builder()
                         .id(1L)
-                        .climberProfileId(1L)
+                        .profileId(1L)
                         .title("search1Profile1")
                         .haveRope(true)
                         .haveBelayDevice(true)
@@ -84,7 +84,7 @@ class SearchServiceImplTest {
                         .build(),
                 Search.builder()
                         .id(2L)
-                        .climberProfileId(1L)
+                        .profileId(1L)
                         .title("search2Profile1")
                         .haveRope(true)
                         .haveBelayDevice(true)
@@ -97,7 +97,7 @@ class SearchServiceImplTest {
                         .build(),
                 Search.builder()
                         .id(3L)
-                        .climberProfileId(2L)
+                        .profileId(2L)
                         .title("search1Profile2")
                         .haveRope(true)
                         .haveBelayDevice(true)
@@ -110,7 +110,7 @@ class SearchServiceImplTest {
                         .build(),
                 Search.builder()
                         .id(4L)
-                        .climberProfileId(4L)
+                        .profileId(4L)
                         .title("search1Profile3")
                         .haveRope(true)
                         .haveBelayDevice(true)
@@ -127,7 +127,7 @@ class SearchServiceImplTest {
     }
 
     @Test
-    void findAll_returnAll(){
+    void findAll_ReturnAll(){
         when(searchRepository.findAll()).thenReturn(searches);
         searches.get(3).setTimeSlots(timeSlots);
 
@@ -145,7 +145,7 @@ class SearchServiceImplTest {
     }
 
     @Test
-    void findById_searchId_optionalEntity() {
+    void findById_SearchId_Found() {
         when(searchRepository.findById(searches.getFirst().getId())).thenReturn(Optional.of(searches.getFirst()));
         searches.getFirst().setTimeSlots(timeSlots);
 
@@ -156,7 +156,7 @@ class SearchServiceImplTest {
     }
 
     @Test
-    void findById_wrongId_optionalEmpty() {
+    void findById_WrongId_Empty() {
         when(searchRepository.findById(searches.getLast().getId())).thenReturn(Optional.empty());
         Optional<Search> optSearch = searchServiceImpl.findById(searches.getLast().getId());
 
@@ -165,27 +165,27 @@ class SearchServiceImplTest {
     }
 
     @Test
-    void findByClimberProfileId_profileId_optionalSetSearch(){
-        when(searchRepository.findByClimberProfileId(searches.get(3).getClimberProfileId())).thenReturn(Optional.of(Set.of(searches.get(3))));
+    void findByProfileId_ProfileId_Found(){
+        when(searchRepository.findByProfileId(searches.get(3).getProfileId())).thenReturn(Optional.of(Set.of(searches.get(3))));
         searches.get(3).setTimeSlots(timeSlots);
 
-        Optional<Set<Search>> optSearches = searchServiceImpl.findByClimberProfileId(4L);
+        Optional<Set<Search>> optSearches = searchServiceImpl.findByProfileId(4L);
 
-        verify(searchRepository, times(1)).findByClimberProfileId(searches.get(3).getClimberProfileId());
+        verify(searchRepository, times(1)).findByProfileId(searches.get(3).getProfileId());
         assertEquals(optSearches, Optional.of(Set.of(searches.get(3))));
     }
 
     @Test
-    void findByClimberProfileId_wrongProfileId_empty(){
-        when(searchRepository.findByClimberProfileId(searches.get(2).getClimberProfileId())).thenReturn(Optional.empty());
-        Optional<Set<Search>> optSearches = searchServiceImpl.findByClimberProfileId(2L);
+    void findByProfileId_WrongProfileId_Empty(){
+        when(searchRepository.findByProfileId(searches.get(2).getProfileId())).thenReturn(Optional.empty());
+        Optional<Set<Search>> optSearches = searchServiceImpl.findByProfileId(2L);
 
-        verify(searchRepository, times(1)).findByClimberProfileId(searches.get(2).getClimberProfileId());
+        verify(searchRepository, times(1)).findByProfileId(searches.get(2).getProfileId());
         assertEquals(optSearches, Optional.empty());
     }
 
     @Test
-    void createSearch_insert(){
+    void createSearch_Insert(){
         Set<ClimbLevel> climbLevelsToCreate = Stream.of(
                 ClimbLevel.builder().id(2L).codeFr(null).build(),
                 ClimbLevel.builder().id(7L).codeFr(null).build()
@@ -194,7 +194,7 @@ class SearchServiceImplTest {
 
         Search searchToCreate = Search.builder()
                         .id(1L)
-                        .climberProfileId(1L)
+                        .profileId(1L)
                         .title("search1Profile1")
                         .haveRope(true)
                         .haveBelayDevice(true)
@@ -216,14 +216,14 @@ class SearchServiceImplTest {
         assertEquals(search, searches.getFirst());
         assertEquals(search.getTimeSlots(), searches.getFirst().getTimeSlots());
         assertEquals(search.getClimbLevels(), searches.getFirst().getClimbLevels());
-        assertEquals(search.getClimberProfileId(), searches.getFirst().getClimberProfileId());
+        assertEquals(search.getProfileId(), searches.getFirst().getProfileId());
     }
 
     @Test
-    void updateSearch_update() {
+    void updateSearch_Update() {
         Search searchToUpdate = Search.builder()
                 .id(1L)
-                .climberProfileId(1L)
+                .profileId(1L)
                 .title("search1modified")
                 .haveRope(true)
                 .haveBelayDevice(true)
@@ -250,7 +250,7 @@ class SearchServiceImplTest {
     }
 
     @Test
-    void deleteEmployeeById_ok() {
+    void deleteEmployeeById_Ok() {
         searchServiceImpl.deleteById(searches.get(2).getId());
         verify(searchRepository, times(1)).deleteById(searches.get(2).getId());
     }

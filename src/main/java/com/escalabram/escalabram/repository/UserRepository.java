@@ -1,6 +1,6 @@
 package com.escalabram.escalabram.repository;
 
-import com.escalabram.escalabram.model.ClimberUser;
+import com.escalabram.escalabram.model.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -11,15 +11,15 @@ import java.time.LocalDateTime;
 import java.util.Optional;
 
 @Repository
-public interface ClimberUserRepository extends JpaRepository<ClimberUser, Long> {
+public interface UserRepository extends JpaRepository<User, Long> {
 
-    Optional<ClimberUser> findByEmail(String email);
+    Optional<User> findByEmail(String email);
 
     boolean existsByUserName(String userName);
 
     boolean existsByEmail(String email);
 
     @Modifying
-    @Query("update ClimberUser u set u.userName = :userName, u.updatedAt = :updatedAt where u.id = :id")
+    @Query("update User u set u.userName = :userName, u.updatedAt = :updatedAt where u.id = :id")
     int updateUserNameById(@Param("id") Long userId, @Param("userName") String userName, @Param("updatedAt") LocalDateTime updatedAt);
 }

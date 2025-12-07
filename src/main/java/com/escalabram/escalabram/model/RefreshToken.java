@@ -22,8 +22,8 @@ public class RefreshToken implements Serializable {
     private Long id;
 
     @OneToOne
-    @JoinColumn(name = "climber_user_id", referencedColumnName = "id")
-    private ClimberUser climberUser;
+    @JoinColumn(name = "user_id", referencedColumnName = "id")
+    private User user;
 
     @Column(nullable = false, unique = true)
     private String token;

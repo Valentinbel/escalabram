@@ -1,7 +1,7 @@
 //package com.escalabram.escalabram.configuration;
 //
-//import com.escalabram.escalabram.model.ClimberUser;
-//import com.escalabram.escalabram.repository.ClimberUserRepository;
+//import com.escalabram.escalabram.model.User;
+//import com.escalabram.escalabram.repository.UserRepository;
 //import org.springframework.security.oauth2.client.oidc.userinfo.OidcUserRequest;
 //import org.springframework.security.oauth2.client.oidc.userinfo.OidcUserService;
 //import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
@@ -13,32 +13,32 @@
 //@Service
 //public class CustomOIDCUserService extends OidcUserService {
 ////
-////    private final ClimberUserRepository climberUserRepository;
+////    private final UserRepository userRepository;
 ////
-////    public CustomOIDCUserService(ClimberUserRepository climberUserRepository) {
-////        this.climberUserRepository = climberUserRepository;
+////    public CustomOIDCUserService(UserRepository userRepository) {
+////        this.userRepository = userRepository;
 ////    }
 ////
 ////    @Override
 ////    public OidcUser loadUser(OidcUserRequest userRequest) throws OAuth2AuthenticationException {
 ////        final OidcUser oidcUser = super.loadUser(userRequest);
 ////        String email = oidcUser.getEmail();
-////        ClimberUser climberUser = createClimberUserIfNotExists(oidcUser, email);
+////        User user = createUserIfNotExists(oidcUser, email);
 ////
-////        String username = climberUser.getUserName();
-////        return new CustomOidcUser(oidcUser, email, username, climberUser.getRole());
+////        String username = user.getUserName();
+////        return new CustomOidcUser(oidcUser, email, username, user.getRole());
 ////    }
 ////
-////    public ClimberUser createClimberUserIfNotExists(OidcUser oidcUser, String email) {
-////        return climberUserRepository.findByEmail(email)
+////    public User createUserIfNotExists(OidcUser oidcUser, String email) {
+////        return userRepository.findByEmail(email)
 ////                .orElseGet(() -> {
-////                    ClimberUser newUser = new ClimberUser();
+////                    User newUser = new User();
 ////                    newUser.setUserName(oidcUser.getFullName());
 ////                    newUser.setEmail(email);
 ////                    newUser.setRole("USER");
 ////                    newUser.setCreatedAt(LocalDateTime.now());
 ////                    newUser.setUpdatedAt(LocalDateTime.now());
-////                    return climberUserRepository.save(newUser);
+////                    return userRepository.save(newUser);
 ////                });
 ////    }
 //}

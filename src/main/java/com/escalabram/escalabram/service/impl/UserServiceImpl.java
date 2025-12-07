@@ -1,8 +1,8 @@
 package com.escalabram.escalabram.service.impl;
 
-import com.escalabram.escalabram.model.ClimberUser;
-import com.escalabram.escalabram.repository.ClimberUserRepository;
-import com.escalabram.escalabram.service.ClimberUSerService;
+import com.escalabram.escalabram.model.User;
+import com.escalabram.escalabram.repository.UserRepository;
+import com.escalabram.escalabram.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
@@ -14,29 +14,29 @@ import java.util.Optional;
 @Service
 @Transactional
 @RequiredArgsConstructor
-public class ClimberUserServiceImpl implements ClimberUSerService {
+public class UserServiceImpl implements UserService {
 
-    private final ClimberUserRepository climberUserRepository;
+    private final UserRepository userRepository;
 
     @Override
     public boolean existsByUserName(String userName) {
-        return climberUserRepository.existsByUserName(userName);
+        return userRepository.existsByUserName(userName);
     }
 
     @Override
     public boolean existsByEmail(String email) {
-        return climberUserRepository.existsByEmail(email);
+        return userRepository.existsByEmail(email);
     }
 
     @Override
-    public Optional<ClimberUser> findById(Long id) {
-        return climberUserRepository.findById(id);
+    public Optional<User> findById(Long id) {
+        return userRepository.findById(id);
     }
 
     @Override
-    public ClimberUser save(ClimberUser user) {
+    public User save(User user) {
         try {
-            return climberUserRepository.save(user);
+            return userRepository.save(user);
         } catch (DataIntegrityViolationException e) {
             throw new IllegalStateException("Error thrown trying to save user: {}" +  user, e);
         }
@@ -45,11 +45,11 @@ public class ClimberUserServiceImpl implements ClimberUSerService {
     @Override
     public int updateUserNameById(Long userId, String userName) {
         if(existsById(userId))
-            return climberUserRepository.updateUserNameById(userId, userName, LocalDateTime.now());
+            return userRepository.updateUserNameById(userId, userName, LocalDateTime.now());
         else throw new IllegalStateException("Error thrown trying to update username for userId: " + userId);
     }
 
     private boolean existsById(Long id) {
-        return climberUserRepository.existsById(id);
+        return userRepository.existsById(id);
     }
 }

@@ -1,6 +1,6 @@
 package com.escalabram.escalabram.repository;
 
-import com.escalabram.escalabram.model.ClimberUser;
+import com.escalabram.escalabram.model.User;
 import com.escalabram.escalabram.model.FileInfo;
 import com.escalabram.escalabram.model.Role;
 import org.junit.jupiter.api.BeforeEach;
@@ -27,7 +27,7 @@ class FileInfoRepositoryTest {
     @Autowired
     private TestEntityManager entityManager;
 
-    private ClimberUser user;
+    private User user;
     private FileInfo fileInfo;
 
     @BeforeEach
@@ -38,7 +38,7 @@ class FileInfoRepositoryTest {
         Set<Role> roleSet = new HashSet<>();
         roleSet.add(roleUser);
 
-        user = ClimberUser.builder()
+        user = User.builder()
                 .userName("Brooke")
                 .email("brooketta@mail.it")
                 .password("tartineOrclimber")
@@ -50,14 +50,14 @@ class FileInfoRepositoryTest {
         fileInfo = FileInfo.builder()
                 .name("myPic.jpg")
                 .url("myrepo/user1/myPic.jpg")
-                .climberUser(user)
+                .user(user)
                 .build();
         entityManager.persist(fileInfo);
     }
 
     @Test
     void deleteByUrl_Ok() {
-        Optional<FileInfo> existsBefore = fileInfoRepository.findByclimberUserId(user.getId());
+        Optional<FileInfo> existsBefore = fileInfoRepository.findByUserId(user.getId());
         fileInfoRepository.deleteByUrl(fileInfo.getUrl());
 
         assertAll(
@@ -68,8 +68,8 @@ class FileInfoRepositoryTest {
     }
 
     @Test
-    void findByclimberUserId_Id_ThenFound() {
-        Optional<FileInfo> optResult = fileInfoRepository.findByclimberUserId(user.getId());
+    void findByUserId_Id_Found() {
+        Optional<FileInfo> optResult = fileInfoRepository.findByUserId(user.getId());
         assertAll(
                 () -> assertTrue(optResult.isPresent()),
                 () -> assertEquals(fileInfo, optResult.get())
@@ -77,9 +77,9 @@ class FileInfoRepositoryTest {
     }
 
     @Test
-    void findByclimberUserId_Id_ThenEmpty() {
+    void findByUserId_Id_Empty() {
         Long wrongUser = user.getId() + 1;
-        Optional<FileInfo> optResult = fileInfoRepository.findByclimberUserId(wrongUser);
+        Optional<FileInfo> optResult = fileInfoRepository.findByUserId(wrongUser);
         assertTrue(optResult.isEmpty());
     }
 }

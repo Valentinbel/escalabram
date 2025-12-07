@@ -1,6 +1,6 @@
 package com.escalabram.escalabram.repository;
 
-import com.escalabram.escalabram.model.ClimberUser;
+import com.escalabram.escalabram.model.User;
 import com.escalabram.escalabram.model.RefreshToken;
 import com.escalabram.escalabram.model.Role;
 import org.junit.jupiter.api.BeforeEach;
@@ -30,7 +30,7 @@ class RefreshTokenRepositoryTest {
 
     private RefreshToken refreshToken;
     private String token;
-    private ClimberUser climberUser;
+    private User user;
 
     @BeforeEach
     void setup() {
@@ -40,20 +40,20 @@ class RefreshTokenRepositoryTest {
         Set<Role> roleSet = new HashSet<>();
         roleSet.add(roleUser);
 
-        climberUser = ClimberUser.builder()
+        user = User.builder()
                 .userName("Brooke")
                 .email("brooketta@mail.it")
                 .password("tartineOrclimber")
                 .roles(roleSet)
                 .createdAt(LocalDateTime.MIN)
                 .build();
-        entityManager.persist(climberUser);
+        entityManager.persist(user);
 
         token = "isThisTokenOrTolkien?";
         refreshToken = new RefreshToken();
         refreshToken.setToken(token);
         refreshToken.setExpiryDate(Instant.now().plusSeconds(60));
-        refreshToken.setClimberUser(climberUser);
+        refreshToken.setUser(user);
         entityManager.persist(refreshToken);
     }
 
@@ -74,8 +74,8 @@ class RefreshTokenRepositoryTest {
     }
 
     @Test
-    void findByClimberUserId_UserId_ThenFound() {
-        Optional<RefreshToken> optResult = refreshTokenRepository.findByClimberUserId(climberUser.getId());
+    void findByUserId_UserId_Found() {
+        Optional<RefreshToken> optResult = refreshTokenRepository.findByUserId(user.getId());
         assertAll(
                 () -> assertTrue(optResult.isPresent()),
                 () -> assertEquals(refreshToken, optResult.get())
@@ -83,17 +83,17 @@ class RefreshTokenRepositoryTest {
     }
 
     @Test
-    void findByClimberUserId_UserId_thenEmpty() {
-        Long wrongUser = climberUser.getId() +1;
-        Optional<RefreshToken> optResult = refreshTokenRepository.findByClimberUserId(wrongUser);
+    void findByUserId_UserId_Empty() {
+        Long wrongUser = user.getId() +1;
+        Optional<RefreshToken> optResult = refreshTokenRepository.findByUserId(wrongUser);
         assertTrue(optResult.isEmpty());
 
     }
 
     @Test
-    void deleteByClimberUser_Ok() {
-        Optional<RefreshToken> existsBefore = refreshTokenRepository.findByClimberUserId(climberUser.getId());
-        int result = refreshTokenRepository.deleteByClimberUser(climberUser);
+    void deleteByUser_Ok() {
+        Optional<RefreshToken> existsBefore = refreshTokenRepository.findByUserId(user.getId());
+        int result = refreshTokenRepository.deleteByUser(user);
 
         assertAll(
                 () -> assertTrue(existsBefore.isPresent()),

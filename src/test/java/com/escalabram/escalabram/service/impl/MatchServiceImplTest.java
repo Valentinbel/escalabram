@@ -105,7 +105,7 @@ class MatchServiceImplTest {
         searches = Stream.of(
                 Search.builder()
                         .id(1L)
-                        .climberProfileId(1L)
+                        .profileId(1L)
                         .title("search1Profile1")
                         .haveRope(true)
                         .haveBelayDevice(true)
@@ -118,7 +118,7 @@ class MatchServiceImplTest {
                         .build(),
                 Search.builder()
                         .id(2L)
-                        .climberProfileId(1L)
+                        .profileId(1L)
                         .title("search2Profile1")
                         .haveRope(true)
                         .haveBelayDevice(true)
@@ -131,7 +131,7 @@ class MatchServiceImplTest {
                         .build(),
                 Search.builder()
                         .id(3L)
-                        .climberProfileId(2L)
+                        .profileId(2L)
                         .title("search1Profile2")
                         .haveRope(true)
                         .haveBelayDevice(true)
@@ -144,7 +144,7 @@ class MatchServiceImplTest {
                         .build(),
                 Search.builder()
                         .id(4L)
-                        .climberProfileId(4L)
+                        .profileId(4L)
                         .title("search1Profile3")
                         .haveRope(true)
                         .haveBelayDevice(true)
@@ -159,7 +159,7 @@ class MatchServiceImplTest {
     }
 
     @Test
-    void createMatchesIfFit_matching(){
+    void createMatchesIfFit_Matching(){
         // Matching
         Search searchMatching = searches.getFirst();
         searchMatching.setTimeSlots(timeSlotsMatching1);
@@ -198,7 +198,7 @@ class MatchServiceImplTest {
 
         List<Match> matches = matchServiceImpl.createMatchesIfFit(searchMatching);
 
-        verify(searchRepository, times(1)).findAllSearchesByCriterias(searchMatching.getClimberProfileId(), searchMatching.getPlaceId(), matchingBeginTimesSearchMatching);
+        verify(searchRepository, times(1)).findAllSearchesByCriterias(searchMatching.getProfileId(), searchMatching.getPlaceId(), matchingBeginTimesSearchMatching);
         verify(searchRepository, times(1)).findClimbLevelsByIdSearchId(searchToMatched.getId());
         verify(matchRepository, times(1)).findByCriterias(match.getMatchingSearchId(), match.getMatchedSearchId(),match.getMatchedTimeSlotId(), match.getMutualMatch());
         verify(matchRepository, times(1)).save(ArgumentMatchers.any());
@@ -207,7 +207,7 @@ class MatchServiceImplTest {
     }
 
     @Test
-    void createMatchesIfFit_matchAlreadyExists(){
+    void createMatchesIfFit_MatchAlreadyExists(){
         // Matching
         Search searchMatching = searches.getFirst();
         searchMatching.setTimeSlots(timeSlotsMatching1);
@@ -237,7 +237,7 @@ class MatchServiceImplTest {
         searchMatchDTOs.add(searchMatchDTO1);
 
 
-        when(searchRepository.findAllSearchesByCriterias(searchMatching.getClimberProfileId(), searchMatching.getPlaceId(), matchingBeginTimesSearchMatching))
+        when(searchRepository.findAllSearchesByCriterias(searchMatching.getProfileId(), searchMatching.getPlaceId(), matchingBeginTimesSearchMatching))
                 .thenReturn(searchMatchDTOs);
 
         when(searchRepository.findClimbLevelsByIdSearchId(searchToMatched.getId())).thenReturn(matchedClimbLevelDTOs);
@@ -247,7 +247,7 @@ class MatchServiceImplTest {
 
         List<Match> matches = matchServiceImpl.createMatchesIfFit(searchMatching);
 
-        verify(searchRepository, times(1)).findAllSearchesByCriterias(searchMatching.getClimberProfileId(), searchMatching.getPlaceId(), matchingBeginTimesSearchMatching);
+        verify(searchRepository, times(1)).findAllSearchesByCriterias(searchMatching.getProfileId(), searchMatching.getPlaceId(), matchingBeginTimesSearchMatching);
         verify(searchRepository, times(1)).findClimbLevelsByIdSearchId(searchToMatched.getId());
         verify(matchRepository, times(1)).findByCriterias(match.getMatchingSearchId(), match.getMatchedSearchId(),match.getMatchedTimeSlotId(), match.getMutualMatch());
 
@@ -255,7 +255,7 @@ class MatchServiceImplTest {
     }
 
     @Test
-    void createMatchesIfFit_timeSlotsNOMatch(){
+    void createMatchesIfFit_TimeSlotsNOMatch(){
         // Matching
         Search searchMatching = searches.getFirst();
         searchMatching.setTimeSlots(timeSlotsMatching1);
@@ -276,18 +276,18 @@ class MatchServiceImplTest {
         List<SearchMatchDTO> searchMatchDTOs = new ArrayList<>();
         searchMatchDTOs.add(searchMatchDTO1);
 
-        when(searchRepository.findAllSearchesByCriterias(searchMatching.getClimberProfileId(), searchMatching.getPlaceId(), matchingBeginTimesSearchMatching))
+        when(searchRepository.findAllSearchesByCriterias(searchMatching.getProfileId(), searchMatching.getPlaceId(), matchingBeginTimesSearchMatching))
                 .thenReturn(searchMatchDTOs);
 
         List<Match> matches = matchServiceImpl.createMatchesIfFit(searchMatching);
 
-        verify(searchRepository, times(1)).findAllSearchesByCriterias(searchMatching.getClimberProfileId(), searchMatching.getPlaceId(), matchingBeginTimesSearchMatching);
+        verify(searchRepository, times(1)).findAllSearchesByCriterias(searchMatching.getProfileId(), searchMatching.getPlaceId(), matchingBeginTimesSearchMatching);
 
         assertEquals(matches, matchesToResult);
     }
 
     @Test
-    void testCreateMatchesIfFit_timeSlotsMatchButClimbLevelDONT(){
+    void testCreateMatchesIfFit_TimeSlotsMatchButClimbLevelDONT(){
         // Matching
         Search searchMatching = searches.getFirst();
         searchMatching.setTimeSlots(timeSlotsMatching1);
@@ -314,13 +314,13 @@ class MatchServiceImplTest {
         List<SearchMatchDTO> searchMatchDTOs = new ArrayList<>();
         searchMatchDTOs.add(searchMatchDTO1);
 
-        when(searchRepository.findAllSearchesByCriterias(searchMatching.getClimberProfileId(), searchMatching.getPlaceId(), matchingBeginTimesSearchMatching))
+        when(searchRepository.findAllSearchesByCriterias(searchMatching.getProfileId(), searchMatching.getPlaceId(), matchingBeginTimesSearchMatching))
                 .thenReturn(searchMatchDTOs);
         when(searchRepository.findClimbLevelsByIdSearchId(searchToMatched.getId())).thenReturn(matchedClimbLevelDTOs);
 
         List<Match> matches = matchServiceImpl.createMatchesIfFit(searchMatching);
 
-        verify(searchRepository, times(1)).findAllSearchesByCriterias(searchMatching.getClimberProfileId(), searchMatching.getPlaceId(), matchingBeginTimesSearchMatching);
+        verify(searchRepository, times(1)).findAllSearchesByCriterias(searchMatching.getProfileId(), searchMatching.getPlaceId(), matchingBeginTimesSearchMatching);
         verify(searchRepository, times(1)).findClimbLevelsByIdSearchId(searchToMatched.getId());
 
         assertEquals(matches, matchesToResult);

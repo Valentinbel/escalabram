@@ -1,8 +1,8 @@
 package com.escalabram.escalabram.service.impl;
 
-import com.escalabram.escalabram.model.ClimberUser;
+import com.escalabram.escalabram.model.User;
 import com.escalabram.escalabram.model.FileInfo;
-import com.escalabram.escalabram.service.ClimberUSerService;
+import com.escalabram.escalabram.service.UserService;
 import com.escalabram.escalabram.service.FileInfoService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -35,21 +35,21 @@ class FilesStorageServiceImplTest {
     @Mock
     private FileInfoService fileInfoService;
     @Mock
-    private ClimberUSerService climberUSerService;
+    private UserService userService;
     @Mock
     private Resource mockResource;
 
     private Long userId;
     private String userIdString;
     private FileInfo fileInfo;
-    private ClimberUser user;
+    private User user;
     private final MultipartFile mockFile = mock(MultipartFile.class);
 
     @BeforeEach
     void setup() {
         userId = 123L;
         userIdString = userId.toString();
-        user = ClimberUser.builder()
+        user = User.builder()
                 .id(userId)
                 .userName("MejdiSchalck")
                 .email("Mejdi@s.com")
@@ -61,7 +61,7 @@ class FilesStorageServiceImplTest {
                 .id(22L)
                 .name("selfie")
                 .url("fake/url/selfie.png")
-                .climberUser(user)
+                .user(user)
                 .build();
     }
     @Test
@@ -87,7 +87,7 @@ class FilesStorageServiceImplTest {
     }
 
     @Test
-    void getAvatarId_userId_AvatarId() throws MalformedURLException {
+    void getAvatarId_UserId_AvatarId() throws MalformedURLException {
         when(fileInfoService.findByUserId(userId)).thenReturn(Optional.of(fileInfo));
         doReturn(mockResource).when(filesStorageService).createResource(any(Path.class));
         when(mockResource.isReadable()).thenReturn(true);
@@ -126,7 +126,7 @@ class FilesStorageServiceImplTest {
     }
 
     @Test
-    void loadAvatarResource_userId_Resource() throws MalformedURLException {
+    void loadAvatarResource_UserId_Resource() throws MalformedURLException {
         when(fileInfoService.findByUserId(userId)).thenReturn(Optional.of(fileInfo));
         doReturn(mockResource).when(filesStorageService).createResource(any(Path.class));
         when(mockResource.isReadable()).thenReturn(true);
@@ -143,36 +143,36 @@ class FilesStorageServiceImplTest {
     void saveAvatar_EmptyUser_CatchIllegalArgumentException() {
         Long wrongId = 987L;
         String wrongUserId = wrongId.toString();
-        when(climberUSerService.findById(wrongId)).thenReturn(Optional.empty());
+        when(userService.findById(wrongId)).thenReturn(Optional.empty());
 
         IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,() ->
                 filesStorageService.saveAvatar(mockFile, wrongUserId));
 
-        verify(climberUSerService).findById(wrongId);
+        verify(userService).findById(wrongId);
         assertEquals("user not found with id: {}" + wrongId, exception.getMessage());
     }
 
     @Test
     void saveAvatar_SaveError_CatchIllegalArgumentException() {
-        when(climberUSerService.findById(anyLong())).thenReturn(Optional.of(user));
+        when(userService.findById(anyLong())).thenReturn(Optional.of(user));
         when(fileInfoService.save(any(FileInfo.class))).thenThrow(new IllegalStateException("Error thrown trying to save FileInfo: " + null));
 
         IllegalStateException exception = assertThrows(IllegalStateException.class,() ->
                 filesStorageService.saveAvatar(mockFile, userIdString));
 
-        verify(climberUSerService).findById(anyLong());
+        verify(userService).findById(anyLong());
         verify(fileInfoService).save(any(FileInfo.class));
         assertEquals("Error thrown trying to save FileInfo: " + null, exception.getMessage());
     }
 
     @Test
     void saveAvatar_FileUserId_SaveOk() {
-        when(climberUSerService.findById(userId)).thenReturn(Optional.of(user));
+        when(userService.findById(userId)).thenReturn(Optional.of(user));
         when(fileInfoService.save(any(FileInfo.class))).thenReturn(fileInfo);
 
         FileInfo result = filesStorageService.saveAvatar(mockFile, userIdString);
 
-        verify(climberUSerService).findById(userId);
+        verify(userService).findById(userId);
         verify(fileInfoService).save(any(FileInfo.class));
         assertAll(
                 () -> assertNotNull(result),

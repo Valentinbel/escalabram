@@ -7,7 +7,7 @@ import com.escalabram.escalabram.security.payload.response.JwtResponse;
 import com.escalabram.escalabram.security.payload.response.MessageResponse;
 import com.escalabram.escalabram.security.payload.response.TokenRefreshResponse;
 import com.escalabram.escalabram.service.AuthService;
-import com.escalabram.escalabram.service.ClimberUSerService;
+import com.escalabram.escalabram.service.UserService;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -24,15 +24,15 @@ import org.springframework.web.bind.annotation.*;
 public class AuthController {
 
     private static final Logger log = LoggerFactory.getLogger(AuthController.class);
-    private final ClimberUSerService climberUSerService;
+    private final UserService userService;
     private final AuthService authService;
 
     @PostMapping("/register")
     public ResponseEntity<MessageResponse> registerUser(@Valid @RequestBody SignupRequest signUpRequest) {
         log.info("REST request to register a user: {}", signUpRequest.getEmail());
-        if (climberUSerService.existsByUserName(signUpRequest.getUserName()))
+        if (userService.existsByUserName(signUpRequest.getUserName()))
             return ResponseEntity.badRequest().body(new MessageResponse("Error: UserName is already taken!: " + signUpRequest.getUserName()));
-        if (climberUSerService.existsByEmail(signUpRequest.getEmail()))
+        if (userService.existsByEmail(signUpRequest.getEmail()))
             return ResponseEntity.badRequest().body(new MessageResponse("Error: Email is already in use!"));
         authService.createUser(signUpRequest);
         return ResponseEntity.ok(new MessageResponse("User registered successfully!"));

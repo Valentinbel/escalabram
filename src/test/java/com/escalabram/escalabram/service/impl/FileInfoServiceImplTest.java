@@ -1,6 +1,6 @@
 package com.escalabram.escalabram.service.impl;
 
-import com.escalabram.escalabram.model.ClimberUser;
+import com.escalabram.escalabram.model.User;
 import com.escalabram.escalabram.model.FileInfo;
 import com.escalabram.escalabram.repository.FileInfoRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -28,12 +28,12 @@ class FileInfoServiceImplTest {
     @Mock
     private FileInfoRepository fileInfoRepository;
 
-    private ClimberUser user;
+    private User user;
     private FileInfo fileInfo;
 
     @BeforeEach
     void setupData() {
-        user = ClimberUser.builder()
+        user = User.builder()
                 .id(1984L)
                 .userName("AdamOndra")
                 .email("adam@ondra.com")
@@ -44,28 +44,28 @@ class FileInfoServiceImplTest {
         fileInfo = FileInfo.builder()
                 .name("myPic.jpg")
                 .url("myrepo/user1/myPic.jpg")
-                .climberUser(user)
+                .user(user)
                 .build();
     }
 
     @Test
-    void findByUserId_WrongUserId_ThenEmpty() {
+    void findByUserId_WrongUserId_Empty() {
         Long wrongId = 987L;
-        when(fileInfoRepository.findByclimberUserId(anyLong())).thenReturn(Optional.empty());
+        when(fileInfoRepository.findByUserId(anyLong())).thenReturn(Optional.empty());
 
         Optional<FileInfo> optResult =  fileInfoService.findByUserId(wrongId);
 
-        verify(fileInfoRepository).findByclimberUserId(anyLong());
+        verify(fileInfoRepository).findByUserId(anyLong());
         assertEquals(Optional.empty(), optResult);
     }
 
     @Test
-    void findByUserId_userId_ThenFound() {
-        when(fileInfoRepository.findByclimberUserId(anyLong())).thenReturn(Optional.of(fileInfo));
+    void findByUserId_UserId_ThenFound() {
+        when(fileInfoRepository.findByUserId(anyLong())).thenReturn(Optional.of(fileInfo));
 
         Optional<FileInfo> optResult =  fileInfoService.findByUserId(user.getId());
 
-        verify(fileInfoRepository).findByclimberUserId(anyLong());
+        verify(fileInfoRepository).findByUserId(anyLong());
         assertAll(
                 () -> assertTrue(optResult.isPresent()),
                 () -> assertEquals(fileInfo, optResult.get())

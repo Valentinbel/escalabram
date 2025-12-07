@@ -1,7 +1,7 @@
 package com.escalabram.escalabram.security.service;
 
-import com.escalabram.escalabram.model.ClimberUser;
-import com.escalabram.escalabram.repository.ClimberUserRepository;
+import com.escalabram.escalabram.model.User;
+import com.escalabram.escalabram.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -12,14 +12,14 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 @RequiredArgsConstructor
 public class UserDetailsServiceImpl implements UserDetailsService {
-    private final ClimberUserRepository climberUserRepository;
+    private final UserRepository userRepository;
 
     @Override
     @Transactional
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        ClimberUser climberUser = climberUserRepository.findByEmail(email)
-                .orElseThrow(() -> new UsernameNotFoundException("ClimberUser not found with email: " + email));
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new UsernameNotFoundException("User not found with email: " + email));
 
-        return UserDetailsImpl.build(climberUser);
+        return UserDetailsImpl.build(user);
     }
 }

@@ -1,10 +1,10 @@
 package com.escalabram.escalabram.security.service;
 
 import com.escalabram.escalabram.exception.TokenRefreshException;
-import com.escalabram.escalabram.model.ClimberUser;
+import com.escalabram.escalabram.model.User;
 import com.escalabram.escalabram.model.RefreshToken;
 import com.escalabram.escalabram.repository.RefreshTokenRepository;
-import com.escalabram.escalabram.service.ClimberUSerService;
+import com.escalabram.escalabram.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -23,22 +23,22 @@ public class RefreshTokenService { //TODO Mettre une interface/implémentation?
     private Long refreshTokenDurationMs;
 
     private final RefreshTokenRepository refreshTokenRepository;
-    private final ClimberUSerService climberUSerService;
+    private final UserService userService;
 
     public Optional<RefreshToken> findByToken(String token) {
         return refreshTokenRepository.findByToken(token);
     }
 
-    public Optional<RefreshToken> findByClimberUserId(Long userId) {
-        return refreshTokenRepository.findByClimberUserId(userId);
+    public Optional<RefreshToken> findByUserId(Long userId) {
+        return refreshTokenRepository.findByUserId(userId);
     }
 
     public RefreshToken createRefreshToken(Long userId) {
 
         RefreshToken refreshToken = new RefreshToken();
 
-        ClimberUser climberUser = climberUSerService.findById(userId).orElseThrow();
-        refreshToken.setClimberUser(climberUser);
+        User user = userService.findById(userId).orElseThrow();
+        refreshToken.setUser(user);
         refreshToken.setExpiryDate(Instant.now().plusMillis(refreshTokenDurationMs));
         refreshToken.setToken(UUID.randomUUID().toString());
 
@@ -56,7 +56,7 @@ public class RefreshTokenService { //TODO Mettre une interface/implémentation?
 
     @Transactional(propagation = Propagation.REQUIRES_NEW)
     public int deleteByUserId(Long userId) {
-        int numoflines = refreshTokenRepository.deleteByClimberUser(climberUSerService.findById(userId).orElseThrow());
+        int numoflines = refreshTokenRepository.deleteByUser(userService.findById(userId).orElseThrow());
         refreshTokenRepository.flush();
         return numoflines;
     }

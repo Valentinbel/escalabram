@@ -33,7 +33,7 @@ public class MatchServiceImpl implements MatchService {
         matchedSearchIds.clear();
         // New search for matching (MATCHING)
         Long matchingSearchId = search.getId();
-        Long matchingClimberProfile = search.getClimberProfileId();
+        Long matchingProfile = search.getProfileId();
         Long matchingPlaceId = search.getPlaceId();
         Set<TimeSlot> matchingTimeSlots = search.getTimeSlots();
         List<Timestamp> matchingBeginTimes = new ArrayList<>();
@@ -54,7 +54,7 @@ public class MatchServiceImpl implements MatchService {
             });
 
             // Searches that may have matched
-            List<SearchMatchDTO> searchMatchDTOs = searchRepository.findAllSearchesByCriterias(matchingClimberProfile, matchingPlaceId, matchingBeginTimes);
+            List<SearchMatchDTO> searchMatchDTOs = searchRepository.findAllSearchesByCriterias(matchingProfile, matchingPlaceId, matchingBeginTimes);
 
             if (!searchMatchDTOs.isEmpty()) {
                 // coincide with timeSlots

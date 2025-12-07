@@ -1,8 +1,8 @@
 package com.escalabram.escalabram.service.impl;
 
-import com.escalabram.escalabram.model.ClimberUser;
+import com.escalabram.escalabram.model.User;
 import com.escalabram.escalabram.model.FileInfo;
-import com.escalabram.escalabram.service.ClimberUSerService;
+import com.escalabram.escalabram.service.UserService;
 import com.escalabram.escalabram.service.FileInfoService;
 import com.escalabram.escalabram.service.FilesStorageService;
 import lombok.RequiredArgsConstructor;
@@ -25,7 +25,7 @@ import java.util.Optional;
 public class FilesStorageServiceImpl implements FilesStorageService {
     private static final Logger log = LoggerFactory.getLogger(FilesStorageServiceImpl.class);
     private final FileInfoService fileInfoService;
-    private final ClimberUSerService climberUSerService;
+    private final UserService userService;
 
     @Override
     public Long getAvatarId(Long userId) {
@@ -108,14 +108,14 @@ public class FilesStorageServiceImpl implements FilesStorageService {
     }
 
     private FileInfo deleteAndSaveFileInfo(Long userId, MultipartFile file) {
-        Optional<ClimberUser> optUser =  climberUSerService.findById(userId);
+        Optional<User> optUser =  userService.findById(userId);
         if (optUser.isPresent()) {
             Path userFolder = getUserFolder(userId);
             fileInfoService.deleteByUrl(userFolder.toString());
             FileInfo fileToSave = FileInfo.builder()
                     .name(file.getOriginalFilename())
                     .url(userFolder.toString())
-                    .climberUser(optUser.get())
+                    .user(optUser.get())
                     .build();
             try {
                 return fileInfoService.save(fileToSave);

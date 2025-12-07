@@ -1,7 +1,7 @@
 package com.escalabram.escalabram.repository;
 
-import com.escalabram.escalabram.model.ClimberProfile;
-import com.escalabram.escalabram.model.ClimberUser;
+import com.escalabram.escalabram.model.Profile;
+import com.escalabram.escalabram.model.User;
 import com.escalabram.escalabram.model.FileInfo;
 import com.escalabram.escalabram.model.Role;
 import org.junit.jupiter.api.BeforeEach;
@@ -21,14 +21,14 @@ import static org.junit.jupiter.api.Assertions.*;
 
 @ActiveProfiles("test")
 @DataJpaTest
-class ClimberProfileRepositoryTest {
+class ProfileRepositoryTest {
 
     @Autowired
-    private ClimberProfileRepository climberProfileRepository;
+    private ProfileRepository profileRepository;
     @Autowired
     private TestEntityManager entityManager;
 
-    private ClimberProfile profile;
+    private Profile profile;
 
     @BeforeEach
     void setup() {
@@ -38,7 +38,7 @@ class ClimberProfileRepositoryTest {
         Set<Role> roleSet = new HashSet<>();
         roleSet.add(userRole);
 
-        ClimberUser user = ClimberUser.builder()
+        User user = User.builder()
                 .userName("CrisSharma")
                 .email("cricri@gmail.com")
                 .password("password1234")
@@ -50,35 +50,35 @@ class ClimberProfileRepositoryTest {
         FileInfo fileInfo = FileInfo.builder()
                 .name("selfie")
                 .url("./uploads/uderId")
-                .climberUser(user)
+                .user(user)
                 .build();
         entityManager.merge(fileInfo);
 
-        profile =ClimberProfile.builder()
+        profile = Profile.builder()
                 .genderId(1L)
                 .languageId(2L)
                 .isNotified(true)
-                .climberUser(user)
-                .climberProfileDescription("Blah blah, my life...")
+                .user(user)
+                .profileDescription("Blah blah, my life...")
                 .build();
         entityManager.merge(profile);
     }
 
     @Test
-    void findByClimberUserId_Id_thenSuccess() {
-        Optional<ClimberProfile> optResult = climberProfileRepository.findByClimberUserId(profile.getClimberUser().getId());
+    void findByUserId_Id_Success() {
+        Optional<Profile> optResult = profileRepository.findByUserId(profile.getUser().getId());
 
         assertAll(
                 () -> assertEquals(profile.getId(), optResult.get().getId()),
-                () -> assertEquals(profile.getClimberUser().getPassword(), optResult.get().getClimberUser().getPassword()),
-                () -> assertEquals(profile.getClimberUser().getCreatedAt().getMinute(), optResult.get().getClimberUser().getCreatedAt().getMinute()),
-                () -> assertEquals(profile.getClimberUser().getRoles(), optResult.get().getClimberUser().getRoles())
+                () -> assertEquals(profile.getUser().getPassword(), optResult.get().getUser().getPassword()),
+                () -> assertEquals(profile.getUser().getCreatedAt().getMinute(), optResult.get().getUser().getCreatedAt().getMinute()),
+                () -> assertEquals(profile.getUser().getRoles(), optResult.get().getUser().getRoles())
         );
     }
 
     @Test
-    void findByClimberUserId_WrongId_thenEmpty() {
-        Optional<ClimberProfile> retrievedClimberProfile = climberProfileRepository.findByClimberUserId(99L);
-        assertEquals(retrievedClimberProfile, Optional.empty());
+    void findByUserId_WrongId_Empty() {
+        Optional<Profile> optResult = profileRepository.findByUserId(99L);
+        assertEquals(optResult, Optional.empty());
     }
 }

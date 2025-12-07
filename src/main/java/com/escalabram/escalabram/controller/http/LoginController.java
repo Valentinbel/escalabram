@@ -51,7 +51,7 @@ import java.util.Map;
 //        StringBuffer userNameInfo = new StringBuffer();
 //        UsernamePasswordAuthenticationToken token = (UsernamePasswordAuthenticationToken) user;
 //        if(token.isAuthenticated()) {
-//            User u = (User) token.getPrincipal(); // (User) à renplacer par ClimberUser ?
+//            User u = (User) token.getPrincipal(); // (User) à renplacer par User ?
 //            userNameInfo.append("Welcome, " + u.getUsername() + ". Tu t'es connecté avec user et password.  <br><br>"); // là aussi
 //            userNameInfo.append("u.getAuthorities() : " + u.getAuthorities()); // là aussi
 //        } else {
