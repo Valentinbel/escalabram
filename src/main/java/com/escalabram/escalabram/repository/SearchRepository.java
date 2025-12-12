@@ -8,7 +8,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
-import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.*;
 
 @Repository
@@ -25,7 +25,7 @@ public interface SearchRepository extends JpaRepository<Search, Long> {
     List<SearchMatchDTO> findAllSearchesByCriterias(
             @Param("profileId") Long profileId,
             @Param("placeId") Long placeId,
-            @Param("matchingBeginTimes") List<Timestamp> matchingBeginTimes);
+            @Param("matchingBeginTimes") List<LocalDateTime> matchingBeginTimes);
 
     @Query(value ="SELECT DISTINCT s.id as searchid, scl.climb_level_id as climblevelid " +
             "FROM Search s " +

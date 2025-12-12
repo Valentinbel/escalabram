@@ -14,7 +14,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -49,21 +49,21 @@ class SearchServiceImplTest {
                 ClimbLevel.builder().id(7L).codeFr("6A+").build()
         ).collect(Collectors.toSet());
 
-        String beginTime1 = "2024-09-02 13:59:59.123456789";
-        String endTime1 = "2024-09-02 18:59:59.123456789";
+        String beginTime1 = "2024-09-02T13:59:59.123"; // TODO changer ces strings par des LocalDateTime.xxx calculés
+        String endTime1 = "2024-09-02T18:59:59.123";
 
-        String beginTime2 = "2024-09-03 19:00:00.123456789";
-        String endTime2 = "2024-09-03 21:00:00.123456789";
+        String beginTime2 = "2024-09-03T19:00:00.123";
+        String endTime2 = "2024-09-03T21:00:00.123";
 
         TimeSlot timeslot1 = TimeSlot.builder()
                 .id(1L)
-                .beginTime(Timestamp.valueOf(beginTime1))
-                .endTime(Timestamp.valueOf(endTime1))
+                .beginTime(LocalDateTime.parse(beginTime1))
+                .endTime(LocalDateTime.parse(endTime1))
                 .build();
         TimeSlot timeslot2 = TimeSlot.builder()
                 .id(2L)
-                .beginTime(Timestamp.valueOf(beginTime2))
-                .endTime(Timestamp.valueOf(endTime2))
+                .beginTime(LocalDateTime.parse(beginTime2))
+                .endTime(LocalDateTime.parse(endTime2))
                 .build();
         timeSlots = Stream.of(timeslot1, timeslot2).collect(Collectors.toSet());
 

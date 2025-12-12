@@ -15,7 +15,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.*;
 
 @Service
@@ -29,14 +29,14 @@ public class MatchServiceImpl implements MatchService {
     private final SearchRepository searchRepository;
 
     @Override
-    public List<Match> createMatchesIfFit(Search search) {
+    public List<Match> createMatchesIfFit(Search search) { // TODO refactor
         matchedSearchIds.clear();
         // New search for matching (MATCHING)
         Long matchingSearchId = search.getId();
         Long matchingProfile = search.getProfileId();
         Long matchingPlaceId = search.getPlaceId();
         Set<TimeSlot> matchingTimeSlots = search.getTimeSlots();
-        List<Timestamp> matchingBeginTimes = new ArrayList<>();
+        List<LocalDateTime> matchingBeginTimes = new ArrayList<>();
 
         List<ClimbLevel> matchingClimbLevels = search.getClimbLevels().stream().toList();
 
@@ -47,7 +47,7 @@ public class MatchServiceImpl implements MatchService {
             matchingClimbLevelIds.add(matchingClimbLevels.getLast().getId());
             Collections.sort(matchingClimbLevelIds);
 
-            HashMap<Timestamp, Timestamp> timeSlotsHashMap = new HashMap<>(); // Remplacer par un SearchMatchDTO
+            HashMap<LocalDateTime, LocalDateTime> timeSlotsHashMap = new HashMap<>(); // Remplacer par un SearchMatchDTO
             matchingTimeSlots.forEach(timeSlot -> {
                 matchingBeginTimes.add(timeSlot.getBeginTime());
                 timeSlotsHashMap.put(timeSlot.getBeginTime(), timeSlot.getEndTime());
@@ -93,10 +93,10 @@ public class MatchServiceImpl implements MatchService {
         // TODO refactor to pass cognitive complexity
     }
 
-    private List<SearchMatchDTO> getMatchedTimeSlots(List<SearchMatchDTO> searchMatchDTOs, HashMap<Timestamp, Timestamp> timeSlotsHashMap) {
+    private List<SearchMatchDTO> getMatchedTimeSlots(List<SearchMatchDTO> searchMatchDTOs, HashMap<LocalDateTime, LocalDateTime> timeSlotsHashMap) {
         List<SearchMatchDTO> matchedTimeSlots = new ArrayList<>();
         searchMatchDTOs.forEach(searchMatchDTO ->
-                timeSlotsHashMap.forEach((Timestamp begin, Timestamp end) -> {
+                timeSlotsHashMap.forEach((LocalDateTime begin, LocalDateTime end) -> {
                     if (isTimeSlotMatching(begin, end, searchMatchDTO)) {
                         log.info("begin: {}. end: {}. searchMatchDTO: {}", begin, end, searchMatchDTO);
                         matchedTimeSlots.add(searchMatchDTO);
@@ -106,15 +106,15 @@ public class MatchServiceImpl implements MatchService {
         return matchedTimeSlots;
     }
 
-    private boolean isTimeSlotMatching(Timestamp begin, Timestamp end, SearchMatchDTO searchMatchDTO) {
-        return (begin.toInstant().isAfter(searchMatchDTO.getBeginTime().toInstant())
-                && begin.toInstant().isBefore(searchMatchDTO.getEndTime().toInstant()))
+    private boolean isTimeSlotMatching(LocalDateTime begin, LocalDateTime end, SearchMatchDTO searchMatchDTO) {
+        return (begin.isAfter(searchMatchDTO.getBeginTime())
+                && begin.isBefore(searchMatchDTO.getEndTime()))
 
-                || (end.toInstant().isAfter(searchMatchDTO.getBeginTime().toInstant())
-                && end.toInstant().isBefore(searchMatchDTO.getEndTime().toInstant()))
+                || (end.isAfter(searchMatchDTO.getBeginTime())
+                && end.isBefore(searchMatchDTO.getEndTime()))
 
-                || (begin.toInstant().equals(searchMatchDTO.getBeginTime().toInstant()))
-                || (end.toInstant().equals(searchMatchDTO.getEndTime().toInstant()));
+                || (begin.isEqual(searchMatchDTO.getBeginTime())) // a été changé. Vérifier que ca marche toujours
+                || (end.isEqual(searchMatchDTO.getEndTime()));
     }
 
     private List<SearchMatchDTO> getMatchedClimbLevels(List<SearchMatchDTO> matchedSearches, List<Long> matchingClimbLevelIds) {

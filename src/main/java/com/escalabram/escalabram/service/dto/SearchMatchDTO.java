@@ -4,7 +4,8 @@ import lombok.*;
 
 import java.io.Serial;
 import java.io.Serializable;
-import java.sql.Timestamp;
+import java.time.LocalDateTime;
+
 @Getter
 @Setter
 @ToString
@@ -17,6 +18,6 @@ public class SearchMatchDTO implements Serializable {
 
     private Long searchId;
     private Long timeSlotId;
-    private Timestamp beginTime;
-    private Timestamp endTime;
+    private LocalDateTime beginTime;
+    private LocalDateTime endTime;
 }

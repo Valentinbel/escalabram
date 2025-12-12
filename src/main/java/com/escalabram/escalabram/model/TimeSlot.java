@@ -8,7 +8,7 @@ import lombok.*;
 
 import java.io.Serial;
 import java.io.Serializable;
-import java.sql.Timestamp;
+import java.time.LocalDateTime;
 
 @Entity
 @Getter
@@ -29,12 +29,12 @@ public class TimeSlot implements Serializable {
     @NotBlank
     @FutureOrPresent(message = "BeginTime needs to be present or future")
     @Column(name = "begin_time") //, columnDefinition = "TIME"
-    private Timestamp beginTime;
+    private LocalDateTime  beginTime;
 
     @NotBlank
     @FutureOrPresent(message = "EndTime needs to be present or future")
     @Column(name = "end_time") //, columnDefinition = "TIME"
-    private Timestamp  endTime;
+    private LocalDateTime endTime;
 
     @JsonIgnore
     @ManyToOne(cascade = CascadeType.ALL)
