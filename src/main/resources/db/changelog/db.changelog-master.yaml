@@ -5,3 +5,5 @@ databaseChangeLog:
       file: classpath:/db/changelog/changes/002-gender_data.sql
   - include:
       file: classpath:/db/changelog/changes/003-role_data.sql
+  - include:
+      file: classpath:/db/changelog/changes/004-languages_data.sql
