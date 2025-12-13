@@ -1,6 +1,8 @@
 package com.escalabram.escalabram.model;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 import lombok.*;
 
 import java.io.Serial;
@@ -22,6 +24,8 @@ public class Gender implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "gender_name", nullable = false)
+    @NotBlank
+    @Size(max = 8, message = "GenderName can't have more than 8 char")
+    @Column(name = "gender_name", length = 8, nullable = false, unique = true)
     private String genderName;
 }
