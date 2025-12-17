@@ -40,7 +40,7 @@ public class AuthServiceImpl implements AuthService {
 
     private final PasswordEncoder encoder;
     private final UserRoleService userRoleService;
-    private final UserService USerService;
+    private final UserService userService;
     private final AuthenticationManager authenticationManager;
     private final JwtUtils jwtUtils;
     private final RefreshTokenService refreshTokenService;
@@ -76,7 +76,7 @@ public class AuthServiceImpl implements AuthService {
             });
         }
         user.setRoles(roles);
-        return USerService.save(user);
+        return userService.save(user);
     }
 
     @Override
@@ -125,7 +125,7 @@ public class AuthServiceImpl implements AuthService {
 
     @Override
     public MessageResponse logoutUser(Long userId) {
-        User user = USerService.findById(userId).orElseThrow();
+        User user = userService.findById(userId).orElseThrow();
         refreshTokenService.deleteByUserId(user.getId());
         return new MessageResponse("Log out successful!");
     }
