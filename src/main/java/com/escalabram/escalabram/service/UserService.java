@@ -12,7 +12,11 @@ public interface UserService {
 
     Optional<User> findById(Long id);
 
+    Long findLanguageIdByUserId(Long userId);
+
     User save(User user);
 
     int updateUserNameById(Long userId, String userName);
+
+    int updateLanguageIdById(Long userId, Long languageId);
 }

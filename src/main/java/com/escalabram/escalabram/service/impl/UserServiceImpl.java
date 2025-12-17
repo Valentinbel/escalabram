@@ -2,6 +2,7 @@ package com.escalabram.escalabram.service.impl;
 
 import com.escalabram.escalabram.model.User;
 import com.escalabram.escalabram.repository.UserRepository;
+import com.escalabram.escalabram.service.LanguageService;
 import com.escalabram.escalabram.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -17,6 +18,7 @@ import java.util.Optional;
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
+    private final LanguageService languageService;
 
     @Override
     public boolean existsByUserName(String userName) {
@@ -26,6 +28,11 @@ public class UserServiceImpl implements UserService {
     @Override
     public boolean existsByEmail(String email) {
         return userRepository.existsByEmail(email);
+    }
+
+    @Override
+    public Long findLanguageIdByUserId(Long userId) {
+        return userRepository.findLanguageIdById(userId);
     }
 
     @Override
@@ -49,7 +56,18 @@ public class UserServiceImpl implements UserService {
         else throw new IllegalStateException("Error thrown trying to update username for userId: " + userId);
     }
 
+    @Override
+    public int updateLanguageIdById(Long userId, Long languageId) {
+        if(existsById(userId) && existLanguageId(languageId))
+            return userRepository.updateLanguageIdById(userId, languageId, LocalDateTime.now());
+        else throw new IllegalStateException("Error thrown trying to update languageId for userId: " + userId);
+    }
+
     private boolean existsById(Long id) {
         return userRepository.existsById(id);
+    }
+
+    private boolean existLanguageId(Long languageId) {
+        return languageService.existById(languageId);
     }
 }

@@ -13,13 +13,20 @@ import java.util.Optional;
 @Repository
 public interface UserRepository extends JpaRepository<User, Long> {
 
-    Optional<User> findByEmail(String email);
-
     boolean existsByUserName(String userName);
 
     boolean existsByEmail(String email);
 
+    Optional<User> findByEmail(String email);
+
+    @Query(value = "SELECT language_id FROM climber_user WHERE id = :id ", nativeQuery = true)
+    Long findLanguageIdById(Long id);
+
     @Modifying
-    @Query("update User u set u.userName = :userName, u.updatedAt = :updatedAt where u.id = :id")
+    @Query("UPDATE User u SET u.userName = :userName, u.updatedAt = :updatedAt WHERE u.id = :id")
     int updateUserNameById(@Param("id") Long userId, @Param("userName") String userName, @Param("updatedAt") LocalDateTime updatedAt);
+
+    @Modifying
+    @Query("UPDATE User u SET u.language.id = :languageId, u.updatedAt = :updatedAt WHERE u.id = :id")
+    int updateLanguageIdById(@Param("id") Long userId, @Param("languageId") Long languageId, @Param("updatedAt") LocalDateTime updatedAt);
 }
