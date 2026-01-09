@@ -1,11 +1,13 @@
 package com.escalabram.escalabram.service.impl;
 
+import com.escalabram.escalabram.model.Language;
 import com.escalabram.escalabram.model.User;
 import com.escalabram.escalabram.model.Role;
 import com.escalabram.escalabram.model.enumeration.EnumRole;
 import com.escalabram.escalabram.security.payload.request.SignupRequest;
 import com.escalabram.escalabram.security.payload.response.MessageResponse;
 import com.escalabram.escalabram.security.service.RefreshTokenService;
+import com.escalabram.escalabram.service.LanguageService;
 import com.escalabram.escalabram.service.UserService;
 import com.escalabram.escalabram.service.UserRoleService;
 import org.junit.jupiter.api.BeforeEach;
@@ -38,12 +40,15 @@ class AuthServiceImplTest {
     @Mock
     UserService userService;
     @Mock
+    LanguageService languageService;
+    @Mock
     RefreshTokenService refreshTokenService;
 
+    private final LocalDateTime localDateTime = LocalDateTime.now();
     private Role userRole;
     private SignupRequest signupRequest;
     private User user;
-    private final LocalDateTime localDateTime = LocalDateTime.now();
+    private Language language;
 
     @BeforeEach
     void setupData() {
@@ -57,6 +62,7 @@ class AuthServiceImplTest {
         signupRequest.setUserName("janja");
         signupRequest.setEmail("janja@g.com");
         signupRequest.setPassword(password);
+        signupRequest.setLanguageId(1L);
 
         String encodedPassword = encoder.encode(signupRequest.getPassword());
         user = User.builder()
@@ -66,27 +72,45 @@ class AuthServiceImplTest {
                 .roles(userRoles)
                 .createdAt(localDateTime)
                 .build();
+
+        language = Language.builder()
+                .id(1L)
+                .code("en")
+                .label("English")
+                .build();
+    }
+
+    @Test
+    void createUser_LanguageNotFound_Exception() {
+        RuntimeException exception = assertThrows(RuntimeException.class,() ->
+                authService.createUser(signupRequest));
+        verify(languageService).findById(signupRequest.getLanguageId());
+        assertEquals("Error: Language is not found.", exception.getMessage());
     }
 
     @Test
     void createUser_RoleNotFound_RuntimeException() {
+        when(languageService.findById(signupRequest.getLanguageId())).thenReturn(Optional.of(language));
         when(userRoleService.findByRoleName(EnumRole.ROLE_USER))
                 .thenThrow(new RuntimeException("Error: Role is not found."));
 
         RuntimeException exception = assertThrows(RuntimeException.class,() ->
                 authService.createUser(signupRequest));
 
+        verify(languageService).findById(signupRequest.getLanguageId());
         verify(userService, never()).save(any(User.class));
         assertEquals("Error: Role is not found.", exception.getMessage());
     }
 
     @Test
     void createUser_Role_User() {
+        when(languageService.findById(signupRequest.getLanguageId())).thenReturn(Optional.of(language));
         when(userRoleService.findByRoleName(EnumRole.ROLE_USER)).thenReturn(Optional.of(userRole));
         when(userService.save(any(User.class))).thenReturn(user);
 
         User result = authService.createUser(signupRequest);
 
+        verify(languageService).findById(signupRequest.getLanguageId());
         verify(userRoleService).findByRoleName((EnumRole.ROLE_USER));
         verify(userService).save(any(User.class));
         assertEquals(user, result);

@@ -1,6 +1,7 @@
 package com.escalabram.escalabram.service.impl;
 
 import com.escalabram.escalabram.exception.TokenRefreshException;
+import com.escalabram.escalabram.model.Language;
 import com.escalabram.escalabram.model.RefreshToken;
 import com.escalabram.escalabram.model.User;
 import com.escalabram.escalabram.security.payload.request.TokenRefreshRequest;
@@ -14,6 +15,7 @@ import com.escalabram.escalabram.security.payload.response.JwtResponse;
 import com.escalabram.escalabram.model.Role;
 import com.escalabram.escalabram.model.enumeration.EnumRole;
 import com.escalabram.escalabram.service.AuthService;
+import com.escalabram.escalabram.service.LanguageService;
 import com.escalabram.escalabram.service.UserService;
 import com.escalabram.escalabram.service.UserRoleService;
 import com.escalabram.escalabram.security.jwt.JwtUtils;
@@ -41,17 +43,22 @@ public class AuthServiceImpl implements AuthService {
     private final PasswordEncoder encoder;
     private final UserRoleService userRoleService;
     private final UserService userService;
+    private final LanguageService languageService;
     private final AuthenticationManager authenticationManager;
     private final JwtUtils jwtUtils;
     private final RefreshTokenService refreshTokenService;
 
     @Override
     public User createUser(SignupRequest signUpRequest) {
+        Language userLanguage = languageService.findById(signUpRequest.getLanguageId()).orElseThrow(() ->
+                new RuntimeException("Error: Language is not found."));
+
         User user = User.builder()
                 .userName(signUpRequest.getUserName())
                 .email(signUpRequest.getEmail())
                 .password(encoder.encode(signUpRequest.getPassword()))
                 .createdAt(LocalDateTime.now())
+                .language(userLanguage)
                 .build();
 
         Set<String> strRoles = signUpRequest.getRole();
