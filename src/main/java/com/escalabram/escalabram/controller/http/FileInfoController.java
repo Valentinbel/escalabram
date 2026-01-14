@@ -38,7 +38,7 @@ public class FileInfoController {
         log.info("REST request to get File from userId: {}", userId);
         try {
             Resource avatar =  this.filesStorageService.loadAvatarResource(userId);
-            String contentType = this.filesStorageService.getContentType(avatar, userId);
+            String contentType = this.filesStorageService.getContentType(avatar);
 
             return ResponseEntity.ok()
                     .contentType(MediaType.parseMediaType(contentType))

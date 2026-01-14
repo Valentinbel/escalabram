@@ -35,6 +35,6 @@ public class FileInfo implements Serializable {
 
     @NotNull
     @OneToOne
-    @JoinColumn(name = "climber_user_id", referencedColumnName = "id", nullable = false)
-    private ClimberUser climberUser;
+    @JoinColumn(name = "user_id", referencedColumnName = "id", nullable = false)
+    private User user;
 }

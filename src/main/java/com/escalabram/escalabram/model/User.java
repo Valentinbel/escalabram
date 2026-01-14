@@ -22,7 +22,7 @@ import java.util.Set;
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name="climber_user")
-public class ClimberUser implements Serializable {
+public class User implements Serializable {
 
     @Serial
     private static final long serialVersionUID = 5685392521253805062L;
@@ -47,10 +47,14 @@ public class ClimberUser implements Serializable {
     @Column(name = "password", nullable = false)
     private String password;
 
+    @ManyToOne
+    @JoinColumn(name = "language_id")
+    private Language language;
+
     @ManyToMany
     @JoinTable(name = "user_roles",
-            joinColumns = @JoinColumn(name = "climber_user_id"),
-            inverseJoinColumns = @JoinColumn(name = "role_user_id"))
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "role_id"))
     @Builder.Default
     private Set<Role> roles = new HashSet<>();
 

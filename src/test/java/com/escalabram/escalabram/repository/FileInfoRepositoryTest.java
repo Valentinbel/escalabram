@@ -1,6 +1,6 @@
 package com.escalabram.escalabram.repository;
 
-import com.escalabram.escalabram.model.ClimberUser;
+import com.escalabram.escalabram.model.User;
 import com.escalabram.escalabram.model.FileInfo;
 import com.escalabram.escalabram.model.Role;
 import org.junit.jupiter.api.BeforeEach;
@@ -27,7 +27,7 @@ class FileInfoRepositoryTest {
     @Autowired
     private TestEntityManager entityManager;
 
-    private ClimberUser climberUser;
+    private User user;
     private FileInfo fileInfo;
 
     @BeforeEach
@@ -38,26 +38,26 @@ class FileInfoRepositoryTest {
         Set<Role> roleSet = new HashSet<>();
         roleSet.add(roleUser);
 
-        climberUser = ClimberUser.builder()
+        user = User.builder()
                 .userName("Brooke")
                 .email("brooketta@mail.it")
                 .password("tartineOrclimber")
                 .roles(roleSet)
                 .createdAt(LocalDateTime.MIN)
                 .build();
-        entityManager.persist(climberUser);
+        entityManager.persist(user);
 
         fileInfo = FileInfo.builder()
                 .name("myPic.jpg")
                 .url("myrepo/user1/myPic.jpg")
-                .climberUser(climberUser)
+                .user(user)
                 .build();
         entityManager.persist(fileInfo);
     }
 
     @Test
     void deleteByUrl_Ok() {
-        Optional<FileInfo> existsBefore = fileInfoRepository.findByclimberUserId(climberUser.getId());
+        Optional<FileInfo> existsBefore = fileInfoRepository.findByUserId(user.getId());
         fileInfoRepository.deleteByUrl(fileInfo.getUrl());
 
         assertAll(
@@ -68,8 +68,8 @@ class FileInfoRepositoryTest {
     }
 
     @Test
-    void findByclimberUserId_Id_ThenFound() {
-        Optional<FileInfo> optResult = fileInfoRepository.findByclimberUserId(climberUser.getId());
+    void findByUserId_Id_Found() {
+        Optional<FileInfo> optResult = fileInfoRepository.findByUserId(user.getId());
         assertAll(
                 () -> assertTrue(optResult.isPresent()),
                 () -> assertEquals(fileInfo, optResult.get())
@@ -77,9 +77,9 @@ class FileInfoRepositoryTest {
     }
 
     @Test
-    void findByclimberUserId_Id_ThenEmpty() {
-        Long wrongUser = climberUser.getId() + 1;
-        Optional<FileInfo> optResult = fileInfoRepository.findByclimberUserId(wrongUser);
+    void findByUserId_Id_Empty() {
+        Long wrongUser = user.getId() + 1;
+        Optional<FileInfo> optResult = fileInfoRepository.findByUserId(wrongUser);
         assertTrue(optResult.isEmpty());
     }
 }

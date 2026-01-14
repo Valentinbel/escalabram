@@ -1,6 +1,6 @@
 package com.escalabram.escalabram.repository;
 
-import com.escalabram.escalabram.model.ClimberUser;
+import com.escalabram.escalabram.model.User;
 import com.escalabram.escalabram.model.Role;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -19,14 +19,14 @@ import static org.junit.jupiter.api.Assertions.*;
 
 @ActiveProfiles("test")
 @DataJpaTest
-class ClimberUserRepositoryTest {
+class UserRepositoryTest {
 
     @Autowired
-    private ClimberUserRepository climberUserRepository;
+    private UserRepository userRepository;
     @Autowired
     private TestEntityManager entityManager;
 
-    private ClimberUser climberUser;
+    private User user;
     private String wrongEmail;
     private String wrongUserName;
 
@@ -38,14 +38,14 @@ class ClimberUserRepositoryTest {
         Set<Role> roleSet = new HashSet<>();
         roleSet.add(roleUser);
 
-        climberUser = ClimberUser.builder()
+        user = User.builder()
                 .userName("Brooke")
                 .email("brooketta@mail.it")
                 .password("tartineOrclimber")
                 .roles(roleSet)
                 .createdAt(LocalDateTime.MIN)
                 .build();
-        entityManager.persist(climberUser);
+        entityManager.persist(user);
 
         wrongEmail = "anotherEmail@wrong.com";
         wrongUserName = "Michel";
@@ -53,49 +53,49 @@ class ClimberUserRepositoryTest {
 
     @Test
     void findByEmail_Email_thenFound() {
-        Optional<ClimberUser> optResult = climberUserRepository.findByEmail(climberUser.getEmail());
+        Optional<User> optResult = userRepository.findByEmail(user.getEmail());
         assertAll(
                 () -> assertTrue(optResult.isPresent()),
-                () -> assertEquals(climberUser, optResult.get())
+                () -> assertEquals(user, optResult.get())
         );
     }
 
     @Test
     void findByEmail_Email_thenEmpty() {
-        Optional<ClimberUser> optResult = climberUserRepository.findByEmail(wrongEmail);
+        Optional<User> optResult = userRepository.findByEmail(wrongEmail);
         assertTrue(optResult.isEmpty());
     }
 
     @Test
     void existsByUserName_True() {
-        boolean result = climberUserRepository.existsByUserName(climberUser.getUserName());
+        boolean result = userRepository.existsByUserName(user.getUserName());
         assertTrue(result);
     }
 
     @Test
     void existsByUserName_False() {
-        boolean result = climberUserRepository.existsByUserName(wrongUserName);
+        boolean result = userRepository.existsByUserName(wrongUserName);
         assertFalse(result);
     }
 
     @Test
     void existsByEmail_True() {
-        boolean result = climberUserRepository.existsByEmail(climberUser.getEmail());
+        boolean result = userRepository.existsByEmail(user.getEmail());
         assertTrue(result);
     }
 
     @Test
     void existsByEmail_False() {
-        boolean result = climberUserRepository.existsByEmail(wrongEmail);
+        boolean result = userRepository.existsByEmail(wrongEmail);
         assertFalse(result);
     }
 
     @Test
     void updateUserNameById_userIdUserName_updateOk() {
         String newUserName = "Shawn";
-        int result = climberUserRepository.updateUserNameById(climberUser.getId(), newUserName, LocalDateTime.now());
+        int result = userRepository.updateUserNameById(user.getId(), newUserName, LocalDateTime.now());
         entityManager.clear();
-        Optional<ClimberUser> optModifiedUser = climberUserRepository.findByEmail(climberUser.getEmail());
+        Optional<User> optModifiedUser = userRepository.findByEmail(user.getEmail());
         assertAll(
                 () -> assertTrue(optModifiedUser.isPresent()),
                 () -> assertEquals(1, result),
@@ -105,13 +105,13 @@ class ClimberUserRepositoryTest {
 
     @Test
     void updateUserNameById_WronfUserId_UpdateChangedNothing() {
-        int result = climberUserRepository.updateUserNameById(climberUser.getId(),climberUser.getUserName(), LocalDateTime.now());
+        int result = userRepository.updateUserNameById(user.getId(),user.getUserName(), LocalDateTime.now());
         entityManager.clear();
-        Optional<ClimberUser> optNotModifiedUser = climberUserRepository.findByEmail(climberUser.getEmail());
+        Optional<User> optNotModifiedUser = userRepository.findByEmail(user.getEmail());
         assertAll(
                 () -> assertTrue(optNotModifiedUser.isPresent()),
                 () -> assertEquals(1, result),
-                () -> assertEquals(optNotModifiedUser.get().getUserName(), climberUser.getUserName())
+                () -> assertEquals(optNotModifiedUser.get().getUserName(), user.getUserName())
         );
     }
 }

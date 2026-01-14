@@ -1,6 +1,6 @@
 package com.escalabram.escalabram.repository;
 
-import com.escalabram.escalabram.model.ClimberUser;
+import com.escalabram.escalabram.model.User;
 import com.escalabram.escalabram.model.RefreshToken;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
@@ -13,8 +13,8 @@ public interface RefreshTokenRepository extends JpaRepository<RefreshToken, Long
 
     Optional<RefreshToken> findByToken(String token);
 
-    Optional<RefreshToken> findByClimberUserId(Long climberUserId);
+    Optional<RefreshToken> findByUserId(Long userId);
 
     @Modifying(clearAutomatically = true, flushAutomatically = true)
-    int deleteByClimberUser(ClimberUser climberUser);
+    int deleteByUser(User user);
 }

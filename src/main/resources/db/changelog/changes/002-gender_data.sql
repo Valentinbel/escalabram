@@ -1,10 +1,10 @@
-CREATE TABLE gender (
-  id BIGSERIAL PRIMARY KEY,
-  gender_name VARCHAR(255)
+CREATE TABLE IF NOT EXISTS gender (
+    id BIGSERIAL PRIMARY KEY,
+    gender_name VARCHAR(255)
 );
 
-INSERT INTO gender (gender_name)
+INSERT INTO gender (id, gender_name)
 VALUES
-    ('male'),
-    ('female'),
-    ('other')
+    (1, 'female'),
+    (2, 'male'),
+    (3, 'other');

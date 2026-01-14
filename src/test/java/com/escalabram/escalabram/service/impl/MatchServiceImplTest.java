@@ -17,7 +17,8 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.sql.Timestamp;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -43,6 +44,7 @@ class MatchServiceImplTest {
     private Set<TimeSlot> timeSlotsMatching1;
     private Set<TimeSlot> timeSlotsMatching2;
     private Set<TimeSlot> timeSlotsNOTMatching;
+    private static final DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ISO_LOCAL_DATE_TIME;
 
     @BeforeEach
     void setupData() {
@@ -61,51 +63,51 @@ class MatchServiceImplTest {
                 ClimbLevel.builder().id(12L).codeFr("7A").build()
         ).collect(Collectors.toSet());
 
-        String beginTime1 = "2024-09-02 13:59:59.123456789";
-        String endTime1 = "2024-09-02 18:59:59.123456789";
+        String beginTime1 = "2024-09-02T13:59:59.123"; // TODO changer ces strings par des LocalDateTime.xxx calculés
+        String endTime1 = "2024-09-02T18:59:59.123";
 
         timeSlotsMatching1 = Stream.of(
                 TimeSlot.builder()
                         .id(1L)
-                        .beginTime(Timestamp.valueOf(beginTime1))
-                        .endTime(Timestamp.valueOf(endTime1))
+                        .beginTime(LocalDateTime.parse(beginTime1, dateTimeFormatter))
+                        .endTime(LocalDateTime.parse(endTime1, dateTimeFormatter))
                         .build()
     ).collect(Collectors.toSet());
 
-        String beginTime2 = "2024-09-02 15:59:59.123456789";
-        String endTime2 = "2024-09-02 19:59:59.123456789";
+        String beginTime2 = "2024-09-02T15:59:59.123";
+        String endTime2 = "2024-09-02T19:59:59.123";
 
         timeSlotsMatching2 = Stream.of(
                 TimeSlot.builder()
                         .id(3L)
-                        .beginTime(Timestamp.valueOf(beginTime2))
-                        .endTime(Timestamp.valueOf(endTime2))
+                        .beginTime(LocalDateTime.parse(beginTime2))
+                        .endTime(LocalDateTime.parse(endTime2))
                         .build()
         ).collect(Collectors.toSet());
 
-        String beginTime3 = "2024-09-02 22:59:59.123456789";
-        String endTime3 = "2024-09-02 23:59:59.123456789";
+        String beginTime3 = "2024-09-02T22:59:59.123";
+        String endTime3 = "2024-09-02T23:59:59.123";
 
-        String beginTime4 = "2024-09-03 04:00:00.123456789";
-        String endTime4 = "2024-09-03 06:00:00.123456789";
+        String beginTime4 = "2024-09-03T04:00:00.123";
+        String endTime4 = "2024-09-03T06:00:00.123";
 
         timeSlotsNOTMatching = Stream.of(
                 TimeSlot.builder()
                         .id(5L)
-                        .beginTime(Timestamp.valueOf(beginTime3))
-                        .endTime(Timestamp.valueOf(endTime3))
+                        .beginTime(LocalDateTime.parse(beginTime3))
+                        .endTime(LocalDateTime.parse(endTime3))
                         .build(),
                 TimeSlot.builder()
                         .id(6L)
-                        .beginTime(Timestamp.valueOf(beginTime4))
-                        .endTime(Timestamp.valueOf(endTime4))
+                        .beginTime(LocalDateTime.parse(beginTime4))
+                        .endTime(LocalDateTime.parse(endTime4))
                         .build()
         ).collect(Collectors.toSet());
 
         searches = Stream.of(
                 Search.builder()
                         .id(1L)
-                        .climberProfileId(1L)
+                        .profileId(1L)
                         .title("search1Profile1")
                         .haveRope(true)
                         .haveBelayDevice(true)
@@ -118,7 +120,7 @@ class MatchServiceImplTest {
                         .build(),
                 Search.builder()
                         .id(2L)
-                        .climberProfileId(1L)
+                        .profileId(1L)
                         .title("search2Profile1")
                         .haveRope(true)
                         .haveBelayDevice(true)
@@ -131,7 +133,7 @@ class MatchServiceImplTest {
                         .build(),
                 Search.builder()
                         .id(3L)
-                        .climberProfileId(2L)
+                        .profileId(2L)
                         .title("search1Profile2")
                         .haveRope(true)
                         .haveBelayDevice(true)
@@ -144,7 +146,7 @@ class MatchServiceImplTest {
                         .build(),
                 Search.builder()
                         .id(4L)
-                        .climberProfileId(4L)
+                        .profileId(4L)
                         .title("search1Profile3")
                         .haveRope(true)
                         .haveBelayDevice(true)
@@ -159,11 +161,11 @@ class MatchServiceImplTest {
     }
 
     @Test
-    void createMatchesIfFit_matching(){
+    void createMatchesIfFit_Matching(){
         // Matching
         Search searchMatching = searches.getFirst();
         searchMatching.setTimeSlots(timeSlotsMatching1);
-        List<Timestamp> matchingBeginTimesSearchMatching =  new ArrayList<>();
+        List<LocalDateTime> matchingBeginTimesSearchMatching =  new ArrayList<>();
         matchingBeginTimesSearchMatching.add(timeSlotsMatching1.stream().toList().getFirst().getBeginTime());
 
         // That may have matched
@@ -198,7 +200,7 @@ class MatchServiceImplTest {
 
         List<Match> matches = matchServiceImpl.createMatchesIfFit(searchMatching);
 
-        verify(searchRepository, times(1)).findAllSearchesByCriterias(searchMatching.getClimberProfileId(), searchMatching.getPlaceId(), matchingBeginTimesSearchMatching);
+        verify(searchRepository, times(1)).findAllSearchesByCriterias(searchMatching.getProfileId(), searchMatching.getPlaceId(), matchingBeginTimesSearchMatching);
         verify(searchRepository, times(1)).findClimbLevelsByIdSearchId(searchToMatched.getId());
         verify(matchRepository, times(1)).findByCriterias(match.getMatchingSearchId(), match.getMatchedSearchId(),match.getMatchedTimeSlotId(), match.getMutualMatch());
         verify(matchRepository, times(1)).save(ArgumentMatchers.any());
@@ -207,11 +209,11 @@ class MatchServiceImplTest {
     }
 
     @Test
-    void createMatchesIfFit_matchAlreadyExists(){
+    void createMatchesIfFit_MatchAlreadyExists(){
         // Matching
         Search searchMatching = searches.getFirst();
         searchMatching.setTimeSlots(timeSlotsMatching1);
-        List<Timestamp> matchingBeginTimesSearchMatching =  new ArrayList<>();
+        List<LocalDateTime> matchingBeginTimesSearchMatching =  new ArrayList<>();
         matchingBeginTimesSearchMatching.add(timeSlotsMatching1.stream().toList().getFirst().getBeginTime());
 
         // That may have matched
@@ -237,7 +239,7 @@ class MatchServiceImplTest {
         searchMatchDTOs.add(searchMatchDTO1);
 
 
-        when(searchRepository.findAllSearchesByCriterias(searchMatching.getClimberProfileId(), searchMatching.getPlaceId(), matchingBeginTimesSearchMatching))
+        when(searchRepository.findAllSearchesByCriterias(searchMatching.getProfileId(), searchMatching.getPlaceId(), matchingBeginTimesSearchMatching))
                 .thenReturn(searchMatchDTOs);
 
         when(searchRepository.findClimbLevelsByIdSearchId(searchToMatched.getId())).thenReturn(matchedClimbLevelDTOs);
@@ -247,7 +249,7 @@ class MatchServiceImplTest {
 
         List<Match> matches = matchServiceImpl.createMatchesIfFit(searchMatching);
 
-        verify(searchRepository, times(1)).findAllSearchesByCriterias(searchMatching.getClimberProfileId(), searchMatching.getPlaceId(), matchingBeginTimesSearchMatching);
+        verify(searchRepository, times(1)).findAllSearchesByCriterias(searchMatching.getProfileId(), searchMatching.getPlaceId(), matchingBeginTimesSearchMatching);
         verify(searchRepository, times(1)).findClimbLevelsByIdSearchId(searchToMatched.getId());
         verify(matchRepository, times(1)).findByCriterias(match.getMatchingSearchId(), match.getMatchedSearchId(),match.getMatchedTimeSlotId(), match.getMutualMatch());
 
@@ -255,11 +257,11 @@ class MatchServiceImplTest {
     }
 
     @Test
-    void createMatchesIfFit_timeSlotsNOMatch(){
+    void createMatchesIfFit_TimeSlotsNOMatch(){
         // Matching
         Search searchMatching = searches.getFirst();
         searchMatching.setTimeSlots(timeSlotsMatching1);
-        List<Timestamp> matchingBeginTimesSearchMatching =  new ArrayList<>();
+        List<LocalDateTime> matchingBeginTimesSearchMatching =  new ArrayList<>();
         matchingBeginTimesSearchMatching.add(timeSlotsMatching1.stream().toList().getFirst().getBeginTime());
 
         // That may have matched
@@ -276,22 +278,22 @@ class MatchServiceImplTest {
         List<SearchMatchDTO> searchMatchDTOs = new ArrayList<>();
         searchMatchDTOs.add(searchMatchDTO1);
 
-        when(searchRepository.findAllSearchesByCriterias(searchMatching.getClimberProfileId(), searchMatching.getPlaceId(), matchingBeginTimesSearchMatching))
+        when(searchRepository.findAllSearchesByCriterias(searchMatching.getProfileId(), searchMatching.getPlaceId(), matchingBeginTimesSearchMatching))
                 .thenReturn(searchMatchDTOs);
 
         List<Match> matches = matchServiceImpl.createMatchesIfFit(searchMatching);
 
-        verify(searchRepository, times(1)).findAllSearchesByCriterias(searchMatching.getClimberProfileId(), searchMatching.getPlaceId(), matchingBeginTimesSearchMatching);
+        verify(searchRepository, times(1)).findAllSearchesByCriterias(searchMatching.getProfileId(), searchMatching.getPlaceId(), matchingBeginTimesSearchMatching);
 
         assertEquals(matches, matchesToResult);
     }
 
     @Test
-    void testCreateMatchesIfFit_timeSlotsMatchButClimbLevelDONT(){
+    void testCreateMatchesIfFit_TimeSlotsMatchButClimbLevelDONT(){
         // Matching
         Search searchMatching = searches.getFirst();
         searchMatching.setTimeSlots(timeSlotsMatching1);
-        List<Timestamp> matchingBeginTimesSearchMatching =  new ArrayList<>();
+        List<LocalDateTime> matchingBeginTimesSearchMatching =  new ArrayList<>();
         matchingBeginTimesSearchMatching.add(timeSlotsMatching1.stream().toList().getFirst().getBeginTime());
 
         // That may have matched
@@ -314,13 +316,13 @@ class MatchServiceImplTest {
         List<SearchMatchDTO> searchMatchDTOs = new ArrayList<>();
         searchMatchDTOs.add(searchMatchDTO1);
 
-        when(searchRepository.findAllSearchesByCriterias(searchMatching.getClimberProfileId(), searchMatching.getPlaceId(), matchingBeginTimesSearchMatching))
+        when(searchRepository.findAllSearchesByCriterias(searchMatching.getProfileId(), searchMatching.getPlaceId(), matchingBeginTimesSearchMatching))
                 .thenReturn(searchMatchDTOs);
         when(searchRepository.findClimbLevelsByIdSearchId(searchToMatched.getId())).thenReturn(matchedClimbLevelDTOs);
 
         List<Match> matches = matchServiceImpl.createMatchesIfFit(searchMatching);
 
-        verify(searchRepository, times(1)).findAllSearchesByCriterias(searchMatching.getClimberProfileId(), searchMatching.getPlaceId(), matchingBeginTimesSearchMatching);
+        verify(searchRepository, times(1)).findAllSearchesByCriterias(searchMatching.getProfileId(), searchMatching.getPlaceId(), matchingBeginTimesSearchMatching);
         verify(searchRepository, times(1)).findClimbLevelsByIdSearchId(searchToMatched.getId());
 
         assertEquals(matches, matchesToResult);

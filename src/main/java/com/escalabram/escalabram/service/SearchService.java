@@ -12,7 +12,7 @@ public interface SearchService {
 
     Optional<Search> findById(Long searchId);
 
-    Optional<Set<Search>> findByClimberProfileId(Long climberProfileId);
+    Optional<Set<Search>> findByProfileId(Long profileId);
 
     Search createSearch(Search newSearch);
 

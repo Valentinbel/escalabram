@@ -68,8 +68,8 @@ public class SpringSecurityConfig {
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth ->
                         auth.requestMatchers("/api/auth/**").permitAll()
-                        .requestMatchers("/api/climber-user/**").hasAnyRole("USER")
-                        .requestMatchers("/api/climber-profiles/**").hasAnyRole("USER")
+                        .requestMatchers("/api/user/**").hasAnyRole("USER")
+                        .requestMatchers("/api/profiles/**").hasAnyRole("USER")
                         .requestMatchers("/api/avatar/**").hasAnyRole("USER")
                         .requestMatchers("/api/matches/**").hasAnyRole("USER")
                         .requestMatchers("/api/searches/**").hasAnyRole("USER")
@@ -136,7 +136,7 @@ public class SpringSecurityConfig {
 //
 //    @Bean // Service à déplacer dans une classe appropriée?
 //    public UserDetailsService users() {  ////// EN PROD on stocke ces users en BBDD
-//        UserDetails user = User.builder() ///// mettre ClimberUSer pour voir........................................................
+//        UserDetails user = User.builder() ///// mettre User pour voir........................................................
 //                .username("user")
 //                .password(passwordEncoder().encode("user")) // Password Compromised for PROD
 //                .roles("USER").build();

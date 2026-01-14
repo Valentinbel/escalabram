@@ -1,8 +1,8 @@
 package com.escalabram.escalabram.service.impl;
 
-import com.escalabram.escalabram.model.ClimberUser;
+import com.escalabram.escalabram.model.User;
 import com.escalabram.escalabram.model.FileInfo;
-import com.escalabram.escalabram.service.ClimberUSerService;
+import com.escalabram.escalabram.service.UserService;
 import com.escalabram.escalabram.service.FileInfoService;
 import com.escalabram.escalabram.service.FilesStorageService;
 import lombok.RequiredArgsConstructor;
@@ -25,7 +25,7 @@ import java.util.Optional;
 public class FilesStorageServiceImpl implements FilesStorageService {
     private static final Logger log = LoggerFactory.getLogger(FilesStorageServiceImpl.class);
     private final FileInfoService fileInfoService;
-    private final ClimberUSerService climberUSerService;
+    private final UserService userService;
 
     @Override
     public Long getAvatarId(Long userId) {
@@ -38,7 +38,7 @@ public class FilesStorageServiceImpl implements FilesStorageService {
 
             Path userFolder = getUserFolder(userId);
             Path file = userFolder.resolve(optFileInfo.get().getName());
-            Resource resource = new UrlResource(file.toUri());
+            Resource resource = createResource(file);
 
             if (resource.exists() || resource.isReadable()) {
                 return optFileInfo.get().getId();
@@ -59,7 +59,7 @@ public class FilesStorageServiceImpl implements FilesStorageService {
 
             Path userFolder = getUserFolder(userId);
             Path file = userFolder.resolve(optFileInfo.get().getName());
-            Resource resource = new UrlResource(file.toUri());
+            Resource resource = createResource(file);
 
             if (resource.exists() || resource.isReadable()) {
                 return resource;
@@ -75,11 +75,14 @@ public class FilesStorageServiceImpl implements FilesStorageService {
         return Paths.get("uploads/userId_" + userId);
     }
 
+    protected Resource createResource(Path file) throws MalformedURLException {
+        return new UrlResource(file.toUri());
+    }
+
     @Override
     public FileInfo saveAvatar(MultipartFile file, String userIdString) {
         try {
             Long userId= Long.parseLong(userIdString);
-            // TODO: Il faut réduire la taille de l'image aussi. En front ou en back ??
             //delete Folder & save in Folder
             Path userFolder = getUserFolder(userId);
             FileUtils.deleteDirectory(userFolder.toFile());
@@ -105,14 +108,14 @@ public class FilesStorageServiceImpl implements FilesStorageService {
     }
 
     private FileInfo deleteAndSaveFileInfo(Long userId, MultipartFile file) {
-        Optional<ClimberUser> optUser =  climberUSerService.findById(userId);
+        Optional<User> optUser =  userService.findById(userId);
         if (optUser.isPresent()) {
             Path userFolder = getUserFolder(userId);
             fileInfoService.deleteByUrl(userFolder.toString());
             FileInfo fileToSave = FileInfo.builder()
                     .name(file.getOriginalFilename())
                     .url(userFolder.toString())
-                    .climberUser(optUser.get())
+                    .user(optUser.get())
                     .build();
             try {
                 return fileInfoService.save(fileToSave);
@@ -127,7 +130,7 @@ public class FilesStorageServiceImpl implements FilesStorageService {
     }
 
     @Override
-    public String getContentType(Resource avatar, Long userId) throws IOException {
+    public String getContentType(Resource avatar) throws IOException {
         Path imagePath = Paths.get(avatar.getURI());
 
         // Déterminer le Content-Type de manière robuste

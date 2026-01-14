@@ -9,5 +9,5 @@ import java.util.Optional;
 public interface FileInfoRepository extends JpaRepository<FileInfo, Long> {
     void deleteByUrl(String url);
 
-    Optional<FileInfo> findByclimberUserId(@Param("id") Long userId);
+    Optional<FileInfo> findByUserId(@Param("id") Long userId);
 }

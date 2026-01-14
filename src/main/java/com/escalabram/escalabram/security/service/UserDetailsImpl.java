@@ -1,6 +1,6 @@
 package com.escalabram.escalabram.security.service;
 
-import com.escalabram.escalabram.model.ClimberUser;
+import com.escalabram.escalabram.model.User;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -29,16 +29,16 @@ public class UserDetailsImpl implements UserDetails {
     private final String password;
     private final Collection<? extends GrantedAuthority> authorities;
 
-    public static UserDetailsImpl build(ClimberUser climberUser) {
-        List<GrantedAuthority> authorities = climberUser.getRoles().stream()
+    public static UserDetailsImpl build(User user) {
+        List<GrantedAuthority> authorities = user.getRoles().stream()
                 .map(role -> new SimpleGrantedAuthority(role.getRoleName().name()))
                 .collect(Collectors.toList());
 
         return new UserDetailsImpl(
-                climberUser.getId(),
-                climberUser.getUserName(),
-                climberUser.getEmail(),
-                climberUser.getPassword(),
+                user.getId(),
+                user.getUserName(),
+                user.getEmail(),
+                user.getPassword(),
                 authorities);
     }
 
