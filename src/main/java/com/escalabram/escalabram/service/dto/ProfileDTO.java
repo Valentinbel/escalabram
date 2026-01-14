@@ -22,8 +22,6 @@ public class ProfileDTO implements Serializable {
 
     private Long genderId;
 
-    private Long languageId;
-
     private Boolean isNotified;
 
     private String profileDescription;

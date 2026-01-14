@@ -26,9 +26,6 @@ public class Profile implements Serializable {
     @Column(name = "gender_id")
     private Long genderId;
 
-    @Column(name = "language_id")
-    private Long languageId;
-
     @Column(name = "is_notified", nullable = false)
     private Boolean isNotified;
 
@@ -41,6 +38,5 @@ public class Profile implements Serializable {
 
     // TODO Gerer les relations de table
     //hasOne Gender
-    //hasOne Language
     //hasManySearch ==> Comprendre les différents types de Cascade et autres parametres
 }

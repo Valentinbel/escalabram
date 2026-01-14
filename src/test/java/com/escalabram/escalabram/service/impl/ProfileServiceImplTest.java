@@ -48,7 +48,6 @@ class ProfileServiceImplTest {
 
         profile = Profile.builder()
                 .genderId(1L)
-                .languageId(2L)
                 .user(user)
                 .isNotified(true)
                 .profileDescription("Salut les boys, c'est Adam")
@@ -57,7 +56,6 @@ class ProfileServiceImplTest {
         profileDTO = ProfileDTO.builder()
                 .userName("Just Adam")
                 .genderId(1L)
-                .languageId(2L)
                 .profileDescription("Salut les boys, c'est Adam")
                 .userId(profile.getUser().getId())
                 .build();

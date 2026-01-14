@@ -56,7 +56,6 @@ class ProfileRepositoryTest {
 
         profile = Profile.builder()
                 .genderId(1L)
-                .languageId(2L)
                 .isNotified(true)
                 .user(user)
                 .profileDescription("Blah blah, my life...")
