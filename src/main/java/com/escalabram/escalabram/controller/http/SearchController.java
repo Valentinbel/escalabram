@@ -59,7 +59,7 @@ public class SearchController {
             if (search.getId() != null)
                 throw new BadRequestAlertException("A new search cannot already have an ID");
 
-            if(!profileService.existsById(search.getProfileId()))
+            if(!profileService.existsById(search.getProfile().getId()))
                 throw new BadRequestAlertException("There is no Profile matching with this search");
 
             // TODO Remplacer SEARCH par un DTO

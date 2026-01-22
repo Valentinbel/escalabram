@@ -1,9 +1,6 @@
 package com.escalabram.escalabram.service.impl;
 
-import com.escalabram.escalabram.model.ClimbLevel;
-import com.escalabram.escalabram.model.Match;
-import com.escalabram.escalabram.model.Search;
-import com.escalabram.escalabram.model.TimeSlot;
+import com.escalabram.escalabram.model.*;
 import com.escalabram.escalabram.repository.MatchRepository;
 import com.escalabram.escalabram.repository.SearchRepository;
 import com.escalabram.escalabram.service.dto.ISearchClimbLevelDTO;
@@ -48,6 +45,38 @@ class MatchServiceImplTest {
 
     @BeforeEach
     void setupData() {
+        User user1 = User.builder()
+                .userName("user1")
+                .email("email1")
+                .password("12345678")
+                .createdAt(LocalDateTime.MIN)
+                .build();
+        Profile profile1 = Profile.builder()
+                .isNotified(true)
+                .user(user1)
+                .build();
+
+        User user2 = User.builder()
+                .userName("user2")
+                .email("email2")
+                .password("12345678")
+                .createdAt(LocalDateTime.MIN)
+                .build();
+        Profile profile2 = Profile.builder()
+                .isNotified(true)
+                .user(user2)
+                .build();
+
+        User user3 = User.builder()
+                .userName("user3")
+                .email("email3")
+                .password("12345678")
+                .createdAt(LocalDateTime.MIN)
+                .build();
+        Profile profile3 = Profile.builder()
+                .isNotified(true)
+                .user(user3)
+                .build();
 
         Set<ClimbLevel> climbLevelsMatching1 = Stream.of(
                 ClimbLevel.builder().id(2L).codeFr("4+").build(),
@@ -107,7 +136,7 @@ class MatchServiceImplTest {
         searches = Stream.of(
                 Search.builder()
                         .id(1L)
-                        .profileId(1L)
+                        .profile(profile1)
                         .title("search1Profile1")
                         .haveRope(true)
                         .haveBelayDevice(true)
@@ -120,7 +149,7 @@ class MatchServiceImplTest {
                         .build(),
                 Search.builder()
                         .id(2L)
-                        .profileId(1L)
+                        .profile(profile1)
                         .title("search2Profile1")
                         .haveRope(true)
                         .haveBelayDevice(true)
@@ -133,7 +162,7 @@ class MatchServiceImplTest {
                         .build(),
                 Search.builder()
                         .id(3L)
-                        .profileId(2L)
+                        .profile(profile2)
                         .title("search1Profile2")
                         .haveRope(true)
                         .haveBelayDevice(true)
@@ -146,7 +175,7 @@ class MatchServiceImplTest {
                         .build(),
                 Search.builder()
                         .id(4L)
-                        .profileId(4L)
+                        .profile(profile3)
                         .title("search1Profile3")
                         .haveRope(true)
                         .haveBelayDevice(true)
@@ -200,7 +229,7 @@ class MatchServiceImplTest {
 
         List<Match> matches = matchServiceImpl.createMatchesIfFit(searchMatching);
 
-        verify(searchRepository, times(1)).findAllSearchesByCriterias(searchMatching.getProfileId(), searchMatching.getPlaceId(), matchingBeginTimesSearchMatching);
+        verify(searchRepository, times(1)).findAllSearchesByCriterias(searchMatching.getProfile().getId(), searchMatching.getPlaceId(), matchingBeginTimesSearchMatching);
         verify(searchRepository, times(1)).findClimbLevelsByIdSearchId(searchToMatched.getId());
         verify(matchRepository, times(1)).findByCriterias(match.getMatchingSearchId(), match.getMatchedSearchId(),match.getMatchedTimeSlotId(), match.getMutualMatch());
         verify(matchRepository, times(1)).save(ArgumentMatchers.any());
@@ -239,7 +268,7 @@ class MatchServiceImplTest {
         searchMatchDTOs.add(searchMatchDTO1);
 
 
-        when(searchRepository.findAllSearchesByCriterias(searchMatching.getProfileId(), searchMatching.getPlaceId(), matchingBeginTimesSearchMatching))
+        when(searchRepository.findAllSearchesByCriterias(searchMatching.getProfile().getId(), searchMatching.getPlaceId(), matchingBeginTimesSearchMatching))
                 .thenReturn(searchMatchDTOs);
 
         when(searchRepository.findClimbLevelsByIdSearchId(searchToMatched.getId())).thenReturn(matchedClimbLevelDTOs);
@@ -249,7 +278,7 @@ class MatchServiceImplTest {
 
         List<Match> matches = matchServiceImpl.createMatchesIfFit(searchMatching);
 
-        verify(searchRepository, times(1)).findAllSearchesByCriterias(searchMatching.getProfileId(), searchMatching.getPlaceId(), matchingBeginTimesSearchMatching);
+        verify(searchRepository, times(1)).findAllSearchesByCriterias(searchMatching.getProfile().getId(), searchMatching.getPlaceId(), matchingBeginTimesSearchMatching);
         verify(searchRepository, times(1)).findClimbLevelsByIdSearchId(searchToMatched.getId());
         verify(matchRepository, times(1)).findByCriterias(match.getMatchingSearchId(), match.getMatchedSearchId(),match.getMatchedTimeSlotId(), match.getMutualMatch());
 
@@ -278,12 +307,12 @@ class MatchServiceImplTest {
         List<SearchMatchDTO> searchMatchDTOs = new ArrayList<>();
         searchMatchDTOs.add(searchMatchDTO1);
 
-        when(searchRepository.findAllSearchesByCriterias(searchMatching.getProfileId(), searchMatching.getPlaceId(), matchingBeginTimesSearchMatching))
+        when(searchRepository.findAllSearchesByCriterias(searchMatching.getProfile().getId(), searchMatching.getPlaceId(), matchingBeginTimesSearchMatching))
                 .thenReturn(searchMatchDTOs);
 
         List<Match> matches = matchServiceImpl.createMatchesIfFit(searchMatching);
 
-        verify(searchRepository, times(1)).findAllSearchesByCriterias(searchMatching.getProfileId(), searchMatching.getPlaceId(), matchingBeginTimesSearchMatching);
+        verify(searchRepository, times(1)).findAllSearchesByCriterias(searchMatching.getProfile().getId(), searchMatching.getPlaceId(), matchingBeginTimesSearchMatching);
 
         assertEquals(matches, matchesToResult);
     }
@@ -316,13 +345,13 @@ class MatchServiceImplTest {
         List<SearchMatchDTO> searchMatchDTOs = new ArrayList<>();
         searchMatchDTOs.add(searchMatchDTO1);
 
-        when(searchRepository.findAllSearchesByCriterias(searchMatching.getProfileId(), searchMatching.getPlaceId(), matchingBeginTimesSearchMatching))
+        when(searchRepository.findAllSearchesByCriterias(searchMatching.getProfile().getId(), searchMatching.getPlaceId(), matchingBeginTimesSearchMatching))
                 .thenReturn(searchMatchDTOs);
         when(searchRepository.findClimbLevelsByIdSearchId(searchToMatched.getId())).thenReturn(matchedClimbLevelDTOs);
 
         List<Match> matches = matchServiceImpl.createMatchesIfFit(searchMatching);
 
-        verify(searchRepository, times(1)).findAllSearchesByCriterias(searchMatching.getProfileId(), searchMatching.getPlaceId(), matchingBeginTimesSearchMatching);
+        verify(searchRepository, times(1)).findAllSearchesByCriterias(searchMatching.getProfile().getId(), searchMatching.getPlaceId(), matchingBeginTimesSearchMatching);
         verify(searchRepository, times(1)).findClimbLevelsByIdSearchId(searchToMatched.getId());
 
         assertEquals(matches, matchesToResult);

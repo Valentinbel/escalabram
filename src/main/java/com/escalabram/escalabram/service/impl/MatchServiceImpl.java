@@ -33,7 +33,7 @@ public class MatchServiceImpl implements MatchService {
         matchedSearchIds.clear();
         // New search for matching (MATCHING)
         Long matchingSearchId = search.getId();
-        Long matchingProfile = search.getProfileId();
+        Long matchingProfile = search.getProfile().getId();
         Long matchingPlaceId = search.getPlaceId();
         Set<TimeSlot> matchingTimeSlots = search.getTimeSlots();
         List<LocalDateTime> matchingBeginTimes = new ArrayList<>();

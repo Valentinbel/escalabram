@@ -5,11 +5,12 @@ import lombok.*;
 
 import java.io.Serial;
 import java.io.Serializable;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Getter
 @Setter
-@ToString
 @Builder(toBuilder = true)
 @NoArgsConstructor
 @AllArgsConstructor
@@ -32,11 +33,14 @@ public class Profile implements Serializable {
     @Column(columnDefinition = "TEXT", name = "profile_description")
     private String profileDescription;
 
+    @OneToMany(mappedBy = "profile", cascade = CascadeType.ALL, orphanRemoval = true)
+    @Builder.Default
+    private Set<Search> searches = new HashSet<>();
+
     @OneToOne(orphanRemoval = true)
     @JoinColumn(name = "user_id", referencedColumnName = "id", nullable = false)
     private User user;
 
     // TODO Gerer les relations de table
     //hasOne Gender
-    //hasManySearch ==> Comprendre les différents types de Cascade et autres parametres
 }
