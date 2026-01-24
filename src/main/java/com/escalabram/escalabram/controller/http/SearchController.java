@@ -53,7 +53,7 @@ public class SearchController {
     }
 
     @PostMapping("/searches")
-    public ResponseEntity<Search> createSearch(@Valid @RequestBody Search search) {
+    public ResponseEntity<Search> createSearch(@Valid @RequestBody Search search) { // TODO SearchDTO?
         log.info("REST request to save Search : {}", search);
         try {
             if (search.getId() != null)

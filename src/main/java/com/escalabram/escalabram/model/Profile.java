@@ -41,6 +41,18 @@ public class Profile implements Serializable {
     @JoinColumn(name = "user_id", referencedColumnName = "id", nullable = false)
     private User user;
 
+//    @Column(name = "have_rope")
+//    private Boolean haveRope;
+//
+//    @Column(name = "have_belay_device")
+//    private Boolean haveBelayDevice;
+//
+//    @Column(name = "have_quickdraw")
+//    private Boolean haveQuickdraw;
+//
+//    @Column(name = "have_car_to_share")
+//    private Boolean haveCarToShare;
+
     // TODO Gerer les relations de table
     //hasOne Gender
 }

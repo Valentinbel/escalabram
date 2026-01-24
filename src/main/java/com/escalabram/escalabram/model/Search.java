@@ -30,18 +30,6 @@ public class Search implements Serializable {
     @Column(name = "title")
     private String title;
 
-    @Column(name = "have_rope")
-    private Boolean haveRope;
-
-    @Column(name = "have_belay_device")
-    private Boolean haveBelayDevice;
-
-    @Column(name = "have_quickdraw")
-    private Boolean haveQuickdraw;
-
-    @Column(name = "have_car_to_share")
-    private Boolean haveCarToShare;
-
     @Column(name= "place_id")
     private Long placeId;
 
