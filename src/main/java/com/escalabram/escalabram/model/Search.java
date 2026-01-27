@@ -28,7 +28,7 @@ public class Search implements Serializable {
 
     @Size(max = 80, message = "Title cannot be longer than 80 characters")
     @Column(name = "title")
-    private String title;
+    private String title; //TODO comment ?
 
     @Column(name= "place_id")
     private Long placeId;

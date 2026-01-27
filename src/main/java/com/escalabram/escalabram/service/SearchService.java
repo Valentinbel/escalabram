@@ -1,6 +1,7 @@
 package com.escalabram.escalabram.service;
 
 import com.escalabram.escalabram.model.Search;
+import com.escalabram.escalabram.service.dto.SearchDTO;
 
 import java.util.List;
 import java.util.Optional;
@@ -14,7 +15,7 @@ public interface SearchService {
 
     Optional<Set<Search>> findByProfileId(Long profileId);
 
-    Search createSearch(Search newSearch);
+    SearchDTO saveSearch(SearchDTO searchDTO);
 
     Search updateSearch(Search search);
 

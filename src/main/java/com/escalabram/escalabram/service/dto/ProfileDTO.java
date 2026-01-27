@@ -22,7 +22,7 @@ public class ProfileDTO implements Serializable {
 
     private Long genderId;
 
-    private Boolean isNotified;
+    private Boolean isNotified;// TODO A supprimer ?
 
     private String profileDescription;
 

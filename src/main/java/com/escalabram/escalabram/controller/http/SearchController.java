@@ -4,6 +4,7 @@ import com.escalabram.escalabram.exception.BadRequestAlertException;
 import com.escalabram.escalabram.model.Search;
 import com.escalabram.escalabram.service.ProfileService;
 import com.escalabram.escalabram.service.SearchService;
+import com.escalabram.escalabram.service.dto.SearchDTO;
 import com.escalabram.escalabram.utils.ResponseUtil;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -53,17 +54,14 @@ public class SearchController {
     }
 
     @PostMapping("/searches")
-    public ResponseEntity<Search> createSearch(@Valid @RequestBody Search search) { // TODO SearchDTO?
-        log.info("REST request to save Search : {}", search);
+    public ResponseEntity<SearchDTO> saveSearch(@Valid @RequestBody SearchDTO searchDTO) {
+        log.info("REST request to save Search : {}", searchDTO);
         try {
-            if (search.getId() != null)
-                throw new BadRequestAlertException("A new search cannot already have an ID");
-
-            if(!profileService.existsById(search.getProfile().getId()))
+            if(!profileService.existsById(searchDTO.getProfileId()))
                 throw new BadRequestAlertException("There is no Profile matching with this search");
 
             // TODO Remplacer SEARCH par un DTO
-            Search createdSearch = searchService.createSearch(search);
+            SearchDTO createdSearch = searchService.saveSearch(searchDTO);
 
             return new ResponseEntity<>(createdSearch, HttpStatus.CREATED);
             //return ResponseEntity.status(HttpStatus.OK).build(createdSearch);

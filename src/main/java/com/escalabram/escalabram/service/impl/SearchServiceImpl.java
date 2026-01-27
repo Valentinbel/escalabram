@@ -6,7 +6,11 @@ import com.escalabram.escalabram.model.TimeSlot;
 import com.escalabram.escalabram.repository.SearchRepository;
 import com.escalabram.escalabram.service.ClimbLevelService;
 import com.escalabram.escalabram.service.SearchService;
+import com.escalabram.escalabram.service.dto.SearchDTO;
+import com.escalabram.escalabram.service.mapper.SearchMapper;
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -17,8 +21,10 @@ import java.util.*;
 @RequiredArgsConstructor
 public class SearchServiceImpl implements SearchService {
 
+    private static final Logger log = LoggerFactory.getLogger(SearchServiceImpl.class);
     private final SearchRepository searchRepository;
     private final ClimbLevelService climbLevelService;
+    private final SearchMapper searchMapper;
 
     @Override
     public List<Search> findAll() {
@@ -36,23 +42,27 @@ public class SearchServiceImpl implements SearchService {
     }
 
     @Override
-    public Search createSearch(Search search) {
-        Set<ClimbLevel> newClimbLevels = climbLevelService.findCimbLevelsByIds(search.getClimbLevels());
-        search.setClimbLevels(newClimbLevels);
+    public SearchDTO saveSearch(SearchDTO searchDTO) {
+        Set<ClimbLevel> newClimbLevels = climbLevelService.findCimbLevelsByIds(searchDTO.getClimbLevels());
+        searchDTO.setClimbLevels(newClimbLevels);
+
+        Search searchToSave = searchMapper.toSearch(searchDTO);
+        log.info("searchToSave: {}", searchToSave);
 
         Set<TimeSlot> timeslots = new HashSet<>();
-        for (TimeSlot timeSlotIn : search.getTimeSlots()) {
+        for (TimeSlot timeSlotIn : searchToSave.getTimeSlots()) {
             TimeSlot timeSlot = TimeSlot.builder()
                     .id(timeSlotIn.getId())
                     .beginTime(timeSlotIn.getBeginTime())
                     .endTime(timeSlotIn.getEndTime())
-                    .search(search)
+                    .search(searchToSave)
                     .build();
             timeslots.add(timeSlot);
         }
-        search.setTimeSlots(timeslots);
+        searchToSave.setTimeSlots(timeslots);
 
-        return searchRepository.save(search);
+        Search savedSearch = searchRepository.save(searchToSave);
+        return searchMapper.toSearchDTO(savedSearch);
     }
 
     @Override

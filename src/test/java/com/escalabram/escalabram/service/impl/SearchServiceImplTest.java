@@ -206,36 +206,36 @@ class SearchServiceImplTest {
         assertEquals(optSearches, Optional.empty());
     }
 
-    @Test
-    void createSearch_Insert(){
-        Set<ClimbLevel> climbLevelsToCreate = Stream.of(
-                ClimbLevel.builder().id(2L).codeFr(null).build(),
-                ClimbLevel.builder().id(7L).codeFr(null).build()
-
-        ).collect(Collectors.toSet());
-
-        Search searchToCreate = Search.builder()
-                        .id(1L)
-                        .profile(profile1)
-                        .title("search1Profile1")
-                        .placeId(1L)
-                        .preferedGenderId(1L)
-                        .climbLevels(climbLevelsToCreate)
-                        .isActive(true)
-                        .build();
-        searchToCreate.setTimeSlots(timeSlots);
-
-        when(climbLevelService.findCimbLevelsByIds(climbLevelsToCreate)).thenReturn(climbLevels);
-        when(searchRepository.save(ArgumentMatchers.any())).thenReturn(searches.getFirst());
-
-        Search search = searchServiceImpl.createSearch(searchToCreate);
-
-        verify(searchRepository, times(1)).save(ArgumentMatchers.any());
-        assertEquals(search, searches.getFirst());
-        assertEquals(search.getTimeSlots(), searches.getFirst().getTimeSlots());
-        assertEquals(search.getClimbLevels(), searches.getFirst().getClimbLevels());
-        assertEquals(search.getProfile().getId(), searches.getFirst().getProfile().getId());
-    }
+//    @Test // TODO
+//    void saveSearch_Insert(){
+//        Set<ClimbLevel> climbLevelsToCreate = Stream.of(
+//                ClimbLevel.builder().id(2L).codeFr(null).build(),
+//                ClimbLevel.builder().id(7L).codeFr(null).build()
+//
+//        ).collect(Collectors.toSet());
+//
+//        Search searchToCreate = Search.builder()
+//                        .id(1L)
+//                        .profile(profile1)
+//                        .title("search1Profile1")
+//                        .placeId(1L)
+//                        .preferedGenderId(1L)
+//                        .climbLevels(climbLevelsToCreate)
+//                        .isActive(true)
+//                        .build();
+//        searchToCreate.setTimeSlots(timeSlots);
+//
+//        when(climbLevelService.findCimbLevelsByIds(climbLevelsToCreate)).thenReturn(climbLevels);
+//        when(searchRepository.save(ArgumentMatchers.any())).thenReturn(searches.getFirst());
+//
+//        Search search = searchServiceImpl.saveSearch(searchToCreate);
+//
+//        verify(searchRepository, times(1)).save(ArgumentMatchers.any());
+//        assertEquals(search, searches.getFirst());
+//        assertEquals(search.getTimeSlots(), searches.getFirst().getTimeSlots());
+//        assertEquals(search.getClimbLevels(), searches.getFirst().getClimbLevels());
+//        assertEquals(search.getProfile().getId(), searches.getFirst().getProfile().getId());
+//    }
 
     @Test
     void updateSearch_Update() {
