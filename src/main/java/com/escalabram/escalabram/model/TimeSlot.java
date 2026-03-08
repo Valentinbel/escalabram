@@ -3,7 +3,6 @@ package com.escalabram.escalabram.model;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.FutureOrPresent;
-import jakarta.validation.constraints.NotBlank;
 import lombok.*;
 
 import java.io.Serial;
@@ -26,12 +25,10 @@ public class TimeSlot implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotBlank
     @FutureOrPresent(message = "BeginTime needs to be present or future")
     @Column(name = "begin_time") //, columnDefinition = "TIME"
     private LocalDateTime  beginTime;
 
-    @NotBlank
     @FutureOrPresent(message = "EndTime needs to be present or future")
     @Column(name = "end_time") //, columnDefinition = "TIME"
     private LocalDateTime endTime;

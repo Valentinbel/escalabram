@@ -26,7 +26,6 @@ import java.util.Set;
 public class SearchController {
     private static final Logger log = LoggerFactory.getLogger(SearchController.class);
     private final SearchService searchService;
-    private final ProfileService profileService;
 
     @GetMapping("/searches")
     public ResponseEntity<List<Search>> getAllSearches(){
@@ -57,15 +56,8 @@ public class SearchController {
     public ResponseEntity<SearchDTO> saveSearch(@Valid @RequestBody SearchDTO searchDTO) {
         log.info("REST request to save Search : {}", searchDTO);
         try {
-            if(!profileService.existsById(searchDTO.getProfileId()))
-                throw new BadRequestAlertException("There is no Profile matching with this search");
-
-            // TODO Remplacer SEARCH par un DTO
             SearchDTO createdSearch = searchService.saveSearch(searchDTO);
-
             return new ResponseEntity<>(createdSearch, HttpStatus.CREATED);
-            //return ResponseEntity.status(HttpStatus.OK).build(createdSearch);
-            //return ResponseEntity.created(new URI("/api/personne-autorises/" + result.getId())).body(result);
         } catch (Exception e) {
             log.error("An error was encountered while retrieving data",e);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
@@ -93,9 +85,3 @@ public class SearchController {
         }
     }
 }
-
-// TODO import fr.gouv.justice.tig.web.rest.errors.BadRequestAlertException; (Tig-Lib-Shared)
-// Creer ma badRequestAlert implémenter commme URI Alert
-// Vérifier dans les autres fonctions ouvertes de TIG si on a tout ok.
-// Implémenter le test.
-//
