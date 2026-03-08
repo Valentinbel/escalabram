@@ -2,7 +2,6 @@ package com.escalabram.escalabram.controller.http;
 
 import com.escalabram.escalabram.exception.BadRequestAlertException;
 import com.escalabram.escalabram.model.Search;
-import com.escalabram.escalabram.service.ProfileService;
 import com.escalabram.escalabram.service.SearchService;
 import com.escalabram.escalabram.service.dto.SearchDTO;
 import com.escalabram.escalabram.utils.ResponseUtil;
