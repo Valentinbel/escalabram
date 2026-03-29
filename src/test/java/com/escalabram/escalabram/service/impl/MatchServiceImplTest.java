@@ -16,10 +16,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -32,6 +29,8 @@ class MatchServiceImplTest {
 
     @InjectMocks
     private MatchServiceImpl matchServiceImpl;
+    @Mock
+    private SearchServiceImpl searchService;
     @Mock
     private MatchRepository matchRepository;
     @Mock
@@ -78,19 +77,20 @@ class MatchServiceImplTest {
                 .user(user3)
                 .build();
 
-        Set<ClimbLevel> climbLevelsMatching1 = Stream.of(
+        SequencedSet<ClimbLevel> climbLevelsMatching1 = Stream.of(
                 ClimbLevel.builder().id(2L).codeFr("4+").build(),
                 ClimbLevel.builder().id(7L).codeFr("6A+").build()
-        ).collect(Collectors.toSet());
+        ).collect(Collectors.toCollection(LinkedHashSet::new));
 
-        Set<ClimbLevel> climbLevelsMatching2 = Stream.of(
+        SequencedSet<ClimbLevel> climbLevelsMatching2 = Stream.of(
                 ClimbLevel.builder().id(6L).codeFr("6A").build(),
                 ClimbLevel.builder().id(9L).codeFr("6B+").build()
-        ).collect(Collectors.toSet());
-        Set<ClimbLevel> climbLevelsNOTMatching = Stream.of(
+        ).collect(Collectors.toCollection(LinkedHashSet::new));
+
+        SequencedSet<ClimbLevel> climbLevelsNOTMatching = Stream.of(
                 ClimbLevel.builder().id(9L).codeFr("6B+").build(),
                 ClimbLevel.builder().id(12L).codeFr("7A").build()
-        ).collect(Collectors.toSet());
+        ).collect(Collectors.toCollection(LinkedHashSet::new));
 
         String beginTime1 = "2024-09-02T13:59:59.123"; // TODO changer ces strings par des LocalDateTime.xxx calculés
         String endTime1 = "2024-09-02T18:59:59.123";
@@ -198,12 +198,13 @@ class MatchServiceImplTest {
 
         Match match = new Match(1L, searches.getFirst().getId(), searchMatchDTO1.getSearchId(), searchMatchDTO1.getTimeSlotId(), true);
         Optional<Match> emptyMatch = Optional.empty();
-        List<Match> matchesToResult = new ArrayList<>();
+        Set<Match> matchesToResult = new HashSet<>();
         matchesToResult.add(match);
 
         List<SearchMatchDTO> searchMatchDTOs = new ArrayList<>();
         searchMatchDTOs.add(searchMatchDTO1);
 
+        when(searchService.findById(searches.getFirst().getId())).thenReturn(Optional.of(searchMatching));
         when(searchRepository.findAllSearchesByCriterias(ArgumentMatchers.any(), ArgumentMatchers.any(), ArgumentMatchers.any()))
                 .thenReturn(searchMatchDTOs);
         when(searchRepository.findClimbLevelsByIdSearchId(ArgumentMatchers.any())).thenReturn(matchedClimbLevelDTOs);
@@ -211,7 +212,7 @@ class MatchServiceImplTest {
                 .thenReturn(emptyMatch);
         when(matchRepository.save(ArgumentMatchers.any())).thenReturn(match);
 
-        List<Match> matches = matchServiceImpl.createMatchesIfFit(searchMatching);
+        Set<Match> matches = matchServiceImpl.createMatchesIfFit(searches.getFirst().getId());
 
         verify(searchRepository, times(1)).findAllSearchesByCriterias(searchMatching.getProfile().getId(), searchMatching.getPlaceId(), matchingBeginTimesSearchMatching);
         verify(searchRepository, times(1)).findClimbLevelsByIdSearchId(searchToMatched.getId());
@@ -245,13 +246,13 @@ class MatchServiceImplTest {
         matchedClimbLevelDTOs.add(searchClimbLevelDTO2);
 
         Match match = new Match(1L, searches.getFirst().getId(), searchMatchDTO1.getSearchId(), searchMatchDTO1.getTimeSlotId(), true);
-        List<Match> matchesToResult = new ArrayList<>();
+        Set<Match> matchesToResult = new HashSet<>();
         matchesToResult.add(match);
 
         List<SearchMatchDTO> searchMatchDTOs = new ArrayList<>();
         searchMatchDTOs.add(searchMatchDTO1);
 
-
+        when(searchService.findById(searches.getFirst().getId())).thenReturn(Optional.of(searchMatching));
         when(searchRepository.findAllSearchesByCriterias(searchMatching.getProfile().getId(), searchMatching.getPlaceId(), matchingBeginTimesSearchMatching))
                 .thenReturn(searchMatchDTOs);
 
@@ -260,7 +261,7 @@ class MatchServiceImplTest {
         when(matchRepository.findByCriterias(match.getMatchingSearchId(), match.getMatchedSearchId(),match.getMatchedTimeSlotId(), match.getMutualMatch()))
                 .thenReturn(Optional.of(match));
 
-        List<Match> matches = matchServiceImpl.createMatchesIfFit(searchMatching);
+        Set<Match> matches = matchServiceImpl.createMatchesIfFit(searches.getFirst().getId());
 
         verify(searchRepository, times(1)).findAllSearchesByCriterias(searchMatching.getProfile().getId(), searchMatching.getPlaceId(), matchingBeginTimesSearchMatching);
         verify(searchRepository, times(1)).findClimbLevelsByIdSearchId(searchToMatched.getId());
@@ -268,6 +269,10 @@ class MatchServiceImplTest {
 
         assertEquals(matches, matchesToResult);
     }
+
+    // TODO : TimeSlotsNOMatch : Title do not fit with method
+    // TODO : TimeSlotsMatchButClimbLevelDONT() : Title do not fit with method
+    // TODO Methods are missing. Exception: Search don't exist. + ... (recheck all methods should be great..)
 
     @Test
     void createMatchesIfFit_TimeSlotsNOMatch(){
@@ -286,15 +291,16 @@ class MatchServiceImplTest {
                 timeSlotsNOTMatching.stream().toList().getFirst().getBeginTime(),
                 timeSlotsNOTMatching.stream().toList().getFirst().getEndTime());
 
-        List<Match> matchesToResult = new ArrayList<>();
+        Set<Match> matchesToResult = new HashSet<>();
 
         List<SearchMatchDTO> searchMatchDTOs = new ArrayList<>();
         searchMatchDTOs.add(searchMatchDTO1);
 
+        when(searchService.findById(searches.getFirst().getId())).thenReturn(Optional.of(searchMatching));
         when(searchRepository.findAllSearchesByCriterias(searchMatching.getProfile().getId(), searchMatching.getPlaceId(), matchingBeginTimesSearchMatching))
                 .thenReturn(searchMatchDTOs);
 
-        List<Match> matches = matchServiceImpl.createMatchesIfFit(searchMatching);
+        Set<Match> matches = matchServiceImpl.createMatchesIfFit(searches.getFirst().getId());
 
         verify(searchRepository, times(1)).findAllSearchesByCriterias(searchMatching.getProfile().getId(), searchMatching.getPlaceId(), matchingBeginTimesSearchMatching);
 
@@ -324,16 +330,18 @@ class MatchServiceImplTest {
         matchedClimbLevelDTOs.add(searchClimbLevelDTO1);
         matchedClimbLevelDTOs.add(searchClimbLevelDTO2);
 
-        List<Match> matchesToResult = new ArrayList<>();
+        Set<Match> matchesToResult = new HashSet<>();
 
         List<SearchMatchDTO> searchMatchDTOs = new ArrayList<>();
         searchMatchDTOs.add(searchMatchDTO1);
 
+
+        when(searchService.findById(searches.getFirst().getId())).thenReturn(Optional.of(searchMatching));
         when(searchRepository.findAllSearchesByCriterias(searchMatching.getProfile().getId(), searchMatching.getPlaceId(), matchingBeginTimesSearchMatching))
                 .thenReturn(searchMatchDTOs);
         when(searchRepository.findClimbLevelsByIdSearchId(searchToMatched.getId())).thenReturn(matchedClimbLevelDTOs);
 
-        List<Match> matches = matchServiceImpl.createMatchesIfFit(searchMatching);
+        Set<Match> matches = matchServiceImpl.createMatchesIfFit(searches.getFirst().getId());
 
         verify(searchRepository, times(1)).findAllSearchesByCriterias(searchMatching.getProfile().getId(), searchMatching.getPlaceId(), matchingBeginTimesSearchMatching);
         verify(searchRepository, times(1)).findClimbLevelsByIdSearchId(searchToMatched.getId());
