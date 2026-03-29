@@ -18,14 +18,17 @@ public class SearchDTO implements Serializable {
 
     private Long id;
 
+    @NotNull
     private Set<LocalDateTime> timeSlots;
 
+    @NotNull
     private Set<ClimbLevel> climbLevels;
 
+    @NotNull
     private Long placeId;
 
     private Long preferedGenderId;
 
-    @NotNull // TODO verifier que ca marche
+    @NotNull
     Long profileId;
 }

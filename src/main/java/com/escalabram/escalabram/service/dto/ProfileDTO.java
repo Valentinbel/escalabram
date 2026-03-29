@@ -1,5 +1,7 @@
 package com.escalabram.escalabram.service.dto;
 
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
 import java.io.Serial;
@@ -18,6 +20,7 @@ public class ProfileDTO implements Serializable {
 
     private Long id;
 
+    @NotBlank
     private String userName;
 
     private Long genderId;
@@ -26,5 +29,6 @@ public class ProfileDTO implements Serializable {
 
     private String profileDescription;
 
+    @NotNull
     private Long userId;
 }
