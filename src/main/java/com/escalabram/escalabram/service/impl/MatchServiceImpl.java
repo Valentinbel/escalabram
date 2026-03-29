@@ -41,8 +41,8 @@ public class MatchServiceImpl implements MatchService {
         Search search = optSearch.get();
 
         // Sort ClimbLevels
-        List<Long> matchingClimbLevelIds = sortClimbLevelIds(search);
-        log.info("matchingClimbLevelIds: {}", matchingClimbLevelIds);
+        List<Long> searchClimbLevelIds = sortClimbLevelIds(search);
+        log.info("searchClimbLevelIds: {}", searchClimbLevelIds);
 
         List<LocalDateTime> matchingBeginTimes = new ArrayList<>();
         search.getTimeSlots().forEach(timeSlot ->
@@ -50,15 +50,15 @@ public class MatchServiceImpl implements MatchService {
         );
 
         // Searches that may have matched
-        List<SearchMatchDTO> searchMatchDTOs = searchRepository.findAllSearchesByCriterias(search.getProfile().getId(), search.getPlaceId(), matchingBeginTimes);
-        log.info("searchMatchDTOs: {}", searchMatchDTOs);
+        List<SearchMatchDTO> searchMatchesByplaceAndDate = searchRepository.findAllSearchesByCriterias(search.getProfile().getId(), search.getPlaceId(), matchingBeginTimes);
+        log.info("searchMatchesByplaceAndDate: {}", searchMatchesByplaceAndDate);
 
         Set<Match> newMatches = new HashSet<>();
-        if (searchMatchDTOs.isEmpty())
+        if (searchMatchesByplaceAndDate.isEmpty())
             return newMatches;
 
         // Coincide with climbLevels
-        List<SearchMatchDTO> matchedClimbLevels = getMatchedClimbLevels(searchMatchDTOs, matchingClimbLevelIds);
+        List<SearchMatchDTO> matchedClimbLevels = getMatchedClimbLevels(searchMatchesByplaceAndDate, searchClimbLevelIds);
 
         if (matchedClimbLevels.isEmpty())
             log.info("Some timeslots have matched but not the climbLevels");
@@ -96,7 +96,7 @@ public class MatchServiceImpl implements MatchService {
         return matchingClimbLevelIds;
     }
 
-    private List<SearchMatchDTO> getMatchedClimbLevels(List<SearchMatchDTO> matchedSearches, List<Long> matchingClimbLevelIds) {
+    private List<SearchMatchDTO> getMatchedClimbLevels(List<SearchMatchDTO> matchedSearches, List<Long> searchClimbLevelIds) {
         List<SearchMatchDTO> matchedClimbLevels = new ArrayList<>();
 
         matchedSearches.forEach(dto -> {
@@ -108,7 +108,7 @@ public class MatchServiceImpl implements MatchService {
             });
             Collections.sort(matchedClimbLevelIds);
 
-            if (isClimbLevelMatching(matchedClimbLevelIds, matchingClimbLevelIds)) {
+            if (!matchedClimbLevelIds.isEmpty() && isClimbLevelMatching(matchedClimbLevelIds, searchClimbLevelIds)) {
                 matchedSearches.forEach(search -> {
                     if (search.getSearchId().equals(dto.getSearchId())) {
                         matchedClimbLevels.add(search);
