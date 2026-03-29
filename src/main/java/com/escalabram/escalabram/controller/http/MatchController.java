@@ -21,11 +21,6 @@ public class MatchController {
     @GetMapping("/matches/search/{searchId}")
     public ResponseEntity<Set<Match>> createMatchesBySearchId(@PathVariable Long searchId) {
         log.info("REST request to create a list of matches if it's possible, from searchId: {}", searchId);
-//        try { //TODO delete comments
             return ResponseEntity.ok(matchService.createMatchesIfFit(searchId));
-//        } catch (Exception e) {
-//            log.error("An error was encountered while creating data from Matches",e);
-//            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
-//        }
     }
 }

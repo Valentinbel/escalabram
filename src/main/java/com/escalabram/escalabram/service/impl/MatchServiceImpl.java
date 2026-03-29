@@ -45,11 +45,9 @@ public class MatchServiceImpl implements MatchService {
         log.info("matchingClimbLevelIds: {}", matchingClimbLevelIds);
 
         List<LocalDateTime> matchingBeginTimes = new ArrayList<>();
-        //HashMap<LocalDateTime, LocalDateTime> timeSlotsHashMap = new HashMap<>(); // Remplacer par un SearchMatchDTO
-        search.getTimeSlots().forEach(timeSlot -> {
-            matchingBeginTimes.add(timeSlot.getBeginTime());
-            //timeSlotsHashMap.put(timeSlot.getBeginTime(), timeSlot.getEndTime());
-        });
+        search.getTimeSlots().forEach(timeSlot ->
+            matchingBeginTimes.add(timeSlot.getBeginTime())
+        );
 
         // Searches that may have matched
         List<SearchMatchDTO> searchMatchDTOs = searchRepository.findAllSearchesByCriterias(search.getProfile().getId(), search.getPlaceId(), matchingBeginTimes);
@@ -58,10 +56,6 @@ public class MatchServiceImpl implements MatchService {
         Set<Match> newMatches = new HashSet<>();
         if (searchMatchDTOs.isEmpty())
             return newMatches;
-
-        // coincide with timeSlots
-        //List<SearchMatchDTO> matchedTimeSlots = getMatchedTimeSlots(searchMatchDTOs, timeSlotsHashMap);
-        //if (!matchedTimeSlots.isEmpty()) {
 
         // Coincide with climbLevels
         List<SearchMatchDTO> matchedClimbLevels = getMatchedClimbLevels(searchMatchDTOs, matchingClimbLevelIds);
@@ -87,7 +81,6 @@ public class MatchServiceImpl implements MatchService {
                 newMatches.add(optionalMatch.orElseThrow());
             }
         });
-        //} else log.info("There are no matchedTimeSlots. We can't say about ClimbLevels");
         return newMatches; //TODO ajouter critères de match: preferedGenreId
     }
 
@@ -136,28 +129,4 @@ public class MatchServiceImpl implements MatchService {
                 || (matchedClimbLevelIds.getFirst().equals(matchingClimbLevelIds.getFirst())
                 || matchedClimbLevelIds.getLast().equals(matchingClimbLevelIds.getLast()));
     }
-
-     /*private List<SearchMatchDTO> getMatchedTimeSlots(List<SearchMatchDTO> searchMatchDTOs, HashMap<LocalDateTime, LocalDateTime> timeSlotsHashMap) {
-        List<SearchMatchDTO> matchedTimeSlots = new ArrayList<>();
-        searchMatchDTOs.forEach(searchMatchDTO ->
-                timeSlotsHashMap.forEach((LocalDateTime begin, LocalDateTime end) -> {
-                    if (isTimeSlotMatching(begin, end, searchMatchDTO)) {
-                        log.info("begin: {}. end: {}. searchMatchDTO: {}", begin, end, searchMatchDTO);
-                        matchedTimeSlots.add(searchMatchDTO);
-                        matchedSearchIds.add(searchMatchDTO.getSearchId());
-                    }
-                }));
-        return matchedTimeSlots;
-    }
-
-    private boolean isTimeSlotMatching(LocalDateTime begin, LocalDateTime end, SearchMatchDTO searchMatchDTO) {
-        return (begin.isAfter(searchMatchDTO.getBeginTime())
-                && begin.isBefore(searchMatchDTO.getEndTime()))
-
-                || (end.isAfter(searchMatchDTO.getBeginTime())
-                && end.isBefore(searchMatchDTO.getEndTime()))
-
-                || (begin.isEqual(searchMatchDTO.getBeginTime())) // a été changé. Vérifier que ca marche toujours
-                || (end.isEqual(searchMatchDTO.getEndTime()));
-    }*/
 }
