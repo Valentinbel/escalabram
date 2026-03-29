@@ -1,11 +1,10 @@
 package com.escalabram.escalabram.service;
 
 import com.escalabram.escalabram.model.Match;
-import com.escalabram.escalabram.model.Search;
 
-import java.util.List;
+import java.util.Set;
 
 public interface MatchService {
 
-    List<Match> createMatchesIfFit(Search search);
+    Set<Match> createMatchesIfFit(Long searchId);
 }

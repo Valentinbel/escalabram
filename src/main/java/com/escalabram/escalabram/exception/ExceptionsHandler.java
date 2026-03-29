@@ -1,5 +1,6 @@
 package com.escalabram.escalabram.exception;
 
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -52,5 +53,19 @@ public class ExceptionsHandler {
                 new Date(),
                 exc.getMessage(),
                 request.getDescription(false));
+    }
+
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(BadRequestAlertException.class)
+    public ErrorMessage handleBadRequestException(Exception ex, HttpServletRequest request) {
+        log.warn("Bad request. URI: {}. Message: {}", request.getRequestURL(), ex.getMessage());
+        log.debug("Bad request exception details. URI: {}. Exception type: {}.Full exception:",
+                request.getRequestURL(), ex.getClass().getName(), ex);
+
+        return new ErrorMessage(
+                HttpStatus.FORBIDDEN.value(),
+                new Date(),
+                ex.getMessage(),
+                "");
     }
 }
