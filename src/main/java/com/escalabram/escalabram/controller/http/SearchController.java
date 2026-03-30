@@ -2,8 +2,8 @@ package com.escalabram.escalabram.controller.http;
 
 import com.escalabram.escalabram.exception.BadRequestAlertException;
 import com.escalabram.escalabram.model.Search;
-import com.escalabram.escalabram.service.ProfileService;
 import com.escalabram.escalabram.service.SearchService;
+import com.escalabram.escalabram.service.dto.SearchDTO;
 import com.escalabram.escalabram.utils.ResponseUtil;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -25,7 +25,6 @@ import java.util.Set;
 public class SearchController {
     private static final Logger log = LoggerFactory.getLogger(SearchController.class);
     private final SearchService searchService;
-    private final ProfileService profileService;
 
     @GetMapping("/searches")
     public ResponseEntity<List<Search>> getAllSearches(){
@@ -53,21 +52,11 @@ public class SearchController {
     }
 
     @PostMapping("/searches")
-    public ResponseEntity<Search> createSearch(@Valid @RequestBody Search search) {
-        log.info("REST request to save Search : {}", search);
+    public ResponseEntity<SearchDTO> saveSearch(@Valid @RequestBody SearchDTO searchDTO) {
+        log.info("REST request to save Search : {}", searchDTO);
         try {
-            if (search.getId() != null)
-                throw new BadRequestAlertException("A new search cannot already have an ID");
-
-            if(!profileService.existsById(search.getProfileId()))
-                throw new BadRequestAlertException("There is no Profile matching with this search");
-
-            // TODO Remplacer SEARCH par un DTO
-            Search createdSearch = searchService.createSearch(search);
-
+            SearchDTO createdSearch = searchService.saveSearch(searchDTO);
             return new ResponseEntity<>(createdSearch, HttpStatus.CREATED);
-            //return ResponseEntity.status(HttpStatus.OK).build(createdSearch);
-            //return ResponseEntity.created(new URI("/api/personne-autorises/" + result.getId())).body(result);
         } catch (Exception e) {
             log.error("An error was encountered while retrieving data",e);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
@@ -95,9 +84,3 @@ public class SearchController {
         }
     }
 }
-
-// TODO import fr.gouv.justice.tig.web.rest.errors.BadRequestAlertException; (Tig-Lib-Shared)
-// Creer ma badRequestAlert implémenter commme URI Alert
-// Vérifier dans les autres fonctions ouvertes de TIG si on a tout ok.
-// Implémenter le test.
-//

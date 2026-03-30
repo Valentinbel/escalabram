@@ -1,6 +1,8 @@
 package com.escalabram.escalabram.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.*;
 
@@ -24,24 +26,9 @@ public class Search implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "profile_id", nullable = false)
-    private Long profileId;
-
     @Size(max = 80, message = "Title cannot be longer than 80 characters")
     @Column(name = "title")
-    private String title;
-
-    @Column(name = "have_rope")
-    private Boolean haveRope;
-
-    @Column(name = "have_belay_device")
-    private Boolean haveBelayDevice;
-
-    @Column(name = "have_quickdraw")
-    private Boolean haveQuickdraw;
-
-    @Column(name = "have_car_to_share")
-    private Boolean haveCarToShare;
+    private String title; //TODO comment ?
 
     @Column(name= "place_id")
     private Long placeId;
@@ -64,6 +51,13 @@ public class Search implements Serializable {
     )
     @Builder.Default
     private Set<ClimbLevel> climbLevels = new HashSet<>();
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JsonIgnore
+    @NotNull
+    @JoinColumn(name = "profile_id", nullable = false)
+    @ToString.Exclude
+    private Profile profile;
 
     // TODO champs à ajouter (?)
     //min-max age

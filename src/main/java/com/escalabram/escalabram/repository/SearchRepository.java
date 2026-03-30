@@ -20,7 +20,7 @@ public interface SearchRepository extends JpaRepository<Search, Long> {
             "FROM Search s " +
             "INNER JOIN s.timeSlots ts " +
             "WHERE s.placeId = :placeId " +
-            "AND s.profileId <> :profileId " +
+            "AND s.profile.id <> :profileId " +
             "AND DATE(ts.beginTime) IN :matchingBeginTimes ")
     List<SearchMatchDTO> findAllSearchesByCriterias(
             @Param("profileId") Long profileId,

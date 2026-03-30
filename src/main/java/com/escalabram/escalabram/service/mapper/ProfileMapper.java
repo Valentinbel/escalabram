@@ -14,5 +14,6 @@ public interface ProfileMapper {
 
     @Mapping(source = "dto.userId", target="user.id" )
     @Mapping(source = "dto.userName", target="user.userName")
+    @Mapping(target = "searches", ignore = true)
     Profile toProfile(ProfileDTO dto);
 }

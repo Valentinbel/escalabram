@@ -12,7 +12,7 @@ import java.io.Serializable;
 @Builder(toBuilder = true)
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name="match")
+@Table(name="match", uniqueConstraints = @UniqueConstraint(columnNames = {"matching_search_id", "matched_search_id", "matched_time_slot_id" }))
 public class Match implements Serializable {
 
     @Serial
