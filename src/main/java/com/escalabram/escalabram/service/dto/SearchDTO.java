@@ -27,6 +27,8 @@ public class SearchDTO implements Serializable {
     @NotNull
     private Long placeId;
 
+    private String title; //TODO rename to comment  o something else?
+
     private Long preferedGenderId;
 
     @NotNull
