@@ -4,6 +4,7 @@ import com.escalabram.escalabram.exception.BadRequestAlertException;
 import com.escalabram.escalabram.model.Search;
 import com.escalabram.escalabram.service.SearchService;
 import com.escalabram.escalabram.service.dto.SearchDTO;
+import com.escalabram.escalabram.service.dto.SearchListDTO;
 import com.escalabram.escalabram.utils.ResponseUtil;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -13,6 +14,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -27,10 +29,10 @@ public class SearchController {
     private final SearchService searchService;
 
     @GetMapping("/searches")
-    public ResponseEntity<List<Search>> getAllSearches(){
+    public ResponseEntity<List<SearchListDTO>> getAllSearches(){
         log.info("REST request to get list of All Searches");
         try{
-            List<Search> searches = searchService.findAll();
+            List<SearchListDTO> searches = searchService.findAll();
             return ResponseEntity.ok(searches);
         } catch (Exception e){
             log.error("An error was encountered while retrieving data from Searches",e);
@@ -55,6 +57,8 @@ public class SearchController {
     public ResponseEntity<SearchDTO> saveSearch(@Valid @RequestBody SearchDTO searchDTO) {
         log.info("REST request to save Search : {}", searchDTO);
         try {
+            log.info("NEW LOCALDATE TIME: {}",  LocalDateTime.now());
+            log.info("getTimeSlots: {}",  searchDTO.getTimeSlots());
             SearchDTO createdSearch = searchService.saveSearch(searchDTO);
             return new ResponseEntity<>(createdSearch, HttpStatus.CREATED);
         } catch (Exception e) {
@@ -64,7 +68,7 @@ public class SearchController {
     }
 
     @PutMapping("/searches")
-    public ResponseEntity<Search> updateSeach(@Valid @RequestBody Search search) {
+    public ResponseEntity<Search> updateSeach(@Valid @RequestBody Search search) { // TODO a supprimer ?
         log.info("REST request to update Search : {}", search);
         if (search.getId() == null)
             throw new BadRequestAlertException("You cannot update a Search that have no Id");

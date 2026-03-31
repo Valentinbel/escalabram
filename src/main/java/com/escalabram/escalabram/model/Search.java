@@ -14,6 +14,7 @@ import java.util.*;
 @Getter
 @Setter
 @Builder(toBuilder = true)
+@ToString
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name="search")
@@ -41,6 +42,7 @@ public class Search implements Serializable {
 
     @OneToMany(mappedBy = "search", cascade = CascadeType.ALL)
     @Builder.Default
+    @ToString.Exclude
     private Set<TimeSlot> timeSlots = new HashSet<>();
 
     @ManyToMany(cascade = { CascadeType.PERSIST, CascadeType.MERGE })
@@ -50,6 +52,7 @@ public class Search implements Serializable {
             inverseJoinColumns = { @JoinColumn(name = "climb_level_id") }
     )
     @Builder.Default
+    @ToString.Exclude
     private Set<ClimbLevel> climbLevels = new HashSet<>();
 
     @ManyToOne(fetch = FetchType.LAZY)
