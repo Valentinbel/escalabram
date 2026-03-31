@@ -3,6 +3,7 @@ package com.escalabram.escalabram.exception;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -62,6 +63,18 @@ public class ExceptionsHandler {
         log.debug("Bad request exception details. URI: {}. Exception type: {}.Full exception:",
                 request.getRequestURL(), ex.getClass().getName(), ex);
 
+        return new ErrorMessage(
+                HttpStatus.FORBIDDEN.value(),
+                new Date(),
+                ex.getMessage(),
+                "");
+    }
+
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(HttpMessageNotReadableException.class)
+    public ErrorMessage handleHttpMessageNotReadableException(Exception ex, HttpServletRequest request) {
+        log.error("A value from your DTO is not on the correct type. URI: {}. {}", request.getRequestURL(), ex.getMessage());
+        HttpStatus httpStatus = HttpStatus.BAD_REQUEST;
         return new ErrorMessage(
                 HttpStatus.FORBIDDEN.value(),
                 new Date(),
