@@ -14,7 +14,7 @@ import java.util.Set;
 @Builder(toBuilder = true)
 @NoArgsConstructor
 @AllArgsConstructor
-public class SearchListDTO implements Serializable {
+public class SearchListDTO implements Serializable { //TODO : Renommer ce DTO?
 
     private Long id;
 
