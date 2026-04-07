@@ -35,7 +35,7 @@ public class ProfileController {
     }
 
     // Used for create and update
-    @PostMapping("/profiles")
+    @PostMapping("/profiles")// TODO pluriel????
     public ResponseEntity<ProfileDTO> saveProfile(@Valid @RequestBody ProfileDTO profileDTO){
         log.info("REST request to save Profile of userid: {}", profileDTO.getUserId());
         try {

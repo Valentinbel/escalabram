@@ -14,7 +14,7 @@ import java.util.Set;
 @Builder(toBuilder = true)
 @NoArgsConstructor
 @AllArgsConstructor
-public class SearchDTO implements Serializable {
+public class SearchListDTO implements Serializable { //TODO : Renommer ce DTO?
 
     private Long id;
 
@@ -27,10 +27,14 @@ public class SearchDTO implements Serializable {
     @NotNull
     private Long placeId;
 
-    private String title; //TODO rename to comment  o something else?
+    private String title;
 
     private Long preferedGenderId;
 
-    @NotNull
-    Long profileId;
+    private Long profileId;
+    private Long genderId;
+    private String profileDescription;
+    private Long userId;
+    private String userName;
+
 }

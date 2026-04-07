@@ -9,6 +9,7 @@ import com.escalabram.escalabram.service.ClimbLevelService;
 import com.escalabram.escalabram.service.ProfileService;
 import com.escalabram.escalabram.service.SearchService;
 import com.escalabram.escalabram.service.dto.SearchDTO;
+import com.escalabram.escalabram.service.dto.SearchListDTO;
 import com.escalabram.escalabram.service.mapper.SearchMapper;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
@@ -31,8 +32,10 @@ public class SearchServiceImpl implements SearchService {
     private final SearchMapper searchMapper;
 
     @Override
-    public List<Search> findAll() {
-        return searchRepository.findAll();
+    @Transactional(readOnly = true)
+    public List<SearchListDTO> findAll() {
+         List<Search> searches = searchRepository.findAll();
+        return searchMapper.toSearchListDTOs(searches);
     }
 
     @Override
@@ -53,8 +56,10 @@ public class SearchServiceImpl implements SearchService {
         Set<ClimbLevel> newClimbLevels = climbLevelService.findCimbLevelsByIds(searchDTO.getClimbLevels());
         searchDTO.setClimbLevels(newClimbLevels);
 
-//TODO Gérer la date avec UTC (actuellement décallé d'une heure
-// https://claude.ai/chat/14d87630-dcaf-49a3-9d8a-048c510f4859
+        //TODO Gérer la date avec UTC (actuellement décallé d'une heure
+        // https://claude.ai/chat/14d87630-dcaf-49a3-9d8a-048c510f4859
+
+        //https://claude.ai/chat/22fb5e41-382f-4fc4-9e04-2fb150c0ac4d
         Search search = searchMapper.toSearch(searchDTO);
         log.info("searchToSave: {}", search);
 
