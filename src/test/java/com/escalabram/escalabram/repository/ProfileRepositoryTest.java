@@ -7,8 +7,8 @@ import com.escalabram.escalabram.model.Role;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
+import org.springframework.boot.data.jpa.test.autoconfigure.DataJpaTest;
+import org.springframework.boot.jpa.test.autoconfigure.TestEntityManager;
 import org.springframework.test.context.ActiveProfiles;
 
 import java.time.LocalDateTime;
@@ -45,14 +45,14 @@ class ProfileRepositoryTest {
                 .roles(roleSet)
                 .createdAt(LocalDateTime.now())
                 .build();
-        entityManager.merge(user);
+        entityManager.persist(user);
 
         FileInfo fileInfo = FileInfo.builder()
                 .name("selfie")
                 .url("./uploads/uderId")
                 .user(user)
                 .build();
-        entityManager.merge(fileInfo);
+        entityManager.persist(fileInfo);
 
         profile = Profile.builder()
                 .genderId(1L)
@@ -60,13 +60,14 @@ class ProfileRepositoryTest {
                 .user(user)
                 .profileDescription("Blah blah, my life...")
                 .build();
-        entityManager.merge(profile);
+        entityManager.persist(profile);
     }
 
     @Test
     void findByUserId_Id_Success() {
         Optional<Profile> optResult = profileRepository.findByUserId(profile.getUser().getId());
-
+        System.out.println("profile.getId() " + profile.getId());
+        System.out.println("optResult.get().getId() " + optResult.get().getId());
         assertAll(
                 () -> assertEquals(profile.getId(), optResult.get().getId()),
                 () -> assertEquals(profile.getUser().getPassword(), optResult.get().getUser().getPassword()),
