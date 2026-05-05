@@ -1,0 +1,9 @@
+services:
+  rabbitmq:                           # Nom du service Docker
+    image: rabbitmq:3-management      # Image officielle RabbitMQ avec plugin UI d'administration inclus
+    ports:
+      - "5672:5672"                   # Port AMQP → ton app Spring Boot s'y connecte (host:conteneur)
+      - "15672:15672"                 # UI d'administration # Port UI web → http://localhost:15672
+    environment:
+      RABBITMQ_DEFAULT_USER: guest    # Identifiants par défaut
+      RABBITMQ_DEFAULT_PASS: guest    # (à ne jamais utiliser en prod !)

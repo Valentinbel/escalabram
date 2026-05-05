@@ -24,6 +24,6 @@ public class Role implements Serializable {
     private Long id;
 
     @Enumerated(EnumType.STRING)
-    @Column(length = 20)
+    @Column(name = "role_name", length = 20, columnDefinition = "VARCHAR(20)")
     private EnumRole roleName;
 }

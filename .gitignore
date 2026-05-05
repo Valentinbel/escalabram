@@ -34,4 +34,6 @@ build/
 /uploads/
 
 ### Hide sensitive data ###
+.env
 /logs/
+launchLocal.bat
