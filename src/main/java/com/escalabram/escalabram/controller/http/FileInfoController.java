@@ -38,6 +38,9 @@ public class FileInfoController {
         log.info("REST request to get File from userId: {}", userId);
         try {
             Resource avatar =  this.filesStorageService.loadAvatarResource(userId);
+            if (avatar == null)
+                return ResponseEntity.notFound().build();
+
             String contentType = this.filesStorageService.getContentType(avatar);
 
             return ResponseEntity.ok()

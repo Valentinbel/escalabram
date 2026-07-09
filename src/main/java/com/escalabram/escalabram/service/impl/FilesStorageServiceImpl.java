@@ -55,7 +55,7 @@ public class FilesStorageServiceImpl implements FilesStorageService {
         try {
             Optional<FileInfo> optFileInfo = fileInfoService.findByUserId(userId);
             if (optFileInfo.isEmpty())
-                throw new IllegalArgumentException("There is no file related to this user: {}" + userId);
+                return null;
 
             Path userFolder = getUserFolder(userId);
             Path file = userFolder.resolve(optFileInfo.get().getName());
