@@ -1,0 +1,26 @@
+@echo off   :: FILE WITH FICTIVES VALUES TO KNOW VALUES TO PUT IN launchLocal.bat (THAT IS ACTUALLY IN .GITIGNORE)
+setlocal
+
+:: Definir variables de entorno
+set db-database=xxxxxxxx
+set db-password=xxxxxxxx
+set db-username=xxxxxxxx
+set db-host=localhost
+set db-port=5432
+
+set app-jwtsecret=xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx/xxxxxxxxxxxxxxxxxxxxxxxxxxx/xxxxxxxxxxxxxxxxxxxxxxx
+
+set mail-username = xxxxxxxxxx@xxxx.com
+set mail-password= xxxx xxxx xxxx xxxx :::::Mot de passe d'appli gmail
+
+nerdctl start rabbitmq-local
+
+:: Ejecutar la aplicación con Maven
+::mvn clean install spring-boot:run "-Dspring-boot.run.jvmArguments=-agentlib:jdwp=transport=dt_socket,server=y,suspend=y,address=5005"
+::mvn clean install -DskipTests spring-boot:run -Dspring-boot.run.jvmArguments="-agentlib:jdwp=transport=dt_socket,server=y,suspend=y,address=5005"
+mvn clean install -DskipTests spring-boot:run -Dspring-boot.run.profiles=dev -Dspring-boot.run.jvmArguments="-agentlib:jdwp=transport=dt_socket,server=y,suspend=y,address=5005"
+
+:: Vérifier les messages dans RabbitMQ
+:: → http://localhost:15672  (admin/admin)
+
+endlocal
