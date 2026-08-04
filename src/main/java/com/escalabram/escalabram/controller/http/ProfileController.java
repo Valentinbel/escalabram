@@ -1,7 +1,7 @@
 package com.escalabram.escalabram.controller.http;
 
 import com.escalabram.escalabram.service.ProfileService;
-import com.escalabram.escalabram.service.dto.ProfileDTO;
+import com.escalabram.escalabram.dto.ProfileDTO;
 import com.escalabram.escalabram.utils.ResponseUtil;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;

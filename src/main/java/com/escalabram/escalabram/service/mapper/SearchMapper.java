@@ -2,8 +2,8 @@ package com.escalabram.escalabram.service.mapper;
 
 import com.escalabram.escalabram.model.Search;
 import com.escalabram.escalabram.model.TimeSlot;
-import com.escalabram.escalabram.service.dto.SearchDTO;
-import com.escalabram.escalabram.service.dto.SearchListDTO;
+import com.escalabram.escalabram.dto.SearchDTO;
+import com.escalabram.escalabram.dto.SearchListDTO;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 

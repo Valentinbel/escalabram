@@ -1,8 +1,8 @@
 package com.escalabram.escalabram.service;
 
 import com.escalabram.escalabram.model.Search;
-import com.escalabram.escalabram.service.dto.SearchDTO;
-import com.escalabram.escalabram.service.dto.SearchListDTO;
+import com.escalabram.escalabram.dto.SearchDTO;
+import com.escalabram.escalabram.dto.SearchListDTO;
 
 import java.util.List;
 import java.util.Optional;

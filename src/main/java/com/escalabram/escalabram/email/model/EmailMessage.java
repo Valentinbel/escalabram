@@ -1,4 +1,4 @@
-package com.escalabram.escalabram.events.dto;
+package com.escalabram.escalabram.email.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

@@ -4,7 +4,7 @@ import com.escalabram.escalabram.model.Profile;
 import com.escalabram.escalabram.repository.ProfileRepository;
 import com.escalabram.escalabram.service.ProfileService;
 import com.escalabram.escalabram.service.UserService;
-import com.escalabram.escalabram.service.dto.ProfileDTO;
+import com.escalabram.escalabram.dto.ProfileDTO;
 import com.escalabram.escalabram.service.mapper.ProfileMapper;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;

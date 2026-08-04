@@ -1,6 +1,6 @@
 package com.escalabram.escalabram.service;
 
-import com.escalabram.escalabram.service.dto.ProfileDTO;
+import com.escalabram.escalabram.dto.ProfileDTO;
 
 import java.util.Optional;
 

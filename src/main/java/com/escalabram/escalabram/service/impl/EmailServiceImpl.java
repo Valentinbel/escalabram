@@ -1,6 +1,7 @@
-package com.escalabram.escalabram.events.service;
+package com.escalabram.escalabram.service.impl;
 
-import com.escalabram.escalabram.events.dto.EmailMessage;
+import com.escalabram.escalabram.email.model.EmailMessage;
+import com.escalabram.escalabram.service.EmailService;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
 import lombok.RequiredArgsConstructor;
@@ -14,12 +15,13 @@ import org.springframework.stereotype.Service;
 @Service
 @RequiredArgsConstructor
 @Slf4j
-public class EmailService {
+public class EmailServiceImpl implements EmailService {
     private final JavaMailSender mailSender;
 
     @Value("${spring.mail.username}")
     private String fromAddress;
 
+    @Override
     public void send(EmailMessage emailMessage) {
         MimeMessage mime = mailSender.createMimeMessage();
 

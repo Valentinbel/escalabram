@@ -1,4 +1,4 @@
-package com.escalabram.escalabram.service.dto;
+package com.escalabram.escalabram.dto;
 
 import lombok.*;
 

@@ -1,6 +1,6 @@
-package com.escalabram.escalabram.events.publisher;
+package com.escalabram.escalabram.email.publisher;
 
-import com.escalabram.escalabram.events.dto.EmailMessage;
+import com.escalabram.escalabram.email.model.EmailMessage;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;

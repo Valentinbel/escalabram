@@ -1,7 +1,7 @@
 package com.escalabram.escalabram.service.mapper;
 
 import com.escalabram.escalabram.model.Profile;
-import com.escalabram.escalabram.service.dto.ProfileDTO;
+import com.escalabram.escalabram.dto.ProfileDTO;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 

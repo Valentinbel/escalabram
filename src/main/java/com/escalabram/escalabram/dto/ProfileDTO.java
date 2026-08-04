@@ -1,4 +1,4 @@
-package com.escalabram.escalabram.service.dto;
+package com.escalabram.escalabram.dto;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;

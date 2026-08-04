@@ -1,7 +1,7 @@
-package com.escalabram.escalabram.events.consumer;
+package com.escalabram.escalabram.email.consumer;
 
-import com.escalabram.escalabram.events.dto.EmailMessage;
-import com.escalabram.escalabram.events.service.EmailService;
+import com.escalabram.escalabram.email.model.EmailMessage;
+import com.escalabram.escalabram.service.EmailService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;

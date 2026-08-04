@@ -1,8 +1,8 @@
 package com.escalabram.escalabram.repository;
 
 import com.escalabram.escalabram.model.Search;
-import com.escalabram.escalabram.service.dto.ISearchClimbLevelDTO;
-import com.escalabram.escalabram.service.dto.SearchMatchDTO;
+import com.escalabram.escalabram.dto.ISearchClimbLevelDTO;
+import com.escalabram.escalabram.dto.SearchMatchDTO;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;

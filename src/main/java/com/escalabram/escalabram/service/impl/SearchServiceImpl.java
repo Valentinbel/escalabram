@@ -1,7 +1,7 @@
 package com.escalabram.escalabram.service.impl;
 
-import com.escalabram.escalabram.events.dto.EmailMessage;
-import com.escalabram.escalabram.events.publisher.EmailEventPublisher;
+import com.escalabram.escalabram.email.model.EmailMessage;
+import com.escalabram.escalabram.email.publisher.EmailEventPublisher;
 import com.escalabram.escalabram.exception.BadRequestAlertException;
 import com.escalabram.escalabram.model.ClimbLevel;
 import com.escalabram.escalabram.model.Search;
@@ -10,8 +10,8 @@ import com.escalabram.escalabram.repository.SearchRepository;
 import com.escalabram.escalabram.service.ClimbLevelService;
 import com.escalabram.escalabram.service.ProfileService;
 import com.escalabram.escalabram.service.SearchService;
-import com.escalabram.escalabram.service.dto.SearchDTO;
-import com.escalabram.escalabram.service.dto.SearchListDTO;
+import com.escalabram.escalabram.dto.SearchDTO;
+import com.escalabram.escalabram.dto.SearchListDTO;
 import com.escalabram.escalabram.service.mapper.SearchMapper;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
