@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <!-- Réutilisation des styles du layout de base -->
+    <th:block th:replace="~{emails/layout/base :: head}"/>
+</head>
+    <body>
+        <div class="wrapper">
+            <div class="header">
+                <h1>Bienvenue sur PINYA 🎉</h1>
+            </div>
+
+            <div class="content">
+                <p>Bonjour <strong th:text="${name}">Utilisateur</strong>,</p>
+                <p>Votre compte a été créé avec succès. Nous sommes ravis de vous accueillir !</p>
+
+                <p>Voici vos informations :</p>
+                <ul>
+                    <li>Email : <span th:text="${email}"></span></li>
+                    <li>Membre depuis : <span th:text="${#temporals.format(createdAt, 'dd/MM/yyyy')}"></span></li>
+                </ul>
+
+                <a th:href="${loginUrl}" class="button">Accéder à mon espace →</a>
+            </div>
+
+            <div class="footer">
+                <p>© 2025 MyApp · <a th:href="${unsubscribeUrl}">Se désabonner</a></p>
+            </div>
+        </div>
+    </body>
+</html>

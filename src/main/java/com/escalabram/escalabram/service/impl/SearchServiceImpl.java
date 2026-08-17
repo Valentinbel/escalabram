@@ -1,7 +1,5 @@
 package com.escalabram.escalabram.service.impl;
 
-import com.escalabram.escalabram.email.model.EmailMessage;
-import com.escalabram.escalabram.email.publisher.EmailEventPublisher;
 import com.escalabram.escalabram.exception.BadRequestAlertException;
 import com.escalabram.escalabram.model.ClimbLevel;
 import com.escalabram.escalabram.model.Search;
@@ -32,20 +30,11 @@ public class SearchServiceImpl implements SearchService {
     private final ClimbLevelService climbLevelService;
     private final ProfileService profileService;
     private final SearchMapper searchMapper;
-    private final EmailEventPublisher emailEventPublisher;
 
     @Override
     @Transactional(readOnly = true)
     public List<SearchListDTO> findAll() {
          List<Search> searches = searchRepository.findAll();
-         // POUR TEST Rabbit.
-        emailEventPublisher.publishEmailEvent( EmailMessage.builder()
-                .to("valentinbelhomme@gmail.com") //userDto.getEmail()
-                .subject("Bienvenue sur notre plateforme !")
-                .body("<h1>Bonjour VALENTIN </h1><p>Votre compte est créé.</p>") //+ userDto.getName()
-                .type(EmailMessage.EmailType.WELCOME)
-                .build()
-        );
         return searchMapper.toSearchListDTOs(searches);
     }
 
@@ -67,7 +56,7 @@ public class SearchServiceImpl implements SearchService {
         Set<ClimbLevel> newClimbLevels = climbLevelService.findCimbLevelsByIds(searchDTO.getClimbLevels());
         searchDTO.setClimbLevels(newClimbLevels);
 
-        //TODO Gérer la date avec UTC (actuellement décallé d'une heure
+        //TODO Gérer la date avec UTC (actuellement décallé d'une heure => Instant?
         // https://claude.ai/chat/14d87630-dcaf-49a3-9d8a-048c510f4859
 
         //https://claude.ai/chat/22fb5e41-382f-4fc4-9e04-2fb150c0ac4d

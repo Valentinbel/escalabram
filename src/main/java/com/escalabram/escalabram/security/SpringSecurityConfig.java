@@ -40,7 +40,7 @@ public class SpringSecurityConfig {
         return new AuthTokenFilter();
     }
 
-    @Bean
+    @Bean // TODO supprimer ? depuis spring security 7 (SpringBoot 4)?
     public AuthenticationProvider authenticationProvider(UserDetailsService userDetailsService,
                                                          PasswordEncoder passwordEncoder) {
         DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider(userDetailsService);//new DaoAuthenticationProvider(userDetailsService); //passwordEncoder ?
@@ -115,7 +115,7 @@ public class SpringSecurityConfig {
         configuration.setAllowCredentials(true);
 
         // Cache du preflight (optionnel, améliore les performances)
-        configuration.setMaxAge(3600L);
+        configuration.setMaxAge(3600L); // TODO Variable?
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);

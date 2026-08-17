@@ -1,0 +1,162 @@
+Tuto Claude RAbbit originel.
+https://claude.ai/chat/450f793c-045d-4358-806a-dbe3f4203e27
+	Avancement:
+		Intégration Thymeleaf dans les stratégies
+		> Si on suit bien le tuto, ca devrait compiler....
+---
+Supprimer docker-compose
+----
+QUESTIONS À RÉSOUDRE !!!!!!!!!!!!!
+    ///
+    * ERREUR DE COMPILATION: https://chatgpt.com/c/6a82e27c-6080-83eb-92fb-5389ef992a9d
+    ///
+    *  En savoir plus sur ApplicationEventPublisher // ← Spring natif
+        Comment ça fonctionne? Comment c'est récupéré ensuite par les class suivantes?
+    * Où placer emailService? Ca a disparu dans les derniers schemas.
+    Si j'ai une architecture en couches, vaut il mieux le mettre avec tous les autres services,
+    ou dans email/service quitte à n'avoir pour le moment qu'une seule class dans ce dossier
+    et d'avoir plusieurs dossiers "service"
+    * Dans la première version de strategy, tu parles de strategy.buildContent(),
+    ensuite, avec Thymeleaf, tu parles ensuite de strategy.buildContext().
+    Pourquoi, et quelle est la différence entre les 2
+    * le model EmailMessage est défini avec le champ Map<String, Object> context;
+    Plus tard, avec thymeleaf, tu sembles remplacer context par data? Y a t'il une raison particulière?
+    * Tu définis l'enum EmailType à l'intérieur de la class EmailMessage.
+    Pourquoi ne pas en faire une class séparée?
+    Qu'est-ce qu'on y gagne? J'ai l'impression qu'on retrouve mopins facilement cet enum?
+    Par contre, j'ai essayé de le séparer, mais des choses comme EmailMessage.EmailType.WELCOME ne fonctionnent plus.
+    * EmailMessage: DTO avec Serialisable? Pourquoi dans le folder model si c'est un DTO?
+
+-----
+src/
+├── main/
+│   ├── java/com/example/
+│   │   ├── config/
+│   │   │   ├── RabbitMQConfig.java
+│   │   │   └── ThymeleafEmailConfig.java
+│   │   │
+│   │   ├── controller/
+│   │   │   ├── UserController.java
+│   │   │   └── OrderController.java
+│   │   │
+│   │   ├── service/
+│   │   │   ├── UserService.java
+│   │   │   ├── OrderService.java
+│   │   │   └── SecurityService.java
+│   │   │
+│   │   ├── repository/
+│   │   │   ├── UserRepository.java
+│   │   │   └── OrderRepository.java
+│   │   │
+│   │   ├── model/
+│   │   │   ├── User.java
+│   │   │   └── Order.java
+│   │   │
+│   │   ├── dto/
+│   │   │   ├── UserDto.java
+│   │   │   └── OrderDto.java
+│   │   │
+│   │   ├── event/                              # ← Événements MÉTIER (domaine, pas email) // c'est un record
+│   │   │   ├── UserRegisteredEvent.java
+│   │   │   ├── OrderConfirmedEvent.java
+│   │   │   └── PasswordResetRequestedEvent.java
+│   │   │
+│   │   └── email/                              # ← Tout ce qui concerne l'email
+│   │       ├── listener/                       # ← Pont : Spring Event → RabbitMQ
+│   │       │   ├── UserRegisteredEventListener.java
+│   │       │   ├── OrderConfirmedEventListener.java
+│   │       │   └── PasswordResetEventListener.java
+│   │       ├── publisher/
+│   │       │   └── EmailEventPublisher.java
+│   │       ├── consumer/
+│   │       │   └── EmailConsumer.java
+│   │       ├── factory/
+│   │       │   └── EmailTemplateFactory.java
+│   │       ├── strategy/
+│   │       │   ├── EmailTemplateStrategy.java
+│   │       │   ├── WelcomeEmailStrategy.java
+│   │       │   ├── PasswordResetEmailStrategy.java
+│   │       │   └── OrderConfirmationEmailStrategy.java
+│   │       └── model/
+│   │           ├── EmailMessage.java
+│   │           └── EmailContent.java
+│   │
+│   └── resources/
+│       └── templates/
+│           └── emails/
+│               ├── layout/
+│               │   └── base.html
+│               ├── welcome.html
+│               ├── password-reset.html
+│               └── order-confirmation.html
+************************************************
+
+┌─────────────────────────────────────────────────────────────────────┐
+│                        DOMAINE MÉTIER                               │
+│                                                                     │
+│  UserController                                                     │
+│       │ POST /register                                              │
+│       ▼                                                             │
+│  UserService  (@Transactional)                                      │
+│       │ 1. userRepository.save(user)           ← BDD                │
+│       │ 2. eventPublisher.publishEvent(         ← Spring Event      │
+│       │         UserRegisteredEvent)                                │
+│       │                                                             │
+│  [COMMIT BDD ✅]                                                    │
+└──────────────────────────┬──────────────────────────────────────────┘
+                           │ AFTER_COMMIT seulement
+                           ▼
+┌─────────────────────────────────────────────────────────────────────┐
+│                     PONT (Listeners)                                │
+│                                                                     │
+│  UserRegisteredEventListener                                        │
+│       │ buildEmailMessage(event)                                    │
+│       ▼                                                             │
+│  EmailEventPublisher                                                │
+│       │ rabbitTemplate.convertAndSend(...)                          │
+└──────────────────────────┬──────────────────────────────────────────┘
+                           │
+                           ▼
+┌─────────────────────────────────────────────────────────────────────┐
+│                   INFRASTRUCTURE EMAIL                              │
+│                                                                     │
+│  [RabbitMQ — email.queue]                                           │
+│       │                                                             │
+│       │  retry x5 si échec                                          │
+│       ▼                                                             │
+│  EmailConsumer (@RabbitListener)                                    │
+│       │ emailService.send(message)                                  │
+│       ▼                                                             │
+│  EmailService                                                       │
+│       ├─ templateFactory.resolve(WELCOME)                           │
+│       │       └─► WelcomeEmailStrategy                              │
+│       ├─ strategy.buildContext(data)                                │
+│       ├─ templateEngine.process("welcome", context) ← Thymeleaf     │
+│       └─ mailSender.send(htmlBody)               ← SMTP 📧          │
+│                                                                     │
+│       [Échec définitif → email.queue.dlq]                           │
+└─────────────────────────────────────────────────────────────────────┘
+
+
+
+//// (Strategy mais pas Thymeleaf):
+5. Ajout d'un nouveau type — zéro modification existante
+java
+// ✅ Il suffit de créer une nouvelle classe et c'est tout
+@Component
+public class InvoiceEmailStrategy implements EmailTemplateStrategy {
+
+    @Override
+    public EmailMessage.EmailType getSupportedType() {
+        return EmailMessage.EmailType.INVOICE; // Ajouté dans l'enum
+    }
+
+    @Override
+    public EmailContent buildContent(Map<String, Object> context) {
+        return new EmailContent(
+            "Votre facture #" + context.get("invoiceId"),
+            "..."
+        );
+    }
+}
+// Spring la détecte et l'enregistre automatiquement dans la Factory ✅

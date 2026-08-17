@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <style>
+        body { font-family: Arial, sans-serif; background: #f4f4f4; margin: 0; padding: 0; }
+        .wrapper { max-width: 600px; margin: 40px auto; background: #ffffff;
+            border-radius: 8px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
+        .header { background: #4F46E5; padding: 24px 32px; }
+        .header h1 { color: #ffffff; margin: 0; font-size: 22px; }
+        .content { padding: 32px; color: #333333; line-height: 1.6; }
+        .button { display: inline-block; padding: 12px 24px; background: #4F46E5;
+            color: #ffffff !important; text-decoration: none;
+            border-radius: 6px; font-weight: bold; margin-top: 16px; }
+        .footer { background: #f9f9f9; padding: 16px 32px;
+            font-size: 12px; color: #999999; text-align: center; }
+    </style>
+</head>
+<body>
+<div class="wrapper">
+    <!-- Header commun -->
+    <div class="header">
+        <h1>MyApp</h1>
+    </div>
+
+    <!-- Contenu injecté par chaque template enfant -->
+    <div class="content" th:fragment="content">
+        <!-- override par les templates enfants -->
+    </div>
+
+    <!-- Footer commun -->
+    <div class="footer">
+        <p>© 2025 MyApp · <a th:href="${unsubscribeUrl}">Se désabonner</a></p>
+    </div>
+</div>
+</body>
+</html>

@@ -1,10 +1,12 @@
 package com.escalabram.escalabram.service.impl;
 
+import com.escalabram.escalabram.event.UserRegisteredEvent;
 import com.escalabram.escalabram.model.User;
 import com.escalabram.escalabram.repository.UserRepository;
 import com.escalabram.escalabram.service.LanguageService;
 import com.escalabram.escalabram.service.UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -19,6 +21,7 @@ public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
     private final LanguageService languageService;
+    private final ApplicationEventPublisher eventPublisher; // ← Spring natif
 
     @Override
     public boolean existsByUserName(String userName) {
@@ -43,7 +46,9 @@ public class UserServiceImpl implements UserService {
     @Override
     public User save(User user) {
         try {
-            return userRepository.save(user);
+            User savedUser = userRepository.save(user);
+            eventPublisher.publishEvent(new UserRegisteredEvent(user.getEmail(), user.getUserName()));
+            return savedUser;
         } catch (DataIntegrityViolationException e) {
             throw new IllegalStateException("Error thrown trying to save user: {}" +  user, e);
         }
