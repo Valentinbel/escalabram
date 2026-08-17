@@ -1,0 +1,93 @@
+LISTE DES CHOSES À CHERCHER:
+--
+@PostConstruct
+--
+@Qualifier("parameterizedJob")
+--
+private final JobExplorer jobExplorer;
+--
+import org.springframework.batch.core.JobExecution;
+JobExecution jobExecution
+--
+@Builder.default
+--
+Pourquoi @EnableBatchProcessing n'est pas recommandé?
+@EnableBatchProcessing. Not recommended, mais à quoi ça sert vraiment?
+--
+factory.setIsolationLevelForCreate("ISOLATION_READ_COMMITTED");
+
+--
+https://dev.to/msnmongare/best-practices-for-naming-api-endpoints-2n5o
+https://blog.dreamfactory.com/best-practices-for-naming-rest-api-endpoints
+--
+https://docs.spring.io/spring-batch/reference/testing.html
+--
+APPRENDRE DOCKER
+--
+load balancer
+--
+maven settings.xml (par exemple : https://www.baeldung.com/maven-settings-xml)
+--
+PowerBi (avoir une petite idée de ce que c'est et de ce que ça peut faire)
+--
+redis
+--
+comprendre @ComponentScan("es.nttdata.iklics.applicationAnalysis")
+--
+Lire ca quand on a 3 minuteS: https://stackoverflow.com/questions/19199872/best-practice-for-restful-post-response
+
+
+LISTE DES CHOSES À CHERCHER:
+--
+@PostConstruct
+--
+Pourquoi @EnableBatchProcessing n'est pas recommandé?
+@EnableBatchProcessing. Not recommended, mais à quoi ça sert vraiment?
+==> Enlever?
+--
+
+https://dev.to/msnmongare/best-practices-for-naming-api-endpoints-2n5o
+https://blog.dreamfactory.com/best-practices-for-naming-rest-api-endpoints
+--
+https://docs.spring.io/spring-batch/reference/testing.html
+
+
+comprendre @ComponentScan("es.nttdata.iklics.applicationAnalysis")
+--
+Lire ca quand on a 3 minuteS: https://stackoverflow.com/questions/19199872/best-practice-for-restful-post-response
+
+--
+Problèmes à régler APP-ANALYSIS:
+
+**** DOUTES à COMMENTER AVEC CARLOS:
+	* DD DATA. Creo que aparecen solo en unos JCL de carpetas COBOL.
+	A ver que hacemos con esto. Si peta. o genera problemas.
+
+
+
+*************************** Liste des prochaines tâches ***************************
+
+* SECURITY app-analysis
+	Origin unique Pod portal backend + solution pour le local.
+	•	Securitzar Analysis process per fer que els endpoints nomès acceptin com a origin el valor de la url de portal backend que tenim a variables d'entorn, i revisar si wagger pot seguir funcionat
+
+* Les logs ne semblent pas tous supprimés. Supprimer les logs des jours précédents.
+
+* JOBLIB
+
+* FileInventoryRepository: updateOccurences(). Query n'est pas compatible H2. Une option serait de lancer juste une seule fois la query d'update à la fin du process.
+
+***** POINTS DE BLOCAGE *****
+* Tests app-analysis ne passent pas.
+
+
+****************************************
+Novas mejoras (27/04) después del primer email a Carlos.
+	FRONT
+		- Para evitar repeticiones. Crear más componentes: Ex: Toaster.
+		=> Así, en vez de crear un toaster nuevo en cada componente. Solo se llama a un metodo del componente que tiene la configuration (metodos, html, css) necesaria.
+	    => Ver si hay otros casos al cual este tipo de refacto se podría aplicar.
+
+		- CSS revisar conde hay !important y z-index. Es muy probable que forzar posición o propriedad sea por motivo de algo mejorable.
+
+
